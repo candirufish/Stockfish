@@ -180,6 +180,7 @@ namespace {
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 25);
+  constexpr Score RookOn7th          = S(  7, 28);
 
 #undef S
 
@@ -374,8 +375,14 @@ namespace {
         if (Pt == ROOK)
         {
             // Bonus for aligning rook with enemy pawns on the same rank/file
-            if (relative_rank(Us, s) >= RANK_5)
+            if (relative_rank(Us, s) >= RANK_5)	
+			{
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
+				
+				//Bonus for rook on 7th rank
+				if (relative_rank(Us, s) == RANK_7)
+					score += RookOn7th;
+			}
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
