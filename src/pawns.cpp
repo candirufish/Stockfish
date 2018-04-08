@@ -42,6 +42,9 @@ namespace {
 
   // Doubled pawn penalty
   constexpr Score Doubled = S(18, 38);
+  
+  ////En passant bonus
+  constexpr Score EnPassantBonus = S(7, 5);
 
   // Weakness of our pawn shelter in front of the king by [isKingFile][distance from edge][rank].
   // RANK_1 = 0 is used for files where we have no pawns or our pawn is behind our king.
@@ -143,6 +146,12 @@ namespace {
             backward = (b | shift<Up>(b & adjacent_files_bb(f))) & stoppers;
 
             assert(!(backward && (forward_ranks_bb(Them, s + Up) & neighbours)));
+        }
+		
+		if (!backward && relative_rank(Us, s) == 4)
+        {
+            if (pawn_attack_span(Us, s + pawn_push(Us)) & theirPawns)
+                score += EnPassantBonus;
         }
 
         // Passed pawns will be properly scored in evaluation because we need
