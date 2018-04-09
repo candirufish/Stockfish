@@ -1085,7 +1085,7 @@ moves_loop: // When in check, search starts from here
               else
               {
                   assert(value >= beta); // Fail high
-				  if(depth < 7 * ONE_PLY)
+				  if(depth <= 3 * ONE_PLY)
 						ss->statScore = std::max(ss->statScore, 0);
                   break;
               }
