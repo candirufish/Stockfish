@@ -82,6 +82,12 @@ namespace {
                                          6 * PawnValueEg * 930  / 1000
                                        };
 
+									   
+  //NegSEE Margin
+  int NegSEEMargin[] = {0, -35, -35, -35, -35, -35, -35, -35};
+  TUNE(NegSEEMargin);
+  
+  
   // Futility and reductions lookup tables, initialized at startup
   int FutilityMoveCounts[2][16]; // [improving][depth]
   int Reductions[2][2][64][64];  // [pv][improving][depth][moveNumber]
@@ -922,7 +928,7 @@ moves_loop: // When in check, search starts from here
 
               // Prune moves with negative SEE (~10 Elo)
               if (   lmrDepth < 8
-                  && !pos.see_ge(move, Value(-35 * lmrDepth * lmrDepth)))
+                  && !pos.see_ge(move, Value(NegSEEMargin[lmrDepth / ONE_PLY] * lmrDepth * lmrDepth)))
                   continue;
           }
           else if (    depth < 7 * ONE_PLY // (~20 Elo)
