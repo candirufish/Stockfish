@@ -882,7 +882,7 @@ moves_loop: // When in check, search starts from here
               extension = ONE_PLY;
       }
       else if (    givesCheck // Check extension (~2 Elo)
-               && !moveCountPruning
+               &&  (moveCount < 8 || !moveCountPruning)
                &&  pos.see_ge(move))
           extension = ONE_PLY;
 
