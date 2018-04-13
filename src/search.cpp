@@ -880,7 +880,7 @@ moves_loop: // When in check, search starts from here
 
           if (value < rBeta)
               extension = ONE_PLY;
-		  if (value + 500 < rBeta
+		  if (value + 300 < rBeta
 		  && captureOrPromotion)
 			  extension = ONE_PLY;
       }
