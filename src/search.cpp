@@ -881,8 +881,8 @@ moves_loop: // When in check, search starts from here
           if (value < rBeta)
               extension = ONE_PLY;
       }
-      else if (    givesCheck // Check extension (~2 Elo)
-               &&  (moveCount < 8 || !moveCountPruning)
+      else if (    givesCheck 		// Check extension (~2 Elo)
+               &&  (moveCount < 12 || !moveCountPruning)
                &&  pos.see_ge(move))
           extension = ONE_PLY;
 
