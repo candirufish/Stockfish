@@ -78,8 +78,7 @@ namespace {
                                          2 * PawnValueEg * 1042 / 1000,
                                          3 * PawnValueEg * 963  / 1000,
                                          4 * PawnValueEg * 1038 / 1000,
-                                         5 * PawnValueEg * 950  / 1000,
-                                         6 * PawnValueEg * 930  / 1000
+                                         5 * PawnValueEg * 950  / 1000
                                        };
 
   // Futility and reductions lookup tables, initialized at startup
@@ -925,7 +924,7 @@ moves_loop: // When in check, search starts from here
                   && !pos.see_ge(move, Value(-35 * lmrDepth * lmrDepth)))
                   continue;
           }
-          else if (    depth < 7 * ONE_PLY // (~20 Elo)
+          else if (    depth < 6 * ONE_PLY // (~20 Elo)
                    && !extension
                    && !pos.see_ge(move, -Value(CapturePruneMargin[depth / ONE_PLY])))
                   continue;
