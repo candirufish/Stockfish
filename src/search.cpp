@@ -441,6 +441,25 @@ void Thread::search() {
           && VALUE_MATE - bestValue <= 2 * Limits.mate)
           Threads.stop = true;
 
+      // verify singular bestmove
+      bool singularBestMove = false;
+      if (    Limits.use_time_management()
+          && !Threads.stop
+          && !Threads.stopOnPonderhit
+          && rootDepth >= 8 * ONE_PLY
+          && lastBestMoveDepth * 5 < completedDepth
+          && Time.elapsed() > Time.optimum() / 4)
+      {
+          Value rBeta = std::max(bestValue - 3 * PawnValueEg, -VALUE_INFINITE);
+          ss->excludedMove = rootMoves[0].pv[0];
+          Value value = ::search<NonPV>(rootPos, ss, rBeta - 1, rBeta, rootDepth - 6 * ONE_PLY, false, false);
+          ss->excludedMove = MOVE_NONE;
+          if (value < rBeta) {
+              singularBestMove = true;
+              // std::cout << "Singular : " << rootPos.fen() << " : " << UCI::move(rootMoves[0].pv[0],false) << std::endl;
+          }
+      }
+
       if (!mainThread)
           continue;
 
@@ -467,6 +486,8 @@ void Thread::search() {
               // Use part of the gained time from a previous stable move for the current move
               double bestMoveInstability = 1.0 + mainThread->bestMoveChanges;
               bestMoveInstability *= std::pow(mainThread->previousTimeReduction, 0.528) / timeReduction;
+              if (singularBestMove)
+                  bestMoveInstability *= 0.25;
 
               // Stop the search if we have only one legal move, or if available time elapsed
               if (   rootMoves.size() == 1
@@ -960,7 +981,7 @@ moves_loop: // When in check, search starts from here
           Depth r = reduction<PvNode>(improving, depth, moveCount);
 
           if (captureOrPromotion)
-              r -= r ? ONE_PLY : DEPTH_ZERO;
+              r -= r > ONE_PLY ? ONE_PLY : DEPTH_ZERO;
           else
           {
               // Decrease reduction if opponent's move count is high
