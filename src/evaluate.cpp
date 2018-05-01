@@ -162,6 +162,7 @@ namespace {
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
 
   // Assorted bonuses and penalties
+  Score DiscoveredCheck = S(160, 60);
   constexpr Score BishopPawns        = S(  3,  5);
   constexpr Score CloseEnemies       = S(  7,  0);
   constexpr Score Connectivity       = S(  3,  1);
@@ -181,6 +182,7 @@ namespace {
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 25);
+  TUNE(DiscoveredCheck);
 
 #undef S
 
@@ -490,6 +492,10 @@ namespace {
             score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
         }
     }
+	
+	// Discovered checks
+	if (pos.blockers_for_king(Us) & (pos.pieces(Them,KNIGHT) | pos.pieces(Them,BISHOP,ROOK)))
+		score -= DiscoveredCheck;
 
     Bitboard kf = KingFlank[file_of(ksq)];
 
