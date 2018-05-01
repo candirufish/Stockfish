@@ -485,6 +485,10 @@ namespace {
             score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
         }
     }
+	
+	 // Discovered checks
+	  if (pos.blockers_for_king(Us) & (pos.pieces(Them,KNIGHT) | pos.pieces(Them,BISHOP,ROOK)))
+      score -= make_score(160, 60);
 
     Bitboard kf = KingFlank[file_of(ksq)];
 
