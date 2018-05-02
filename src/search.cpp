@@ -1193,7 +1193,8 @@ moves_loop: // When in check, search starts from here
     Move ttMove, move, bestMove;
     Depth ttDepth;
     Value bestValue, value, ttValue, futilityValue, futilityBase, oldAlpha;
-    bool ttHit, inCheck, givesCheck, evasionPrunable;
+    bool ttHit, inCheck, givesCheck, evasionPrunable, discCheck;	
+	Color Us = pos.side_to_move();
     int moveCount;
 
     if (PvNode)
@@ -1206,6 +1207,7 @@ moves_loop: // When in check, search starts from here
     (ss+1)->ply = ss->ply + 1;
     ss->currentMove = bestMove = MOVE_NONE;
     inCheck = pos.checkers();
+	discCheck = (pos.blockers_for_king(Us) & (pos.pieces(~Us,KNIGHT) | pos.pieces(~Us,BISHOP,ROOK)));
     moveCount = 0;
 
     // Check for an immediate draw or maximum ply reached
@@ -1321,7 +1323,7 @@ moves_loop: // When in check, search starts from here
                        && !pos.capture(move);
 
       // Don't search moves with negative SEE values
-      if (  (!inCheck || evasionPrunable)
+      if (  (!inCheck || !discCheck || evasionPrunable)
           && !pos.see_ge(move))
           continue;
 
