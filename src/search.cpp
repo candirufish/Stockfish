@@ -1323,7 +1323,8 @@ moves_loop: // When in check, search starts from here
                        && !pos.capture(move);
 
       // Don't search moves with negative SEE values
-      if (  (!inCheck || !discCheck || evasionPrunable)
+      if (  (!inCheck || evasionPrunable)
+		  && !discCheck
           && !pos.see_ge(move))
           continue;
 
