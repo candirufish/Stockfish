@@ -997,6 +997,10 @@ Key Position::key_after(Move m) const {
 bool Position::see_ge(Move m, Value threshold) const {
 
   assert(is_ok(m));
+  
+  // Discovered checks are difficult to handle in SEE, just assume they pass
+  if (discovered_check(m))
+      return true;
 
   // Only deal with normal moves, assume others pass a simple see
   if (type_of(m) != NORMAL)
