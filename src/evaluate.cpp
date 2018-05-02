@@ -493,7 +493,7 @@ namespace {
     }
 	
 	// Discovered checks
-	if (pos.blockers_for_king(Us) & (pos.pieces(Them,KNIGHT) | pos.pieces(Them,BISHOP,ROOK)))
+	if (pos.blockers_for_king(Us) & pos.pieces(Them,KNIGHT))
 		score -= DiscoveredCheck;
 
     Bitboard kf = KingFlank[file_of(ksq)];
