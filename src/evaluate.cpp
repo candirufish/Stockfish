@@ -166,7 +166,7 @@ namespace {
   constexpr Score CloseEnemies       = S(  7,  0);
   constexpr Score Connectivity       = S(  3,  1);
   constexpr Score CorneredBishop     = S( 50, 50);
-  constexpr Score DiscoveredCheck    = S(180, 60);
+  constexpr Score DiscoveredCheck    = S(140, 60);
   constexpr Score Hanging            = S( 52, 30);
   constexpr Score HinderPassedPawn   = S(  8,  1);
   constexpr Score KnightOnQueen      = S( 21, 11);
