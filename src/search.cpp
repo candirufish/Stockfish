@@ -685,7 +685,7 @@ namespace {
     }
 
     // Step 6. Evaluate the position statically
-    if (inCheck)
+    if (inCheck || discCheck)
     {
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
