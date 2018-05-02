@@ -166,6 +166,7 @@ namespace {
   constexpr Score CloseEnemies       = S(  7,  0);
   constexpr Score Connectivity       = S(  3,  1);
   constexpr Score CorneredBishop     = S( 50, 50);
+  constexpr Score DiscoveredCheck    = S(152, 66);
   constexpr Score Hanging            = S( 52, 30);
   constexpr Score HinderPassedPawn   = S(  8,  1);
   constexpr Score KnightOnQueen      = S( 21, 11);
@@ -490,6 +491,10 @@ namespace {
             score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
         }
     }
+	
+	// Discovered checks
+	if (pos.blockers_for_king(Us) & (pos.pieces(Them,KNIGHT) | pos.pieces(Them,BISHOP,ROOK)))
+		score -= DiscoveredCheck;
 
     Bitboard kf = KingFlank[file_of(ksq)];
 
