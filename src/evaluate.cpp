@@ -656,8 +656,13 @@ namespace {
 
         Score bonus = PassedRank[r];
 		
-		if (pos.non_pawn_material(Them) >= BishopValueMg && pos.non_pawn_material(Us) >= BishopValueMg)
-			 w -= 1;
+		if (((pos.non_pawn_material(Them) <= BishopValueMg && pos.non_pawn_material(Us) <= BishopValueMg)
+ 		  || pos.non_pawn_material(Us) == QueenValueMg)
+		  && pos.count<PAWN>(Us) > 1)
+			w += 1;
+		
+		else if (pos.non_pawn_material(Them) >= BishopValueMg && pos.non_pawn_material(Us) >= BishopValueMg)
+			w -= 1;
 
         if (w)
         {
