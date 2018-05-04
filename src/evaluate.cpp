@@ -156,7 +156,7 @@ namespace {
   };
 
   // PassedDanger[Rank] contains a term to weight the passed score
-  constexpr int PassedDanger[RANK_NB] = { 1, 1, 1, 3, 8, 13, 20 };
+  constexpr int PassedDanger[RANK_NB] = { 0, 0, 1, 1, 6, 11, 18 };
 
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
@@ -660,10 +660,7 @@ namespace {
  		  || pos.non_pawn_material(Us) == QueenValueMg)
 		  && pos.count<PAWN>(Us) > 1)
 			w += 1;
-		
-		else if (pos.non_pawn_material(Them) >= BishopValueMg && pos.non_pawn_material(Us) >= BishopValueMg)
-			w -= 1;
-
+			
         if (w)
         {
             Square blockSq = s + Up;
