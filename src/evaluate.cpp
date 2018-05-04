@@ -654,8 +654,7 @@ namespace {
         int r = relative_rank(Us, s);
         int w = PassedDanger[r];
 		
-		if (   pos.non_pawn_material(Them) <= BishopValueMg
-           || pos.non_pawn_material(Us) >= RookValueMg)
+		if (pos.non_pawn_material(Them) <= (BishopValueMg + KnightValueMg) / 2)
             w += 1;
 
         Score bonus = PassedRank[r];
