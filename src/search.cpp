@@ -539,7 +539,8 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue;
-    bool ttHit, inCheck, givesCheck, improving;
+    bool ttHit, inCheck, givesCheck, improving, discCheck;
+	Color Us = pos.side_to_move();
     bool captureOrPromotion, doFullDepthSearch, moveCountPruning, skipQuiets, ttCapture, pvExact;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
@@ -547,6 +548,7 @@ namespace {
     // Step 1. Initialize node
     Thread* thisThread = pos.this_thread();
     inCheck = pos.checkers();
+	discCheck = (pos.blockers_for_king(Us) & (pos.pieces(~Us,KNIGHT) | pos.pieces(~Us,BISHOP,ROOK)));
     moveCount = captureCount = quietCount = ss->moveCount = 0;
     bestValue = -VALUE_INFINITE;
     maxValue = VALUE_INFINITE;
@@ -683,7 +685,7 @@ namespace {
     }
 
     // Step 6. Evaluate the position statically
-    if (inCheck)
+    if (inCheck || discCheck)
     {
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
@@ -949,6 +951,7 @@ moves_loop: // When in check, search starts from here
           }
           else if (    depth < 7 * ONE_PLY // (~20 Elo)
                    && !extension
+				   && !discCheck
                    && !pos.see_ge(move, -Value(CapturePruneMargin[depth / ONE_PLY])))
                   continue;
       }
