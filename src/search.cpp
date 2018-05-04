@@ -548,7 +548,7 @@ namespace {
     // Step 1. Initialize node
     Thread* thisThread = pos.this_thread();
     inCheck = pos.checkers();
-	discCheck = (pos.blockers_for_king(Us) & (pos.pieces(~Us,KNIGHT));
+	discCheck = (pos.blockers_for_king(Us) & (pos.pieces(~Us,KNIGHT)));
     moveCount = captureCount = quietCount = ss->moveCount = 0;
     bestValue = -VALUE_INFINITE;
     maxValue = VALUE_INFINITE;
