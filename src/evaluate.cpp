@@ -145,18 +145,22 @@ namespace {
   constexpr Score ThreatByKing[] = { S(3, 65), S(9, 145) };
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
-  constexpr Score PassedRank[RANK_NB] = {
+  Score PassedRank[RANK_NB] = {
     S(0, 0), S(5, 7), S(5, 13), S(32, 42), S(70, 70), S(172, 170), S(217, 269)
   };
+  
+  TUNE(SetRange(0, 300), PassedRank);
 
   // PassedFile[File] contains a bonus according to the file of a passed pawn
-  constexpr Score PassedFile[FILE_NB] = {
+  Score PassedFile[FILE_NB] = {
     S(  9, 10), S(2, 10), S(1, -8), S(-20,-12),
     S(-20,-12), S(1, -8), S(2, 10), S(  9, 10)
   };
+  TUNE(SetRange(-40, 30), PassedFile);
 
   // PassedDanger[Rank] contains a term to weight the passed score
-  constexpr int PassedDanger[RANK_NB] = { 0, 0, 0, 2, 7, 12, 19 };
+  int PassedDanger[RANK_NB] = { 0, 0, 0, 2, 7, 12, 19 };
+  TUNE(SetRange(strict_range), PassedDanger);
 
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
