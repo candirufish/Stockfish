@@ -385,7 +385,8 @@ namespace {
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
 			
-		    if (more_than_one(Rank7TH & pos.pieces(Us, ROOK)))
+		    if (more_than_one(Rank7TH & pos.pieces(Us, ROOK))
+				&& relative_rank(Us, pos.square<KING>(Them)) >= RANK_7)
 				score += DoubleRook7th;
 
             // Bonus for rook on an open or semi-open file
