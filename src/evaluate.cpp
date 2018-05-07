@@ -146,17 +146,17 @@ namespace {
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
   constexpr Score PassedRank[RANK_NB] = {
-    S(0, 0), S(5, 7), S(5, 13), S(32, 42), S(70, 70), S(172, 170), S(217, 269)
+    S(59, 8), S(10, 2), S(6, 26), S(11, 23), S(65, 59), S(160, 167), S(262, 261)
   };
 
   // PassedFile[File] contains a bonus according to the file of a passed pawn
   constexpr Score PassedFile[FILE_NB] = {
-    S(  9, 10), S(2, 10), S(1, -8), S(-20,-12),
-    S(-20,-12), S(1, -8), S(2, 10), S(  9, 10)
+    S(  14, 6), S(-7, 9), S(-4, -4), S(-24,-12),
+    S(-17,-11), S(1, -6), S(-4, 19), S( 16, 10)
   };
 
   // PassedDanger[Rank] contains a term to weight the passed score
-  constexpr int PassedDanger[RANK_NB] = { 0, 0, 0, 2, 7, 12, 19 };
+  constexpr int PassedDanger[RANK_NB] = { 0, 0, 0, 3, 7, 12, 21 };
 
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
@@ -181,6 +181,7 @@ namespace {
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 25);
+  constexpr Score DoubleRook7th      = S(  5, 20);
 
 #undef S
 
@@ -379,9 +380,13 @@ namespace {
 
         if (Pt == ROOK)
         {
+			Bitboard Rank7TH = (Us == WHITE ? Rank7BB : Rank2BB);
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
+			
+			if (more_than_one(Rank7TH & pos.pieces(Us, ROOK)))
+				score += DoubleRook7th;
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
