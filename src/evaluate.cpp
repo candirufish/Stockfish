@@ -181,6 +181,7 @@ namespace {
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 25);
+  constexpr Score DoubleRook7th      = S(  5, 20);
 
 #undef S
 
@@ -379,9 +380,13 @@ namespace {
 
         if (Pt == ROOK)
         {
+			Bitboard Rank7TH = (Us == WHITE ? Rank7BB : Rank2BB);
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
+			
+		    if (more_than_one(Rank7TH & pos.pieces(Us, ROOK)))
+				score += DoubleRook7th;
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
