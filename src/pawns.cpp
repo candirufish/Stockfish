@@ -32,42 +32,42 @@ namespace {
   #define S(mg, eg) make_score(mg, eg)
 
   // Isolated pawn penalty
-  constexpr Score Isolated = S(13, 18);
+  constexpr Score Isolated = S(14, 17);
 
   // Backward pawn penalty
-  constexpr Score Backward = S(24, 12);
+  constexpr Score Backward = S(17, 10);
 
   // Connected pawn bonus by opposed, phalanx, #support and rank
   Score Connected[2][2][3][RANK_NB];
 
   // Doubled pawn penalty
-  constexpr Score Doubled = S(18, 38);
+  constexpr Score Doubled = S(16, 40);
 
   // Strength of pawn shelter for our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where we have no pawn, or pawn is behind our king.
   constexpr Value ShelterStrength[int(FILE_NB) / 2][RANK_NB] = {
-    { V( -9), V(64), V(77), V( 44), V( 4), V( -1), V(-11) },
-    { V(-15), V(83), V(51), V(-10), V( 1), V(-10), V(-28) },
-    { V(-18), V(84), V(27), V(-12), V(21), V( -7), V(-36) },
-    { V( 12), V(79), V(25), V( 19), V( 9), V( -6), V(-33) }
+    { V( 7), V(72), V(80), V( 30), V( -1), V( 24), V(-17) },
+    { V(-7), V(99), V(59), V(-11), V( 10), V(-23), V(-33) },
+    { V(-3), V(88), V(21), V(-11), V(7), V( 20), V(-34) },
+    { V( 8), V(84), V(12), V( 8), V( 21), V( -16), V(-34) }
   };
 
   // Danger of enemy pawns moving toward our king by [type][distance from edge][rank].
   // For the unopposed and unblocked cases, RANK_1 = 0 is used when opponent has
   // no pawn on the given file, or their pawn is behind our king.
   constexpr Value StormDanger[][4][RANK_NB] = {
-    { { V( 4),  V(  73), V( 132), V(46), V(31) },  // Unopposed
-      { V( 1),  V(  64), V( 143), V(26), V(13) },
-      { V( 1),  V(  47), V( 110), V(44), V(24) },
-      { V( 0),  V(  72), V( 127), V(50), V(31) } },
-    { { V( 0),  V(   0), V(  19), V(23), V( 1) },  // BlockedByPawn
-      { V( 0),  V(   0), V(  88), V(27), V( 2) },
-      { V( 0),  V(   0), V( 101), V(16), V( 1) },
-      { V( 0),  V(   0), V( 111), V(22), V(15) } },
-    { { V(22),  V(  45), V( 104), V(62), V( 6) },  // Unblocked
-      { V(31),  V(  30), V(  99), V(39), V(19) },
-      { V(23),  V(  29), V(  96), V(41), V(15) },
-      { V(21),  V(  23), V( 116), V(41), V(15) } }
+    { { V( 12),  V(  79), V( 124), V(58), V(33) },  // Unopposed
+      { V( 19),  V(  105), V( 155), V(-2), V(31) },
+      { V( -14),  V(  44), V( 131), V(45), V(25) },
+      { V( 0),  V(  65), V( 113), V(37), V(14) } },
+    { { V( 0),  V(   0), V(  31), V(6), V( -32) },  // BlockedByPawn
+      { V( 0),  V(   0), V(  55), V(-6), V( 9) },
+      { V( 0),  V(   0), V( 101), V(-33), V( 4) },
+      { V( 0),  V(   0), V( 115), V(5), V(35) } },
+    { { V(46),  V(  71), V( 88), V(36), V( 27) },  // Unblocked
+      { V(42),  V(  -6), V( 100), V(1), V(32) },
+      { V(14),  V(  13), V( 115), V(68), V(23) },
+      { V(5),  V(  41), V( 125), V(79), V(28) } }
   };
 
   #undef S
