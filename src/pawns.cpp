@@ -42,6 +42,9 @@ namespace {
 
   // Doubled pawn penalty
   constexpr Score Doubled = S(13, 40);
+  
+  //Isolated Doubled pawn penalty
+  constexpr Score Doubled_Isolated = S(20, 60);
 
   // Strength of pawn shelter for our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where we have no pawn, or pawn is behind our king.
@@ -147,7 +150,7 @@ namespace {
             score -= Backward, e->weakUnopposed[Us] += !opposed;
 
         if (doubled && !supported)
-            score -= Doubled;
+		    score = (!neighbours  && relative_rank(Us, s) <= RANK_4) ? score - Doubled_Isolated : score - Doubled;
     }
 
     return score;
