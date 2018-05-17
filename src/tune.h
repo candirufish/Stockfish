@@ -33,6 +33,18 @@ inline Range default_range(int v) {
   return v > 0 ? Range(0, 2 * v) : Range(2 * v, 0);
 }
 
+inline Range quadratic_range(int v) {
+  return v == 0 ? Range(0,0) : (v > 12 ? Range(v - 40, v + 40) : (v < -13 ? Range(v - 40, v + 40) : Range(v - 15, v + 15)));
+}
+
+inline Range linear_range(int v) {
+  return v > 999 ? Range(v - 220, v + 220) : Range(v - 35, v + 35);
+}
+
+inline Range cubic_range(int v) {
+  return v == 0 ? Range(0,0) : Range(v - 25, v + 25);
+}
+
 struct SetRange {
   explicit SetRange(RangeFun f) : fun(f) {}
   SetRange(int min, int max) : fun(nullptr), range(min, max) {}
