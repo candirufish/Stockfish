@@ -31,28 +31,120 @@ namespace {
 
   // Polynomial material imbalance parameters
 
-  constexpr int QuadraticOurs[][PIECE_TYPE_NB] = {
+	constexpr int Linear[] = { 1499, 6, -9, 2, 18, 5 };
+
+	constexpr int QuadraticOurs[][PIECE_TYPE_NB] = {
     //            OUR PIECES
     // pair pawn knight bishop rook queen
-    {1667                               }, // Bishop pair
-    {  40,    0                         }, // Pawn
-    {  32,  255,  -3                    }, // Knight      OUR PIECES
-    {   0,  104,   4,    0              }, // Bishop
-    { -26,   -2,  47,   105,  -149      }, // Rook
-    {-189,   24, 117,   133,  -134, -10 }  // Queen
+    {   2                                 }, // Bishop pair
+    {  41,    3                           }, // Pawn
+    {  35,  248,   -1                     }, // Knight      OUR PIECES
+    {  -4,  121,    2,     0              }, // Bishop
+    { -23,   -2,   49,    92,  -131       }, // Rook
+    {-187,   28,  127,   125,  -142, -12  }  // Queen
   };
 
-  constexpr int QuadraticTheirs[][PIECE_TYPE_NB] = {
+	constexpr int QuadraticTheirs[][PIECE_TYPE_NB] = {
     //           THEIR PIECES
     // pair pawn knight bishop rook queen
-    {   0                               }, // Bishop pair
-    {  36,    0                         }, // Pawn
-    {   9,   63,   0                    }, // Knight      OUR PIECES
-    {  59,   65,  42,     0             }, // Bishop
-    {  46,   39,  24,   -24,    0       }, // Rook
-    {  97,  100, -42,   137,  268,    0 }  // Queen
+    {   2                                }, // Bishop pair
+    {  45,    3                          }, // Pawn
+    {   10,   63,   0                     }, // Knight      OUR PIECES
+    {  56,   75,  44,     2              }, // Bishop
+    {  48,   38,  27,   -28,   1        }, // Rook
+    { 108,   94, -31,   140,  212,   -3  }  // Queen
   };
 
+	constexpr int CubicOurs[][PIECE_TYPE_NB][PIECE_TYPE_NB] = {
+    // OUR PIECES:
+    {}, // Bishop pair
+    {   // Pawn
+        //            OUR PIECES
+        // pair pawn knight bishop rook queen
+        {   -7                               }, // Bishop pair
+        {    2,   -10                        }  // Pawn        OUR PIECES
+    },
+    {   // Knight
+        //            OUR PIECES
+        // pair pawn knight bishop rook queen
+        {    0                               }, // Bishop pair
+        {    -4,   8                         }, // Pawn
+        {    9,   -7,   2                   }  // Knight      OUR PIECES
+    },
+    {   // Bishop
+        //            OUR PIECES
+        // pair pawn knight bishop rook queen
+        {   -5                               }, // Bishop pair
+        {   -5,    2                         }, // Pawn
+        {   -3,   -7,    10                   }, // Knight      OUR PIECES
+        {    1,    5,    3,   -8             }  // Bishop
+    },
+    {   // Rook
+        //            OUR PIECES
+        // pair pawn knight bishop rook queen
+        {   -2                               }, // Bishop pair
+        {    0,   8                         }, // Pawn
+        {   -4,   -6,    4                   }, // Knight      OUR PIECES
+        {    2,    3,    1,   -3             }, // Bishop
+        {   -8,   -5,   -5,   -5,   -5       }  // Rook
+    },
+    {   // Queen
+        //            OUR PIECES
+        // pair pawn knight bishop rook queen
+        {    2                               }, // Bishop pair
+        {   0,   -6                         }, // Pawn
+        {   -5,  -14,    -4                   }, // Knight      OUR PIECES
+        {    1,    3,   -3,   -1             }, // Bishop
+        {   -4,    0,   1,    -1,   3       }, // Rook
+        {    0,    9,   -4,    -3,    8,    2 }  // Queen
+    }
+  };
+
+	constexpr int CubicTheirs[][PIECE_TYPE_NB][PIECE_TYPE_NB] = {
+    // OUR PIECES:
+    {}, // Bishop pair
+    {   // Pawn
+        //            THEIR PIECES
+        // pair pawn knight bishop rook queen
+        {   -2,   -3,   -3,   -5,    1,    6 }, // Bishop pair
+        {   -2,   21,    -4,    0,    6,   -8 }  // Pawn        OUR PIECES
+    },
+    {   // Knight
+        //            THEIR PIECES
+        // pair pawn knight bishop rook queen
+        {   0,    8,    1,    5,   -2,    0 }, // Bishop pair
+        {   -12,   1,    0,   -7,    -2,    3 }, // Pawn
+        {   16,    5,   -4,    -2,   0,   -11 }  // Knight      OUR PIECES
+    },
+    {   // Bishop
+        //            THEIR PIECES
+        // pair pawn knight bishop rook queen
+        {   -4,   -2,    7,    -4,    5,   0 }, // Bishop pair
+        {   1,    0,   -6,    4,    5,   -4 }, // Pawn
+        {    4,    3,    3,   -6,    0,   -5 }, // Knight      OUR PIECES
+        {    8,    2,   -2,    0,   -2,   -2 }  // Bishop
+    },
+    {   // Rook
+        //            THEIR PIECES
+        // pair pawn knight bishop rook queen
+        {    10,    1,    4,    4,    11,   -3 }, // Bishop pair
+        {    -8,   -7,    5,    8,    4,    4 }, // Pawn
+        {    5,    4,    1,   0,    1,    6 }, // Knight      OUR PIECES
+        {    5,    -5,    2,    -3,    1,   -6 }, // Bishop
+        {    -1,    4,   -1,   -1,   -3,    0 }  // Rook
+    },
+    {   // Queen
+        //            THEIR PIECES
+        // pair pawn knight bishop rook queen
+        {    6,   4,    2,    -4,   -3,   1 }, // Bishop pair
+        {    -6,    4,    1,    3,   -5,    8 }, // Pawn
+        {    1,   7,   0,    0,   -1,    2 }, // Knight      OUR PIECES
+        {   -7,    5,    2,    -3,    2,    -9 }, // Bishop
+        {   -3,    8,   -4,   -4,    2,   -2 }, // Rook
+        {   -6,    0,   4,   1,   -6,    7 }  // Queen
+    }
+  };
+  
   // Endgame evaluation and scaling functions are accessed directly and not through
   // the function maps because they correspond to more than one material hash key.
   Endgame<KXK>    EvaluateKXK[] = { Endgame<KXK>(WHITE),    Endgame<KXK>(BLACK) };
@@ -91,17 +183,27 @@ namespace {
 
     int bonus = 0;
 
-    // Second-degree polynomial material imbalance, by Tord Romstad
+    // Third-degree polynomial material imbalance, by Tord Romstad and Stefan Geschwentner
     for (int pt1 = NO_PIECE_TYPE; pt1 <= QUEEN; ++pt1)
     {
         if (!pieceCount[Us][pt1])
             continue;
 
-        int v = 0;
+        int v = Linear[pt1];
 
         for (int pt2 = NO_PIECE_TYPE; pt2 <= pt1; ++pt2)
+        {
+            int w = 0;
+            for (int pt3 = NO_PIECE_TYPE; pt3 <= pt2; ++pt3)
+                w += CubicOurs[pt1][pt2][pt3] * pieceCount[Us][pt3];
+
+            for (int pt3 = NO_PIECE_TYPE; pt3 <= QUEEN; ++pt3)
+                w += CubicTheirs[pt1][pt2][pt3] * pieceCount[Them][pt3];
+
             v +=  QuadraticOurs[pt1][pt2] * pieceCount[Us][pt2]
-                + QuadraticTheirs[pt1][pt2] * pieceCount[Them][pt2];
+                + QuadraticTheirs[pt1][pt2] * pieceCount[Them][pt2]
+                + w * pieceCount[Us][pt2];
+        }
 
         bonus += pieceCount[Us][pt1] * v;
     }
