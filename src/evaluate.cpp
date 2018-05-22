@@ -652,7 +652,12 @@ namespace {
 
         int r = relative_rank(Us, s);
         int w = PassedDanger[r];
-
+		
+		if (   pos.non_pawn_material(Them) <= BishopValueEg
+		&& pos.count<PAWN>(Them) == 0
+		&& pos.count<PAWN>(Us) >= 3)
+		w += 1;
+						
         Score bonus = PassedRank[r];
 
         if (w)
