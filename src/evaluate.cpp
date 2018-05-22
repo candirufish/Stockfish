@@ -654,8 +654,8 @@ namespace {
         int w = PassedDanger[r];
 		
 		if (pos.count<PAWN>(Them) == 0
-		&& pos.count<PAWN>(Us) > 1
-		&& pos.count<ROOK>(Us) > 1)
+		&& pos.count<PAWN>(Us) >= 1
+		&& pos.count<ROOK>(Us) >= 1)
 		w += 1;
 
         Score bonus = PassedRank[r];
