@@ -654,7 +654,7 @@ namespace {
         int w = PassedDanger[r];
 		
 		if (   pos.non_pawn_material(Them) <= BishopValueMg
-            && pos.count<PAWN>(Us) >= 3)
+            && pos.count<PAWN>(Us) >= 2)
             w += 1;
 
         Score bonus = PassedRank[r];
