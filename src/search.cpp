@@ -330,6 +330,9 @@ void Thread::search() {
   // In evaluate.cpp the evaluation is from the white point of view
   contempt = (us == WHITE ?  make_score(ct, ct / 2)
                           : -make_score(ct, ct / 2));
+						  
+  // counts the number of aspiration researches per rootDepth	
+   int researches = 0;
 
   // Iterative deepening loop until requested to stop or the target depth is reached
   while (   (rootDepth += ONE_PLY) < DEPTH_MAX
@@ -355,6 +358,9 @@ void Thread::search() {
 
       size_t PVFirst = 0;
       PVLast = 0;
+	  
+	  int researchesLastRootDepth = researches;
+      researches = 0;
 
       // MultiPV loop. We perform a full root search for each PV line
       for (PVIdx = 0; PVIdx < multiPV && !Threads.stop; ++PVIdx)
@@ -374,7 +380,7 @@ void Thread::search() {
           if (rootDepth >= 5 * ONE_PLY)
           {
               Value previousScore = rootMoves[PVIdx].previousScore;
-              delta = Value(18);
+              delta = Value(16 + researchesLastRootDepth);
               alpha = std::max(previousScore - delta,-VALUE_INFINITE);
               beta  = std::min(previousScore + delta, VALUE_INFINITE);
 
@@ -433,6 +439,8 @@ void Thread::search() {
                   break;
 
               delta += delta / 4 + 5;
+			  if (PVIdx == 0)
+			 researches++;
 
               assert(alpha >= -VALUE_INFINITE && beta <= VALUE_INFINITE);
           }
