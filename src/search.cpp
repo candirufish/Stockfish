@@ -1002,6 +1002,10 @@ moves_loop: // When in check, search starts from here
               // Decrease reduction for exact PV nodes (~0 Elo)
               if (pvExact)
                   r -= ONE_PLY;
+			  
+			  // Decrease reduction near opponent king
+			  if (distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) <= 2)
+                  r -= ONE_PLY;
 
               // Increase reduction if ttMove is a capture (~0 Elo)
               if (ttCapture)
