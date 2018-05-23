@@ -653,8 +653,8 @@ namespace {
         int r = relative_rank(Us, s);
         int w = PassedDanger[r];
 		
-		if (pos.count<PAWN>(Them) == 0
-		&& pos.count<PAWN>(Us) >= 1
+		if (pos.count<ROOK>(Them) == 0
+		&& pos.count<PAWN>(Us) > pos.count<PAWN>(Them)
 		&& pos.count<ROOK>(Us) >= 1)
 		w += 1;
 
