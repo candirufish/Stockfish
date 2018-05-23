@@ -1003,8 +1003,9 @@ moves_loop: // When in check, search starts from here
               if (pvExact)
                   r -= ONE_PLY;
 			  
-			  // Decrease reduction near opponent king
-			  if (distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) <= 2)
+			  // Decrease reduction near opponent king for major pieces
+			  if (pos.non_pawn_material(pos.side_to_move())
+				  && distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 2)
                   r -= ONE_PLY;
 
               // Increase reduction if ttMove is a capture (~0 Elo)
