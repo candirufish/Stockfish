@@ -991,8 +991,12 @@ moves_loop: // When in check, search starts from here
       {
           Depth r = reduction<PvNode>(improving, depth, moveCount);
 
-          if (captureOrPromotion) // (~5 Elo)
+          if (captureOrPromotion) // (~5 Elo)			  
+			{			  
               r -= r ? ONE_PLY : DEPTH_ZERO;
+			  if (distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 2)
+				  r -= ONE_PLY;
+			}
           else
           {
               // Decrease reduction if opponent's move count is high (~5 Elo)
