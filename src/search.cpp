@@ -1001,7 +1001,7 @@ moves_loop: // When in check, search starts from here
                   && thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] < 0)
                   r += ONE_PLY;
                             
-              r -= r ? ONE_PLY : DEPTH_ZERO;
+              r -= r ? ((distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 2) ? 2 * ONE_PLY : ONE_PLY) : DEPTH_ZERO;
           }
           else
           {
