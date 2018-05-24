@@ -996,10 +996,12 @@ moves_loop: // When in check, search starts from here
 
           if (captureOrPromotion) // (~5 Elo)
           {
-              //Increase reduction by comparing opponent's stat score
-              if (   (ss-1)->statScore >= 0 
-                  && thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] < 0)
-                  r += ONE_PLY;
+              //Increase or decrease reduction by comparing opponent's stat score
+			  ss->statScore = thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())];
+			  if ((ss - 1)->statScore >= 0 && ss->statScore < 0)
+				r += ONE_PLY;
+			  else if (ss->statScore >= 0 && (ss - 1)->statScore < 0)
+				r -= ONE_PLY;
                             
               r -= r ? ONE_PLY : DEPTH_ZERO;
           }
