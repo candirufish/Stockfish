@@ -960,8 +960,8 @@ moves_loop: // When in check, search starts from here
           else {
 			  if (  depth < 3 * ONE_PLY
 				  && captureOrPromotion			  
-				  && ((ss - 1)->statScore >= 0 && thisThread->captureHistory[pos.moved_piece(move)][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] < 0)
-			      && !(distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) <= 2))
+				  && ((ss - 1)->statScore >= 0 
+				  && thisThread->captureHistory[pos.moved_piece(move)][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] < 0))
 			   	  continue;
 			  			  
 			  
