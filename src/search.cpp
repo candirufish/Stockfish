@@ -540,7 +540,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue;
     bool ttHit, inCheck, givesCheck, improving;
-    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, skipQuiets, ttCapture, pvExact;
+    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, skipQuiets, ttCapture, pvExact, AdvPwnPush;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
 
@@ -891,6 +891,8 @@ moves_loop: // When in check, search starts from here
 
       moveCountPruning =   depth < 16 * ONE_PLY
                         && moveCount >= FutilityMoveCounts[improving][depth / ONE_PLY];
+						
+	  AdvPwnPush = pos.advanced_pawn_push(move);
 
       // Step 13. Extensions (~70 Elo)
 
@@ -931,7 +933,7 @@ moves_loop: // When in check, search starts from here
       {
           if (   !captureOrPromotion
               && !givesCheck
-              && (!pos.advanced_pawn_push(move) || pos.non_pawn_material() >= Value(5000)))
+              && (!AdvPwnPush || pos.non_pawn_material() >= Value(5000)))
           {
               // Move count based pruning (~30 Elo)
               if (moveCountPruning)
@@ -1019,7 +1021,11 @@ moves_loop: // When in check, search starts from here
 
               // Increase reduction for cut nodes (~5 Elo)
               if (cutNode)
-                  r += 2 * ONE_PLY;
+			      r += 2 * ONE_PLY;
+			  
+			  if (AdvPwnPush
+			  && distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 4)
+			      r -= ONE_PLY;
 
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
