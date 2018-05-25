@@ -1024,7 +1024,7 @@ moves_loop: // When in check, search starts from here
 			      r += 2 * ONE_PLY;
 			  
 			  if (AdvPwnPush
-			  && distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 4)
+			  && distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 2)
 			      r -= ONE_PLY;
 
               // Decrease reduction for moves that escape a capture. Filter out
