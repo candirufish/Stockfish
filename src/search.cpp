@@ -960,10 +960,23 @@ moves_loop: // When in check, search starts from here
                   && !pos.see_ge(move, Value(-35 * lmrDepth * lmrDepth)))
                   continue;
           }
-          else if (    depth < 7 * ONE_PLY // (~20 Elo)
-                   && !extension
-                   && !pos.see_ge(move, -Value(CapturePruneMargin[depth / ONE_PLY])))
-                  continue;
+ 		  else if (depth < 7 * ONE_PLY && !extension) // (~20 Elo)
+ 		  {
+ 			  if (depth <= 3 * ONE_PLY			      
+			      && !inCheck 
+ 				  && !givesCheck 
+ 				  && captureOrPromotion
+ 				  && moveCountPruning
+ 				  && (ss - 1)->statScore >= 0
+ 				  && depth == 1 * ONE_PLY
+				  && ss->staticEval + PieceValue[EG][pos.piece_on(to_sq(move))] + 250 <= alpha
+ 				  && thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] < 0)
+ 				  continue;
+ 
+ 			  if (!pos.see_ge(move, -Value(CapturePruneMargin[depth / ONE_PLY])))
+ 				  continue;
+ 
+ 		  }
       }
 
       // Speculative prefetch as early as possible
