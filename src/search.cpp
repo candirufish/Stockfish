@@ -1038,10 +1038,10 @@ moves_loop: // When in check, search starts from here
               if (ss->statScore >= 0 && (ss-1)->statScore < 0)
                   r -= ONE_PLY;
 
-              else if ((ss-1)->statScore >= 0 && ss->statScore < 0)
+              else if ((ss-1)->statScore >= 0 && ss->statScore < 0 && !pvExact)
                   r += ONE_PLY;
 			  
-			  else if  ((ss-2)->statScore < 0 && (ss)->statScore < (ss-2)->statScore)
+			  else if  ((ss-2)->statScore < 0 && (ss)->statScore < (ss-2)->statScore && !pvExact)
 				  r += ONE_PLY;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
