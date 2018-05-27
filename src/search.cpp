@@ -72,21 +72,9 @@ namespace {
   }
 
   // Margin for pruning capturing moves: almost linear in depth
-   constexpr int CapturePruneMargin[][7] = { { 0,
-										 1 * PawnValueEg * 1055 / 1000,
-										 2 * PawnValueEg * 1042 / 1000,
-										 3 * PawnValueEg * 963 / 1000,
-										 4 * PawnValueEg * 1038 / 1000,
-										 5 * PawnValueEg * 950 / 1000,
-										 6 * PawnValueEg * 930 / 1000
-									   }, { 0,
-	  1 * PawnValueMg * 1055 / 1000,
-	  2 * PawnValueMg * 1042 / 1000,
-	  3 * PawnValueMg * 963 / 1000,
-	  4 * PawnValueMg * 1038 / 1000,
-	  5 * PawnValueMg * 950 / 1000,
-	  6 * PawnValueMg * 930 / 1000
-									   } };
+  int CapturePruneMargin[][7] = {{ 0,253,500,693,996,1140,1339}, { 0,253,500,693,996,1140,1339}};
+  
+  TUNE(SetRange(centered_range),CapturePruneMargin);
 
   // Futility and reductions lookup tables, initialized at startup
   int FutilityMoveCounts[2][16]; // [improving][depth]
