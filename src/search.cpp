@@ -1013,9 +1013,9 @@ moves_loop: // When in check, search starts from here
               if (pvExact)
                   r -= ONE_PLY;
 			  
-			  // Increase reduction if our move count is high
-              if (ss->moveCount > 15)
-                  r += ONE_PLY;
+			  // Decrease reduction if our move count is low
+              if (ss->moveCount < 5)
+                  r -= ONE_PLY;
 
               // Increase reduction if ttMove is a capture (~0 Elo)
               if (ttCapture)
