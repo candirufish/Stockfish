@@ -1017,9 +1017,6 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r += ONE_PLY;
 
-              // Increase reduction for cut nodes (~5 Elo)
-              if (cutNode)
-                  r += 2 * ONE_PLY;
 
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
@@ -1040,6 +1037,10 @@ moves_loop: // When in check, search starts from here
 
               else if ((ss-1)->statScore >= 0 && ss->statScore < 0)
                   r += ONE_PLY;
+			  
+			  // Increase reduction for cut nodes (~5 Elo)
+              else if (cutNode)
+			      r +=  ss->statScore > 0 ? ONE_PLY : 2 * ONE_PLY;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               r = std::max(DEPTH_ZERO, (r / ONE_PLY - ss->statScore / 20000) * ONE_PLY);
