@@ -1012,6 +1012,9 @@ moves_loop: // When in check, search starts from here
               // Decrease reduction for exact PV nodes (~0 Elo)
               if (pvExact)
                   r -= ONE_PLY;
+			  
+			  if ((ss-2)->moveCount > 15 && ss->moveCount > 15)
+                  r += ONE_PLY;
 
               // Increase reduction if ttMove is a capture (~0 Elo)
               if (ttCapture)
