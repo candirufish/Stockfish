@@ -1001,8 +1001,11 @@ moves_loop: // When in check, search starts from here
               //Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0 && (ss)->statScore < 0)
                    r += ONE_PLY;
+			   
+			  if (!PvNode && (ss-2)->statScore > 0 && (ss)->statScore > (ss - 2)->statScore)
+				   r -= ONE_PLY;
  				  
-			r -= (r ||((ss-2)->statScore > 0 && (ss)->statScore > (ss - 2)->statScore)) ? ONE_PLY : DEPTH_ZERO;
+			r -= r ? ONE_PLY : DEPTH_ZERO;
           }
           else
           {
