@@ -997,7 +997,7 @@ moves_loop: // When in check, search starts from here
           if (captureOrPromotion) // (~5 Elo)
           {
               // Increase reduction by comparing opponent's stat score
-              if ((ss-1)->statScore >= 0)
+              if (ttCapture || (ss-1)->statScore >= 0)
                   r += ONE_PLY;
 
               r -= r ? ONE_PLY : DEPTH_ZERO;
@@ -1011,10 +1011,6 @@ moves_loop: // When in check, search starts from here
               // Decrease reduction for exact PV nodes (~0 Elo)
               if (pvExact)
                   r -= ONE_PLY;
-
-              // Increase reduction if ttMove is a capture (~0 Elo)
-              if (ttCapture)
-                  r += ONE_PLY;
 
               // Increase reduction for cut nodes (~5 Elo)
               if (cutNode)
