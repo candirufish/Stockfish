@@ -988,6 +988,17 @@ moves_loop: // When in check, search starts from here
 
       // Step 16. Reduced depth search (LMR). If the move fails high it will be
       // re-searched at full depth.
+	  if ( depth <= 2 * ONE_PLY
+		  && moveCount > 1
+		  && (!captureOrPromotion || moveCountPruning)) {
+
+		  ss->statScore = thisThread->mainHistory[~pos.side_to_move()][from_to(move)]
+		  + (*contHist[0])[movedPiece][to_sq(move)]
+		  + (*contHist[1])[movedPiece][to_sq(move)]
+		  + (*contHist[3])[movedPiece][to_sq(move)]
+		  - 4000;
+		  }
+	  
       if (    depth >= 3 * ONE_PLY
           &&  moveCount > 1
           && (!captureOrPromotion || moveCountPruning))
