@@ -918,6 +918,7 @@ moves_loop: // When in check, search starts from here
       }
       else if (    givesCheck // Check extension (~2 Elo)
                && !moveCountPruning
+		       && depth < 10
                &&  pos.see_ge(move))
           extension = ONE_PLY;
 
