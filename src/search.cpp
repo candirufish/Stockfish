@@ -1025,7 +1025,7 @@ moves_loop: // When in check, search starts from here
               // hence break make_move(). (~5 Elo)
               else if (    type_of(move) == NORMAL
                        && !pos.see_ge(make_move(to_sq(move), from_sq(move))))
-                  r -= ((ss-1)->statScore - 4000)>= 0 ? ONE_PLY : 2 * ONE_PLY;
+                  r -= (ss-1)->statScore >= 0 ? DEPTH_ZERO : 2 * ONE_PLY;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
