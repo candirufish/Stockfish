@@ -1043,6 +1043,9 @@ moves_loop: // When in check, search starts from here
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               r = std::max(DEPTH_ZERO, (r / ONE_PLY - ss->statScore / 20000) * ONE_PLY);
           }
+		  
+		  if (depth <= 3 && extension)
+			   r -= ONE_PLY;
 
           Depth d = std::max(newDepth - r, ONE_PLY);
 
