@@ -1031,7 +1031,7 @@ moves_loop: // When in check, search starts from here
               // hence break make_move(). (~5 Elo)
               if (type_of(move) == NORMAL
                   && !pos.see_ge(make_move(to_sq(move), from_sq(move))))
-                  r -= ss->statScore >= 0 ? 2 * ONE_PLY : ONE_PLY;
+                  r -= (ss-1)->statScore >= 0 ? ONE_PLY : 2 * ONE_PLY;
 
               // Decrease/increase reduction by comparing opponent's stat score (~10 Elo)
               if (ss->statScore >= 0 && (ss-1)->statScore < 0)
