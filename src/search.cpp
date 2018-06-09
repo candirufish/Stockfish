@@ -990,11 +990,11 @@ moves_loop: // When in check, search starts from here
       // re-searched at full depth.
       if (    depth >= 3 * ONE_PLY
           &&  moveCount > 1
-          && (!captureOrPromotion || moveCountPruning))
+          && (!captureOrPromotion || !inCheck || !givesCheck || moveCountPruning))
       {
           Depth r = reduction<PvNode>(improving, depth, moveCount);
 
-          if (captureOrPromotion) // (~5 Elo)
+          if (captureOrPromotion || inCheck || givesCheck) // (~5 Elo)
           {
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
