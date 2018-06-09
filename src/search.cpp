@@ -552,7 +552,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue;
     bool ttHit, inCheck, givesCheck, improving;
-    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, skipQuiets, ttCapture, pvExact;
+    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, skipQuiets, ttCapture, pvExact, AdvPwnPush;;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
 
@@ -891,6 +891,8 @@ moves_loop: // When in check, search starts from here
 
       moveCountPruning =   depth < 16 * ONE_PLY
                         && moveCount >= FutilityMoveCounts[improving][depth / ONE_PLY];
+						
+	  AdvPwnPush = pos.advanced_pawn_push(move);
 
       // Step 13. Extensions (~70 Elo)
 
@@ -931,7 +933,7 @@ moves_loop: // When in check, search starts from here
       {
           if (   !captureOrPromotion
               && !givesCheck
-              && (!pos.advanced_pawn_push(move) || pos.non_pawn_material() >= Value(5000)))
+              && (!AdvPwnPush || pos.non_pawn_material() >= Value(5000)))
           {
               // Move count based pruning (~30 Elo)
               if (moveCountPruning)
@@ -990,11 +992,11 @@ moves_loop: // When in check, search starts from here
       // re-searched at full depth.
       if (    depth >= 3 * ONE_PLY
           &&  moveCount > 1
-          && (!captureOrPromotion || moveCountPruning))
+          && (!captureOrPromotion || !AdvPwnPush|| moveCountPruning))
       {
           Depth r = reduction<PvNode>(improving, depth, moveCount);
 
-          if (captureOrPromotion) // (~5 Elo)
+          if (captureOrPromotion || AdvPwnPush) // (~5 Elo)
           {
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
