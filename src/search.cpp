@@ -987,11 +987,15 @@ moves_loop: // When in check, search starts from here
 
           if (captureOrPromotion) // (~5 Elo)
           {
+			  ss->statScore = thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())];
+			  
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
                   r += ONE_PLY;
+			  else if  ((ss-2)->statScore > 0 && (ss)->statScore > (ss - 2)->statScore)
+				  r -= r > ONE_PLY ? ONE_PLY : DEPTH_ZERO;
 
-              r -= r ? ONE_PLY : DEPTH_ZERO;
+			  r = std::max(DEPTH_ZERO, (r / ONE_PLY - ss->statScore / 20000) * ONE_PLY);
           }
           else
           {
