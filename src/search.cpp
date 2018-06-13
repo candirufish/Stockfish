@@ -991,7 +991,7 @@ moves_loop: // When in check, search starts from here
               if ((ss-1)->statScore >= 0)
                   r += ONE_PLY;
 
-              r -= r ? ONE_PLY : DEPTH_ZERO;
+              r -= (r || !ttCapture) ? ONE_PLY : DEPTH_ZERO;
           }
           else
           {
