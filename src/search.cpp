@@ -1010,10 +1010,8 @@ moves_loop: // When in check, search starts from here
                {
                   if (quietCount == 0) 
                       r += ONE_PLY;
-                 else if (quietCount < 11)
-                      r += 2 * ONE_PLY;
                  else 
-                      r += 3 * ONE_PLY;
+                      r += 2 * ONE_PLY;
               }
 
               // Decrease reduction for moves that escape a capture. Filter out
