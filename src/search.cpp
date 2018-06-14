@@ -1007,7 +1007,14 @@ moves_loop: // When in check, search starts from here
 
               // Increase reduction for cut nodes (~5 Elo)
               if (cutNode)
-                  r += 2 * ONE_PLY;
+               {
+                  if (quietCount == 0) 
+                      r += ONE_PLY;
+                 else if (quietCount < 11)
+                      r += 2 * ONE_PLY;
+                 else 
+                      r += 3 * ONE_PLY;
+              }
 
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
