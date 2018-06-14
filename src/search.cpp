@@ -951,6 +951,7 @@ moves_loop: // When in check, search starts from here
                   continue;
           }
           else if (   !extension // (~20 Elo)
+			       && thisThread->captureHistory[pos.moved_piece(move)][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] < 0
                    && !pos.see_ge(move, -Value(PawnValueEg * (depth / ONE_PLY))))
                   continue;
       }
