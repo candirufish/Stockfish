@@ -965,7 +965,7 @@ moves_loop: // When in check, search starts from here
           continue;
       }
 
-      if (move == ttMove && captureOrPromotion)
+      if (move == ttMove && captureOrPromotion && pos.see_ge(move, KnightValueMg-BishopValueMg))
           ttCapture = true;
 
       // Update the current move (this must be done after singular extension search)
@@ -987,6 +987,9 @@ moves_loop: // When in check, search starts from here
           {
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
+                  r += ONE_PLY;
+			  
+			  if (ttCapture)
                   r += ONE_PLY;
 
               r -= r ? ONE_PLY : DEPTH_ZERO;
