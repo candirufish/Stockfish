@@ -844,6 +844,13 @@ moves_loop: // When in check, search starts from here
                                       countermove,
                                       ss->killers);
     value = bestValue; // Workaround a bogus 'uninitialized' warning under gcc
+	
+	bool strongTT = !PvNode
+		&& ttHit
+		&& tte->depth() >= depth - 2
+		&& ttValue != VALUE_NONE // Possible in case of TT access race
+		&& ttValue >= beta
+		&& tte->bound() == BOUND_LOWER;
 
     skipQuiets = false;
     ttCapture = false;
@@ -965,7 +972,7 @@ moves_loop: // When in check, search starts from here
           continue;
       }
 
-      if (move == ttMove && captureOrPromotion)
+      if (move == ttMove && (captureOrPromotion || strongTT) && pos.see_ge(move, KnightValueMg-BishopValueMg))
           ttCapture = true;
 
       // Update the current move (this must be done after singular extension search)
