@@ -988,6 +988,10 @@ moves_loop: // When in check, search starts from here
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
                   r += ONE_PLY;
+			  
+			  else if (type_of(movedPiece) != PAWN
+			  && (distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 2))
+				  r -= ONE_PLY;
 
               r -= r ? ONE_PLY : DEPTH_ZERO;
           }
