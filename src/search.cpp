@@ -991,7 +991,7 @@ moves_loop: // When in check, search starts from here
 			  			 
 			  if (type_of(movedPiece) != PAWN 
 			  && (distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 2))
-				  r -= ONE_PLY;
+				  r -= r > ONE_PLY ? ONE_PLY : DEPTH_ZERO;
 
               r -= r ? ONE_PLY : DEPTH_ZERO;
           }
