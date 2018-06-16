@@ -988,6 +988,9 @@ moves_loop: // When in check, search starts from here
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
                   r += ONE_PLY;
+			  
+			  else if  ((ss-2)->statScore > 10000 && (ss)->statScore > (ss - 2)->statScore)
+				  r -= r > ONE_PLY ? ONE_PLY : DEPTH_ZERO;
 
               r -= r ? ONE_PLY : DEPTH_ZERO;
           }
