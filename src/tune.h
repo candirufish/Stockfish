@@ -33,6 +33,22 @@ inline Range default_range(double v) {
   return v > 0 ? Range(0, 2 * v) : Range(2 * v, 0);
 }
 
+inline Range a_range(double v) {
+  return v == 0 ? Range(0, 0) : Range(v - 90, v + 90);
+}
+
+inline Range b_range(double v) {
+  return v == 0 ? Range(0, 0) : Range(v - 30, v + 30);
+}
+
+inline Range c_range(double v) {
+  return v == 0 ? Range(0, 0) : Range(v - 15, v + 15);
+}
+
+inline Range strict_range(double v) {
+  return v == 0 ? Range(0, 0) : Range(v - 2, v + 2);
+}
+
 struct SetRange {
   explicit SetRange(RangeFun f) : fun(f) {}
   SetRange(int min, int max) : fun(nullptr), range(min, max) {}
