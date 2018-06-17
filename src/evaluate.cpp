@@ -142,32 +142,32 @@ namespace {
 
   // ThreatByKing[on one/on many] contains bonuses for king attacks on
   // pawns or pieces which are not pawn-defended.
-  constexpr Score ThreatByKing[] = { S(3, 65), S(9, 145) };
+  constexpr Score ThreatByKing[] = { S(32, 59), S(5, 149) };
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
   constexpr Score PassedRank[RANK_NB] = {
-    S(0, 0), S(5, 7), S(5, 13), S(18, 23), S(74, 58), S(164, 166), S(268, 243)
+    S(0, 0), S(-1, 14), S(-2, 13), S(3, 31), S(47, 62), S(177, 156), S(276, 242)
   };
 
   // PassedFile[File] contains a bonus according to the file of a passed pawn
   constexpr Score PassedFile[FILE_NB] = {
-    S( 15,  7), S(-5, 14), S( 1, -5), S(-22,-11),
-    S(-22,-11), S( 1, -5), S(-5, 14), S( 15,  7)
+    S( 17,  10), S(2, 13), S( 4, -17), S(-15,-22),
+    S(-18,-10), S( -4, -1), S(-8, 6), S( 17,  12)
   };
 
   // PassedDanger[Rank] contains a term to weight the passed score
   constexpr int PassedDanger[RANK_NB] = { 0, 0, 0, 3, 6, 12, 21 };
 
   // KingProtector[PieceType-2] contains a penalty according to distance from king
-  constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
+  constexpr Score KingProtector[] = { S(3, 5), S(5, 3), S(3, 0), S(1, -1) };
 
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  3,  5);
-  constexpr Score CloseEnemies       = S(  7,  0);
+  constexpr Score CloseEnemies       = S(  8,  0);
   constexpr Score Connectivity       = S(  3,  1);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 52, 30);
-  constexpr Score HinderPassedPawn   = S(  8,  1);
+  constexpr Score HinderPassedPawn   = S(  5,  2);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
@@ -175,12 +175,12 @@ namespace {
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
-  constexpr Score ThreatByPawnPush   = S( 47, 26);
+  constexpr Score ThreatByPawnPush   = S( 52, 30);
   constexpr Score ThreatByRank       = S( 16,  3);
-  constexpr Score ThreatBySafePawn   = S(175,168);
+  constexpr Score ThreatBySafePawn   = S(198,142);
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
-  constexpr Score WeakUnopposedPawn  = S(  5, 25);
+  constexpr Score WeakUnopposedPawn  = S( 10, 18);
 
 #undef S
 
@@ -474,12 +474,12 @@ namespace {
         unsafeChecks &= mobilityArea[Them];
 
         kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
-                     + 102 * kingAttacksCount[Them]
-                     + 191 * popcount(kingRing[Us] & weak)
-                     + 143 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
-                     - 848 * !pos.count<QUEEN>(Them)
-                     -   9 * mg_value(score) / 8
-                     +  40;
+                     + 62 * kingAttacksCount[Them]
+                     + 186 * popcount(kingRing[Us] & weak)
+                     + 126 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
+                     - 864 * !pos.count<QUEEN>(Them)
+                     -   8 * mg_value(score) / 8
+                     +  42;
 
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)

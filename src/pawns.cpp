@@ -32,35 +32,35 @@ namespace {
   #define S(mg, eg) make_score(mg, eg)
 
   // Pawn penalties
-  constexpr Score Isolated = S(13, 16);
-  constexpr Score Backward = S(17, 11);
-  constexpr Score Doubled  = S(13, 40);
+  constexpr Score Isolated = S(7, 18);
+  constexpr Score Backward = S(11, 16);
+  constexpr Score Doubled  = S(10, 41);
 
   // Connected pawn bonus by opposed, phalanx, #support and rank
   Score Connected[2][2][3][RANK_NB];
 
   // Strength of pawn shelter for our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where we have no pawn, or pawn is behind our king.
-  constexpr Value ShelterStrength[int(FILE_NB) / 2][RANK_NB] = {
-    { V(  7), V(76), V( 84), V( 38), V(  7), V( 30), V(-19) },
-    { V(-13), V(83), V( 42), V(-27), V(  2), V(-32), V(-45) },
-    { V(-26), V(63), V(  5), V(-44), V( -5), V(  2), V(-59) },
-    { V(-19), V(53), V(-11), V(-22), V(-12), V(-51), V(-60) }
+   constexpr Value ShelterStrength[int(FILE_NB) / 2][RANK_NB] = {
+    { V(  23), V(69), V( 77), V( 45), V(  13), V( 27), V(-1) },
+    { V(-46), V(53), V( 24), V(-27), V(  -26), V(-30), V(-40) },
+    { V(-33), V(50), V(  18), V(-36), V( -1), V(  5), V(-33) },
+    { V(-28), V(51), V(-20), V(-31), V(-2), V(-45), V(-64) }
   };
 
   // Danger of enemy pawns moving toward our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where the enemy has no pawn, or their pawn
   // is behind our king.
   constexpr Value UnblockedStorm[int(FILE_NB) / 2][RANK_NB] = {
-    { V( 25), V( 79), V(107), V( 51), V( 27), V(  0), V(  0) },
-    { V(  5), V( 35), V(121), V( -2), V( 15), V(-10), V(-10) },
-    { V(-20), V( 22), V( 98), V( 36), V(  7), V(-20), V(-20) },
-    { V(-27), V( 24), V( 80), V( 25), V( -4), V(-30), V(-30) }
+    { V( 26), V( 50), V(111), V( 59), V( 25), V(  12), V(  18) },
+    { V(  19), V( 37), V(105), V( 12), V( -10), V(-17), V(5) },
+    { V(-13), V( 21), V( 99), V( 24), V(  5), V(-36), V(0) },
+    { V(-24), V( 28), V( 68), V( 17), V( -4), V(-13), V(-17) }
   };
 
   // Danger of blocked enemy pawns storming our king, by rank
   constexpr Value BlockedStorm[RANK_NB] =
-    { V(  0), V(  0), V( 75), V(-10), V(-20), V(-20), V(-20) };
+    { V(  0), V(  0), V( 54), V(-21), V(-31), V(-12), V(-5) };
 
   #undef S
   #undef V
