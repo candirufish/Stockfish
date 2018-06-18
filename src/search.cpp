@@ -990,7 +990,7 @@ moves_loop: // When in check, search starts from here
                   r += ONE_PLY;
 			  
 			  if (givesCheck)
-				  r -= r > ONE_PLY ? ONE_PLY : DEPTH_ZERO;
+				  r -= ONE_PLY;
 			  
               r -= r ? ONE_PLY : DEPTH_ZERO;
           }
