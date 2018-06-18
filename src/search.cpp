@@ -911,6 +911,13 @@ moves_loop: // When in check, search starts from here
                && !moveCountPruning
                &&  pos.see_ge(move))
           extension = ONE_PLY;
+		  
+	  else if ( captureOrPromotion
+	          && type_of(movedPiece) != PAWN
+	          && !moveCountPruning
+			  &&  pos.see_ge(move)
+			  && (distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) <= 2))
+	      extension = ONE_PLY;
 
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
