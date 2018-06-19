@@ -153,10 +153,7 @@ namespace {
   };
 
   // PassedFile[File] contains a bonus according to the file of a passed pawn
-  Score PassedFile[FILE_NB] = {
-    S( 17,  6), S(-4, 7), S( 2, -12), S(-17,-14),
-    S(-17,-14), S(2, -12), S(-4, 7), S( 17,  6)
-  };
+  Score PassedFile[FILE_NB/2] = {S( 17, 6), S(-4, 7), S( 2, -12), S(-17,-14) };
 
   // PassedDanger[Rank] contains a term to weight the passed score
   int PassedDanger[RANK_NB] = { 0, 0, 0, 3, 6, 12, 21 };
@@ -716,7 +713,8 @@ namespace {
             || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
             bonus = bonus / 2;
 
-        score += bonus + PassedFile[file_of(s)];
+        File f = file_of(s);
+		score += bonus + PassedFile[std::min(f, ~f)];
     }
 
     if (T)
