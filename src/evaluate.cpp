@@ -392,7 +392,7 @@ namespace {
             {
                 File kf = file_of(pos.square<KING>(Us));
                 if ((kf < FILE_E) == (file_of(s) < kf))
-                    score -= (TrappedRook - make_score(mob * 22, 0)) * (pos.can_castle(Us) || (b & pos.pieces(Us, ROOK)) ? 1 : 3);
+                    score -= (TrappedRook - make_score(mob * 22, 0)) * (pos.can_castle(Us) ? ((b & pos.pieces(Us, ROOK)) ? 1 : 2) : 3);
             }
         }
 
