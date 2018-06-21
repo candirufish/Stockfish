@@ -32,9 +32,9 @@ namespace {
   #define S(mg, eg) make_score(mg, eg)
 
   // Pawn penalties
-  constexpr Score Isolated = S(5, 18);
-  constexpr Score Backward = S(17, 17);
-  constexpr Score Doubled  = S(10, 49);
+  constexpr Score Isolated = S(3, 20);
+ constexpr Score Backward = S(20, 20);
+ constexpr Score Doubled  = S(12, 53);
 
   // Connected pawn bonus by opposed, phalanx, #support and rank
   Score Connected[2][2][3][RANK_NB];
@@ -42,25 +42,26 @@ namespace {
   // Strength of pawn shelter for our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where we have no pawn, or pawn is behind our king.
    constexpr Value ShelterStrength[int(FILE_NB) / 2][RANK_NB] = {
-    { V(  18), V(79), V( 84), V( 41), V(  9), V( 48), V(-3) },
-    { V(-48), V(55), V( 34), V(-48), V(  -54), V(-48), V(-37) },
-    { V(-20), V(79), V(  28), V(-15), V( 19), V(  18), V(-43) },
-    { V(-35), V(16), V(-9), V(-31), V(-15), V(-78), V(-73) }
+    { V(  14), V(82), V( 77), V( 46), V(  14), V( 47), V(3) },
+    { V(-51), V(52), V( 26), V(-53), V(  -50), V(-54), V(-29) },
+    { V(-18), V(74), V(  25), V(-14), V( 17), V(  7), V(-34) },
+    { V(-32), V(9), V(-13), V(-41), V(-12), V(-81), V(-79) }
   };
 
   // Danger of enemy pawns moving toward our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where the enemy has no pawn, or their pawn
   // is behind our king.
   constexpr Value UnblockedStorm[int(FILE_NB) / 2][RANK_NB] = {
-    { V( 52), V( 26), V(96), V( 100), V( 53), V(  34), V(  28) },
-    { V(  30), V( 31), V(107), V( 35), V( 26), V(-18), V(4) },
-    { V(4), V( 17), V( 98), V( 25), V(  3), V(-25), V(-6) },
-    { V(0), V( 21), V( 78), V( -2), V( -2), V(-11), V(-9) }
+    { V( 51), V( 48), V(92), V( 94), V( 53), V(  38), V(  32) },
+    { V(  33), V( 25), V(112), V( 32), V( 28), V(-24), V(2) },
+    { V(-4), V( 21), V( 90), V( 18), V(  -6), V(-24), V(-6) },
+    { V(-5), V( 20), V( 74), V( 7), V( 8), V(-13), V(-21) }
   };
 
   // Danger of blocked enemy pawns storming our king, by rank
-    constexpr Value BlockedStorm[RANK_NB] =
-    { V(  0), V(  0), V( 82), V(-10), V(-33), V(3), V(37) };
+  constexpr Value BlockedStorm[RANK_NB] =
+    { V(  0), V(  0), V( 84), V(-15), V(-16), V(0), V(25) };
+
 	
 
   #undef S
