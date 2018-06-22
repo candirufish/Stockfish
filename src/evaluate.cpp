@@ -427,7 +427,7 @@ namespace {
     // Main king safety evaluation
     if (kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them))
     {
-        int kingDanger = -mg_value(score);
+        int kingDanger = 0;
         unsafeChecks = 0;
 
         // Attacked squares defended at most once by our queen or king
@@ -477,6 +477,7 @@ namespace {
                    + 183  * popcount(kingRing[Us] & weak)
                    + 122  * popcount(pos.blockers_for_king(Us) | unsafeChecks)
                    - 860  * !pos.count<QUEEN>(Them)
+				   - 7  * mg_value(score) / 8
                    + 17;
 
 
