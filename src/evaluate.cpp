@@ -142,7 +142,7 @@ namespace {
 
   // ThreatByKing[on one/on many] contains bonuses for king attacks on
   // pawns or pieces which are not pawn-defended.
- constexpr Score ThreatByKing[] = { S(30, 62), S(-9, 160) };
+ constexpr Score ThreatByKing[] = { S(30, 62), S(4, 160) };
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
  constexpr Score PassedRank[RANK_NB] = {
@@ -166,7 +166,7 @@ namespace {
   constexpr Score Connectivity       = S(  3,  1);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 52, 30);
-  constexpr Score HinderPassedPawn   = S(  5,  -1);
+  constexpr Score HinderPassedPawn   = S(  5,  2);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
@@ -427,7 +427,7 @@ namespace {
     // Main king safety evaluation
     if (kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them))
     {
-        int kingDanger = 0;
+        int kingDanger = -mg_value(score);
         unsafeChecks = 0;
 
         // Attacked squares defended at most once by our queen or king
@@ -477,7 +477,6 @@ namespace {
                    + 183  * popcount(kingRing[Us] & weak)
                    + 122  * popcount(pos.blockers_for_king(Us) | unsafeChecks)
                    - 860  * !pos.count<QUEEN>(Them)
-                   - 7  * mg_value(score) / 8
                    + 17;
 
 
