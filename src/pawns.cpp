@@ -32,16 +32,16 @@ namespace {
   #define S(mg, eg) make_score(mg, eg)
 
   // Pawn penalties
-  constexpr Score Isolated = S( 4, 20);
-  constexpr Score Backward = S(21, 22);
-  constexpr Score Doubled  = S(12, 54);
+  Score Isolated = S( 4, 20);
+  Score Backward = S(21, 22);
+  Score Doubled  = S(12, 54);
 
   // Connected pawn bonus by opposed, phalanx, #support and rank
   Score Connected[2][2][3][RANK_NB];
 
   // Strength of pawn shelter for our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where we have no pawn, or pawn is behind our king.
-  constexpr Value ShelterStrength[int(FILE_NB) / 2][RANK_NB] = {
+  Value ShelterStrength[int(FILE_NB) / 2][RANK_NB] = {
     { V( 16), V(82), V( 83), V( 47), V( 19), V( 44), V(  4) },
     { V(-51), V(56), V( 33), V(-58), V(-57), V(-50), V(-39) },
     { V(-20), V(71), V( 16), V(-10), V( 13), V( 19), V(-30) },
@@ -51,7 +51,7 @@ namespace {
   // Danger of enemy pawns moving toward our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where the enemy has no pawn, or their pawn
   // is behind our king.
-  constexpr Value UnblockedStorm[int(FILE_NB) / 2][RANK_NB] = {
+  Value UnblockedStorm[int(FILE_NB) / 2][RANK_NB] = {
     { V(54), V( 48), V( 99), V(91), V(42), V( 32), V( 31) },
     { V(34), V( 27), V(105), V(38), V(32), V(-19), V(  3) },
     { V(-4), V( 28), V( 87), V(18), V(-3), V(-14), V(-11) },
@@ -59,8 +59,11 @@ namespace {
   };
 
   // Danger of blocked enemy pawns storming our king, by rank
-  constexpr Value BlockedStorm[RANK_NB] =
+  Value BlockedStorm[RANK_NB] =
     { V(0), V(0), V( 81), V(-9), V(-5), V(-1), V(26) };
+	
+    TUNE(SetRange(a_range),ShelterStrength,UnblockedStorm,BlockedStorm);
+    TUNE(SetRange(b_range),Isolated,Backward,Doubled);
 
   #undef S
   #undef V
