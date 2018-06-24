@@ -35,7 +35,7 @@ namespace {
   constexpr Score Isolated = S( 4, 20);
   constexpr Score Backward = S(21, 22);
   constexpr Score Doubled  = S(12, 54);
-  constexpr Score Blocked  = S(5, 1);
+  constexpr Score Blocked[RANK_NB] = {S(0, 0),S(0, 0),S(0, 0),S(3, 0),S(5, 1),S(7, 2),S( 10, 3)};
 
   // Connected pawn bonus by opposed, phalanx, #support and rank
   Score Connected[2][2][3][RANK_NB];
@@ -147,8 +147,8 @@ namespace {
         if (doubled && !supported)
             score -= Doubled;
 		
-		if (blocked && relative_rank(Us, s) > RANK_5)
-            score -= Blocked;
+		if (blocked)
+            score -= Blocked[relative_rank(Us, s)];
     }
 
     return score;
