@@ -984,10 +984,14 @@ moves_loop: // When in check, search starts from here
           Depth r = reduction<PvNode>(improving, depth, moveCount);
 
           if (captureOrPromotion) // (~5 Elo)
-          {
+          {			  
+			  ss->statScore = thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] - 8000;
+			  
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
                   r += ONE_PLY;
+			  else if  (!((ss-2)->statScore > 0 && (ss)->statScore > (ss - 2)->statScore))
+ 				  r += ONE_PLY;
 
               r -= r ? ONE_PLY : DEPTH_ZERO;
           }
