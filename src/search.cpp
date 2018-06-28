@@ -1000,6 +1000,13 @@ moves_loop: // When in check, search starts from here
               // Decrease reduction for exact PV nodes (~0 Elo)
               if (pvExact)
                   r -= ONE_PLY;
+			  
+			  if (pos.non_pawn_material() == 0
+       			&&  abs(ss->staticEval) <= Value(160)
+       			&&  abs(ss->staticEval) >= Value(10)
+       			&&  pos.rule50_count() <= 10
+ 				&&  (PvNode || improving))
+				 r -= ONE_PLY;
 
               // Increase reduction if ttMove is a capture (~0 Elo)
               if (ttCapture)
