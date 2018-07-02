@@ -954,7 +954,7 @@ moves_loop: // When in check, search starts from here
                    && !pos.see_ge(move, -PawnValueEg * (depth / ONE_PLY)))
 				   {
 				  if (captureOrPromotion)
-				     ss->statScore = -1;
+				     ss->statScore = 0;
                   continue;
 		 }
       }
