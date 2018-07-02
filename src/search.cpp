@@ -952,7 +952,11 @@ moves_loop: // When in check, search starts from here
           }
           else if (   !extension // (~20 Elo)
                    && !pos.see_ge(move, -PawnValueEg * (depth / ONE_PLY)))
+				   {
+				  if (captureOrPromotion)
+				     ss->statScore = -1;
                   continue;
+		 }
       }
 
       // Speculative prefetch as early as possible
