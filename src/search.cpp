@@ -985,6 +985,9 @@ moves_loop: // When in check, search starts from here
 
           if (captureOrPromotion) // (~5 Elo)
           {
+			  if (depth < 5 * ONE_PLY)
+				 ss->statScore = -1;
+			 
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
                   r += ONE_PLY;
