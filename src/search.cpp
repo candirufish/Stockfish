@@ -989,7 +989,10 @@ moves_loop: // When in check, search starts from here
               // Increase reduction by comparing opponent's stat score
               if ((ss-1)->statScore >= 0)
                   r += ONE_PLY;
-
+			  
+			  if ((ss - 1)->mcp)
+				  r -= r > ONE_PLY ? ONE_PLY : DEPTH_ZERO;
+			  			  
               r -= r ? ONE_PLY : DEPTH_ZERO;
           }
           else
@@ -1024,7 +1027,7 @@ moves_loop: // When in check, search starts from here
                              - 4000;
 
               // Decrease/increase reduction by comparing opponent's stat score (~10 Elo)
-              if ((ss->statScore >= 0 && (ss-1)->statScore < 0) || ((ss - 1)->mcp && !(ss - 2)->mcp && (ss - 3)->mcp))
+              if (ss->statScore >= 0 && (ss-1)->statScore < 0)
                   r -= ONE_PLY;
 
               else if ((ss-1)->statScore >= 0 && ss->statScore < 0)
