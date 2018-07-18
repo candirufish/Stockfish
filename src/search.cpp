@@ -554,6 +554,7 @@ namespace {
     moveCount = captureCount = quietCount = ss->moveCount = 0;
     bestValue = -VALUE_INFINITE;
     maxValue = VALUE_INFINITE;
+	ss->mcp = false;
 
     // Check for the available remaining time
     if (thisThread == Threads.main())
@@ -880,7 +881,7 @@ moves_loop: // When in check, search starts from here
       movedPiece = pos.moved_piece(move);
       givesCheck = gives_check(pos, move);
 
-      moveCountPruning =   depth < 16 * ONE_PLY
+      ss->mcp = moveCountPruning =   depth < 16 * ONE_PLY
                         && moveCount >= FutilityMoveCounts[improving][depth / ONE_PLY];
 
       // Step 13. Extensions (~70 Elo)
@@ -1023,7 +1024,7 @@ moves_loop: // When in check, search starts from here
                              - 4000;
 
               // Decrease/increase reduction by comparing opponent's stat score (~10 Elo)
-              if (ss->statScore >= 0 && (ss-1)->statScore < 0)
+              if ((ss->statScore >= 0 && (ss-1)->statScore < 0) || ((ss - 1)->mcp && !(ss - 2)->mcp && (ss - 3)->mcp))
                   r -= ONE_PLY;
 
               else if ((ss-1)->statScore >= 0 && ss->statScore < 0)
