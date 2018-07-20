@@ -87,7 +87,7 @@ namespace {
   
   int cap_stat_bonus(Depth depth) {
 	  int d = depth / ONE_PLY;
-	  return d > 17 ? 0 : 512 * d;
+	  return d > 10 ? 0 : 600 * d;
   }
 
   // Skill structure is used to implement strength limit
