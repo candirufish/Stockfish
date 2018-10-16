@@ -91,6 +91,9 @@ namespace {
   // KingAttackWeights[PieceType] contains king attack weights by piece type
   constexpr int KingAttackWeights[PIECE_TYPE_NB] = { 0, 0, 77, 55, 44, 10 };
 
+ //King danger multipliers
+   int KingDangerMult[7] = {69, 185, 150, 4, 873, 6, 30};
+
   // Penalties for enemy's safe checks
   constexpr int QueenSafeCheck  = 780;
   constexpr int RookSafeCheck   = 880;
@@ -141,25 +144,23 @@ namespace {
   };
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
-  constexpr Score PassedRank[RANK_NB] = {
+  Score PassedRank[RANK_NB] = {
     S(0, 0), S(5, 18), S(12, 23), S(10, 31), S(57, 62), S(163, 167), S(271, 250)
   };
 
   // PassedFile[File] contains a bonus according to the file of a passed pawn
-  constexpr Score PassedFile[FILE_NB] = {
-    S( -1,  7), S( 0,  9), S(-9, -8), S(-30,-14),
-    S(-30,-14), S(-9, -8), S( 0,  9), S( -1,  7)
-  };
+  Score PassedFile[FILE_NB/2] = {S( -1,  7), S( 0,  9), S(-9, -8), S(-30,-14)};
+
 
   // PassedDanger[Rank] contains a term to weight the passed score
-  constexpr int PassedDanger[RANK_NB] = { 0, 0, 0, 3, 7, 11, 20 };
+  int PassedDanger[RANK_NB] = { 0, 0, 0, 3, 7, 11, 20 };
 
   // Assorted bonuses and penalties
-  constexpr Score BishopPawns        = S(  3,  7);
-  constexpr Score CloseEnemies       = S(  6,  0);
+  Score BishopPawns        = S(  3,  7);
+  Score CloseEnemies       = S(  6,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 57, 32);
-  constexpr Score KingProtector      = S(  6,  6);
+  Score KingProtector      = S(  6,  6);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 46,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
@@ -167,13 +168,19 @@ namespace {
   constexpr Score PawnlessFlank      = S( 19, 84);
   constexpr Score RookOnPawn         = S( 10, 30);
   constexpr Score SliderOnQueen      = S( 42, 21);
-  constexpr Score ThreatByKing       = S( 23, 76);
-  constexpr Score ThreatByPawnPush   = S( 45, 40);
+  Score ThreatByKing       = S( 23, 76);
+  Score ThreatByPawnPush   = S( 45, 40);
   constexpr Score ThreatByRank       = S( 16,  3);
-  constexpr Score ThreatBySafePawn   = S(173,102);
+  Score ThreatBySafePawn   = S(173,102);
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
-  constexpr Score WeakUnopposedPawn  = S(  5, 29);
+  Score WeakUnopposedPawn  = S(  5, 29);
+  
+   TUNE(SetRange(a_range),ThreatBySafePawn);
+   TUNE(SetRange(b_range),PassedFile,ThreatByPawnPush,WeakUnopposedPawn,KingDangerMult,ThreatByKing);
+   TUNE(SetRange(c_range),BishopPawns);
+   TUNE(SetRange(d_range),PassedRank);
+   TUNE(SetRange(strict_range),PassedDanger,KingProtector,CloseEnemies);
 
 #undef S
 
@@ -474,13 +481,13 @@ namespace {
         unsafeChecks &= mobilityArea[Them];
 
         kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
-                     +  69 * kingAttacksCount[Them]
-                     + 185 * popcount(kingRing[Us] & weak)
-                     + 150 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
-                     +   4 * tropism
-                     - 873 * !pos.count<QUEEN>(Them)
-                     -   6 * mg_value(score) / 8
-                     -   30;
+                     +  KingDangerMult[0] * kingAttacksCount[Them]
+                     +  KingDangerMult[1] * popcount(kingRing[Us] & weak)
+                     +  KingDangerMult[2] * popcount(pos.blockers_for_king(Us) | unsafeChecks)
+					 +  KingDangerMult[3] * tropism
+                     -  KingDangerMult[4] * !pos.count<QUEEN>(Them)
+                     -  KingDangerMult[5] * mg_value(score) / 8
+                     -  KingDangerMult[6] ;
 
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)
@@ -686,7 +693,8 @@ namespace {
             || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
             bonus = bonus / 2;
 
-        score += bonus + PassedFile[file_of(s)];
+        File f = file_of(s);
+		score += bonus + PassedFile[std::min(f, ~f)];
     }
 
     if (T)
