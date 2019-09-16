@@ -84,6 +84,12 @@ namespace {
     int d = depth / ONE_PLY;
     return d > 17 ? -8 : 22 * d * d + 151 * d - 140;
   }
+  
+  int cap_stat_bonus(Depth depth) {
+	  int d = depth / ONE_PLY;
+	  return d > 17 ? -8 : (67 - d) * d * d / 2 + 151 * d - 140;
+  }
+
 
   // Add a small random component to draw evaluations to avoid 3fold-blindness
   Value value_draw(Depth depth, Thread* thisThread) {
@@ -1276,7 +1282,7 @@ moves_loop: // When in check, search starts from here
             update_quiet_stats(pos, ss, bestMove, quietsSearched, quietCount,
                                stat_bonus(depth + (bestValue > beta + PawnValueMg ? ONE_PLY : DEPTH_ZERO)));
 
-        update_capture_stats(pos, bestMove, capturesSearched, captureCount, stat_bonus(depth + ONE_PLY));
+        update_capture_stats(pos, bestMove, capturesSearched, captureCount, cap_stat_bonus(depth + ONE_PLY));
 
         // Extra penalty for a quiet TT or main killer move in previous ply when it gets refuted
         if (   ((ss-1)->moveCount == 1 || ((ss-1)->currentMove == (ss-1)->killers[0]))
