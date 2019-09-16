@@ -192,11 +192,11 @@ Entry* probe(const Position& pos) {
 	  }
 	  else if (pos.count<PAWN>(WHITE) > pos.count<PAWN>(BLACK))
       {
-          e->factor[WHITE] = (uint8_t) SCALE_FACTOR_MAX;
+          e->factor[WHITE] = (uint8_t) SCALE_FACTOR_PAWN_ENDING;
       }
       else if (pos.count<PAWN>(BLACK) > pos.count<PAWN>(WHITE))
       {
-          e->factor[BLACK] = (uint8_t) SCALE_FACTOR_MAX;
+          e->factor[BLACK] = (uint8_t) SCALE_FACTOR_PAWN_ENDING;
       }
      }
   
