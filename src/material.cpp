@@ -189,8 +189,17 @@ Entry* probe(const Position& pos) {
           // for both colors instead of only one.
           e->scalingFunction[WHITE] = &ScaleKPKP[WHITE];
           e->scalingFunction[BLACK] = &ScaleKPKP[BLACK];
+	  }
+	  else if (pos.count<PAWN>(WHITE) > pos.count<PAWN>(BLACK))
+      {
+          e->factor[WHITE] = (uint8_t) SCALE_FACTOR_MAX;
       }
-  }
+      else if (pos.count<PAWN>(BLACK) > pos.count<PAWN>(WHITE))
+      {
+          e->factor[BLACK] = (uint8_t) SCALE_FACTOR_MAX;
+      }
+     }
+  
 
   // Zero or just one pawn makes it difficult to win, even with a small material
   // advantage. This catches some trivial draws like KK, KBK and KNK and gives a
