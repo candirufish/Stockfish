@@ -87,7 +87,7 @@ namespace {
   
   int cap_stat_bonus(Depth depth) {
 	  int d = depth / ONE_PLY;
-	  return d > 17 ? -8 : (67 - d) * d * d / 2 + 151 * d - 140;
+	  return d > 17 ? 0 : (77 - d) * d * d / 2 + 64 * d - 64;
   }
 
 
