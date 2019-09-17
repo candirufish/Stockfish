@@ -1110,8 +1110,8 @@ moves_loop: // When in check, search starts from here
               if (cutNode)
                   r += 2 * ONE_PLY;
 			  
-			  if (AdvPwnPush)
-				  r -= ONE_PLY;
+			  if (AdvPwnPush && distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) <= 2)
+				  r += ONE_PLY;
 
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
