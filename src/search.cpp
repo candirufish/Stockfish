@@ -597,7 +597,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue;
     bool ttHit, ttPv, inCheck, givesCheck, improving, doLMR;
-    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, ttCapture;
+    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, ttCapture, AdvPwnPush;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, singularLMR;
 
@@ -946,6 +946,7 @@ moves_loop: // When in check, search starts from here
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+	  AdvPwnPush = pos.advanced_pawn_push(move);
 
       // Step 13. Extensions (~70 Elo)
 
@@ -1108,6 +1109,9 @@ moves_loop: // When in check, search starts from here
               // Increase reduction for cut nodes (~5 Elo)
               if (cutNode)
                   r += 2 * ONE_PLY;
+			  
+			  if (AdvPwnPush && distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) >= 2)
+				  r -= ONE_PLY;
 
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
