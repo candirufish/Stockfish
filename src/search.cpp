@@ -1085,7 +1085,7 @@ moves_loop: // When in check, search starts from here
           Depth r = reduction(improving, depth, moveCount);
 		  
 		  if (captureOrPromotion)
-			  ss->statScore = 0;
+			  ss->statScore = -1;
 		  
           // Reduction if other threads are searching this position.
           if (th.marked())
