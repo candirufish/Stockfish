@@ -597,7 +597,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue;
     bool ttHit, ttPv, inCheck, givesCheck, improving, doLMR;
-    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, ttCapture, PassPawn;
+    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, ttCapture, PassPawn, AdvPwnPush;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, singularLMR;
 
@@ -947,6 +947,7 @@ moves_loop: // When in check, search starts from here
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
 	  PassPawn = pos.pawn_passed(us, to_sq(move));
+	  AdvPwnPush = pos.advanced_pawn_push(move);
 
       // Step 13. Extensions (~70 Elo)
 
@@ -1110,7 +1111,7 @@ moves_loop: // When in check, search starts from here
               if (cutNode)
                   r += 2 * ONE_PLY;
 			  
-			  if (PassPawn)
+			  if (PassPawn && AdvPwnPush)
 				  r -= ONE_PLY;
 
               // Decrease reduction for moves that escape a capture. Filter out
