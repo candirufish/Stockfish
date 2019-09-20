@@ -1105,7 +1105,7 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r += ONE_PLY;
 			  
-			  if (ss->staticEval + QueenValueEg <= alpha)
+			  if (ss->staticEval + RookValueEg + KnightValueEg <= alpha)
 				  r += ONE_PLY;
 
               // Increase reduction for cut nodes (~5 Elo)
