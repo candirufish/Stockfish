@@ -955,8 +955,8 @@ moves_loop: // When in check, search starts from here
       // a reduced search on all the other moves but the ttMove and if the
       // result is lower than ttValue minus a margin then we will extend the ttMove.
       if (    depth >= ((PvNode 
-	  && abs(ss->staticEval) <= Value(160)
-	  && abs(ss->staticEval) >= Value(10)) ? 7 : 6) * ONE_PLY
+	  && pos.non_pawn_material() == 0 
+	  &&pos.rule50_count() <= 10) ? 7 : 6) * ONE_PLY
           &&  move == ttMove
           && !rootNode
           && !excludedMove // Avoid recursive singular search
