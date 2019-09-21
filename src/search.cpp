@@ -378,6 +378,8 @@ void Thread::search() {
   contempt = (us == WHITE ?  make_score(ct, ct / 2)
                           : -make_score(ct, ct / 2));
 
+  int researches = 0; 
+  
   // Iterative deepening loop until requested to stop or the target depth is reached
   while (   (rootDepth += ONE_PLY) < DEPTH_MAX
          && !Threads.stop
@@ -394,6 +396,10 @@ void Thread::search() {
 
       size_t pvFirst = 0;
       pvLast = 0;
+	  
+	  int researchesLastRootDepth = researches;
+      researches = 0;	  
+	  
 
       // MultiPV loop. We perform a full root search for each PV line
       for (pvIdx = 0; pvIdx < multiPV && !Threads.stop; ++pvIdx)
@@ -413,7 +419,7 @@ void Thread::search() {
           if (rootDepth >= 4 * ONE_PLY)
           {
               Value previousScore = rootMoves[pvIdx].previousScore;
-              delta = Value(23);
+			  delta = Value(21 + researchesLastRootDepth);
               alpha = std::max(previousScore - delta,-VALUE_INFINITE);
               beta  = std::min(previousScore + delta, VALUE_INFINITE);
 
@@ -478,9 +484,13 @@ void Thread::search() {
               }
 
               delta += delta / 4 + 5;
-
+			  
+			  if (pvIdx == 0)
+				  researches++;
+			  			  
               assert(alpha >= -VALUE_INFINITE && beta <= VALUE_INFINITE);
           }
+		  
 
           // Sort the PV lines searched so far and update the GUI
           std::stable_sort(rootMoves.begin() + pvFirst, rootMoves.begin() + pvIdx + 1);
