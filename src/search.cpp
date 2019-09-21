@@ -419,7 +419,7 @@ void Thread::search() {
           if (rootDepth >= 4 * ONE_PLY)
           {
               Value previousScore = rootMoves[pvIdx].previousScore;
-			  delta = Value(21 + researchesLastRootDepth);
+			  delta = Value(21);
               alpha = std::max(previousScore - delta,-VALUE_INFINITE);
               beta  = std::min(previousScore + delta, VALUE_INFINITE);
 
@@ -467,6 +467,7 @@ void Thread::search() {
               {
                   beta = (alpha + beta) / 2;
                   alpha = std::max(bestValue - delta, -VALUE_INFINITE);
+				  delta += delta / 4 + 5;
 
                   failedHighCnt = 0;
                   if (mainThread)
@@ -475,6 +476,7 @@ void Thread::search() {
               else if (bestValue >= beta)
               {
                   beta = std::min(bestValue + delta, VALUE_INFINITE);
+				  delta += (delta  + researchesLastRootDepth) / 4 + 5;
                   ++failedHighCnt;
               }
               else
@@ -482,8 +484,6 @@ void Thread::search() {
                   ++rootMoves[pvIdx].bestMoveCount;
                   break;
               }
-
-              delta += delta / 4 + 5;
 			  
 			  if (pvIdx == 0)
 				  researches++;
