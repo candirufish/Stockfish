@@ -1086,6 +1086,9 @@ moves_loop: // When in check, search starts from here
               || cutNode))
       {
           Depth r = reduction(improving, depth, moveCount);
+		  
+		  if (captureOrPromotion && pos.rule50_count() > 15)
+			  r -= ONE_PLY;
 
           // Reduction if other threads are searching this position.
           if (th.marked())
