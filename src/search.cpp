@@ -1013,8 +1013,7 @@ moves_loop: // When in check, search starts from here
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
           extension = ((distance(pos.square<KING>(pos.side_to_move()), to_sq(move)) > 2 
-						&&  abs(ss->staticEval) >= Value(30) 
-						&&  abs(ss->staticEval) <= Value(110)) ? 2 : 1) * ONE_PLY;
+						&&  pos.rule50_count() > 15) ? 2 : 1) * ONE_PLY;
 
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
