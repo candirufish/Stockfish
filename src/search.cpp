@@ -1071,6 +1071,9 @@ moves_loop: // When in check, search starts from here
       // Update the current move (this must be done after singular extension search)
       ss->currentMove = move;
       ss->continuationHistory = &thisThread->continuationHistory[movedPiece][to_sq(move)];
+	  
+	  if (captureOrPromotion && depth >= 3 * ONE_PLY)
+		  ss->statScore = 0;
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
