@@ -627,7 +627,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue;
     bool ttHit, ttPv, formerPv, inCheck, givesCheck, improving, didLMR, priorCapture;
-    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, ttCapture, singularLMR;
+    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, ttCapture, singularLMR, AdvPwnPush;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
 
@@ -1004,7 +1004,8 @@ moves_loop: // When in check, search starts from here
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
-
+	  AdvPwnPush = pos.advanced_pawn_push(move);
+	  
       // Calculate new depth for this move
       newDepth = depth - 1;
 
@@ -1162,6 +1163,10 @@ moves_loop: // When in check, search starts from here
           // Reduction if other threads are searching this position.
           if (th.marked())
               r++;
+		  
+		  if (  pos.rule50_count() > 80
+              && (captureOrPromotion || AdvPwnPush))
+              r--;
 
           // Decrease reduction if position is or has been on the PV (~10 Elo)
           if (ttPv)
