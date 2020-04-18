@@ -1165,7 +1165,7 @@ moves_loop: // When in check, search starts from here
           if (th.marked())
               r++;
 		  
-		  if (PassPwn && AdvPwnPush)
+		  if (pos.rule50_count() > 80 && PassPwn && AdvPwnPush)
               r--;
 
           // Decrease reduction if position is or has been on the PV (~10 Elo)
