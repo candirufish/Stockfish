@@ -1154,6 +1154,10 @@ moves_loop: // When in check, search starts from here
               || thisThread->ttHitAverage < 375 * ttHitAverageResolution * ttHitAverageWindow / 1024))
       {
           Depth r = reduction(improving, depth, moveCount);
+		  
+		  if (  pos.rule50_count() > 80
+              && (captureOrPromotion || type_of(movedPiece) == PAWN))
+              ss->statScore = 0;
 
           // Decrease reduction if the ttHit running average is large
           if (thisThread->ttHitAverage > 500 * ttHitAverageResolution * ttHitAverageWindow / 1024)
