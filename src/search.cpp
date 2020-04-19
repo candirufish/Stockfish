@@ -1114,7 +1114,7 @@ moves_loop: // When in check, search starts from here
       else if (   move == ss->killers[0]
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
-          extension = 1 + ((distance(pos.square<KING>(pos.side_to_move()), to_sq(move))) > 2);
+          extension = 1 + ((distance(pos.square<KING>(pos.side_to_move()), to_sq(move))) > 3);
 
       // Last captures extension
       else if (   PieceValue[EG][pos.captured_piece()] > PawnValueEg
