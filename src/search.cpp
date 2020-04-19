@@ -1127,6 +1127,7 @@ moves_loop: // When in check, search starts from here
 
       // Late irreversible move extension
       if (   move == ttMove
+	      && (PvNode || improving)
           && pos.rule50_count() > 80
           && (captureOrPromotion || type_of(movedPiece) == PAWN))
           extension = 2;
