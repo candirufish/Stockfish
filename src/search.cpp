@@ -364,6 +364,7 @@ void Thread::search() {
                           : -make_score(ct, ct / 2));
 
   int searchAgainCounter = 0;
+  int researches = 0;
 
   // Iterative deepening loop until requested to stop or the target depth is reached
   while (   ++rootDepth < MAX_PLY
@@ -382,6 +383,9 @@ void Thread::search() {
       size_t pvFirst = 0;
       pvLast = 0;
 
+	  int researchesLastRootDepth = researches;
+      researches = 0;
+	  
       if (!Threads.increaseDepth)
          searchAgainCounter++;
 
@@ -403,7 +407,7 @@ void Thread::search() {
           if (rootDepth >= 4)
           {
               Value prev = rootMoves[pvIdx].previousScore;
-              delta = Value(17);
+              delta = Value(17 + researchesLastRootDepth);
               alpha = std::max(prev - delta,-VALUE_INFINITE);
               beta  = std::min(prev + delta, VALUE_INFINITE);
 
@@ -468,6 +472,9 @@ void Thread::search() {
               }
 
               delta += delta / 4 + 5;
+			  
+			  if (pvIdx == 0)
+				  researches++;
 
               assert(alpha >= -VALUE_INFINITE && beta <= VALUE_INFINITE);
           }
