@@ -1129,7 +1129,7 @@ moves_loop: // When in check, search starts from here
 				&&  abs(ss->staticEval) >= Value(10)
        			&&  pos.rule50_count() <= 10
 				&&  depth >= 8
- 				&&  improving)
+ 				&&  PvNode)
 			extension = 1;
 
       // Last captures extension
