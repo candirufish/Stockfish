@@ -1123,6 +1123,14 @@ moves_loop: // When in check, search starts from here
       else if (    givesCheck
                && (pos.is_discovery_check_on_king(~us, move) || pos.see_ge(move)))
           extension = 1;
+		  
+	  else if (pos.non_pawn_material() == 0
+       			&&  abs(ss->staticEval) <= Value(160)
+				&&  abs(ss->staticEval) >= Value(10)
+       			&&  pos.rule50_count() <= 10
+				&&  depth >= 8
+ 				&&  improving)
+			extension = 1;
 
       // Last captures extension
       else if (   PieceValue[EG][pos.captured_piece()] > PawnValueEg
