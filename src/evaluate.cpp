@@ -1021,7 +1021,7 @@ Value Eval::evaluate(const Position& pos) {
   bool useClassical = abs(eg_value(pos.psq_score())) * 16 > NNUEThreshold1 * (16 + pos.rule50_count());
   bool classical = !Eval::useNNUE
                 ||  useClassical
-				|| (pos.count<PAWN>() == 0 && pos.rule50_count() <= 10)
+				|| pos.non_pawn_material() == 0
                 || (abs(eg_value(pos.psq_score())) > PawnValueMg / 4 && !(pos.this_thread()->nodes & 0xB));
   Value v = classical ? Evaluation<NO_TRACE>(pos).value()
                       : NNUE::evaluate(pos) * 5 / 4 + Tempo;
