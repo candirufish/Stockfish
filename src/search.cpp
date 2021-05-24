@@ -450,7 +450,7 @@ void Thread::search() {
       if (!Threads.stop)
 	  {
           completedDepth = rootDepth;
-		  drawIter = abs(bestValue) < 2 ? drawIter + 1 : 0;
+		  drawIter = abs(bestValue) < 2 ? drawIter + 2 : 0;
 	  }
 
       if (rootMoves[0].pv[0] != lastBestMove) {
