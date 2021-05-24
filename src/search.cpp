@@ -310,6 +310,7 @@ void Thread::search() {
   ttHitAverage = TtHitAverageWindow * TtHitAverageResolution / 2;
 
   int ct = int(Options["Contempt"]) * PawnValueEg / 100; // From centipawns
+  int shortPv = 0;
 
   // In analysis mode, adjust contempt in accordance with user preference
   if (Limits.infinite || Options["UCI_AnalyseMode"])
@@ -324,6 +325,7 @@ void Thread::search() {
                           : -make_score(ct, ct / 2));
 
   int searchAgainCounter = 0;
+  int drawIter = 0;
 
   // Iterative deepening loop until requested to stop or the target depth is reached
   while (   ++rootDepth < MAX_PLY
@@ -363,7 +365,7 @@ void Thread::search() {
           if (rootDepth >= 4)
           {
               Value prev = rootMoves[pvIdx].previousScore;
-              delta = Value(17);
+              delta = Value(15 + (shortPv = 1 ? drawIter : 0));
               alpha = std::max(prev - delta,-VALUE_INFINITE);
               beta  = std::min(prev + delta, VALUE_INFINITE);
 
@@ -428,6 +430,14 @@ void Thread::search() {
 
               assert(alpha >= -VALUE_INFINITE && beta <= VALUE_INFINITE);
           }
+		  
+		  if (pvIdx == 0)
+          {
+              if (selDepth < rootDepth)
+                  shortPv = 1;
+              else
+                  shortPv = 0;
+          }
 
           // Sort the PV lines searched so far and update the GUI
           std::stable_sort(rootMoves.begin() + pvFirst, rootMoves.begin() + pvIdx + 1);
@@ -438,7 +448,10 @@ void Thread::search() {
       }
 
       if (!Threads.stop)
+	  {
           completedDepth = rootDepth;
+		  drawIter = abs(bestValue) < 2 ? drawIter + 2 : 0;
+	  }
 
       if (rootMoves[0].pv[0] != lastBestMove) {
          lastBestMove = rootMoves[0].pv[0];
@@ -1150,8 +1163,8 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
           if (singularQuietLMR)
               r--;
-
-          // Increase reduction for cut nodes (~3 Elo)
+		  
+		  // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
               r += 1 + !captureOrPromotion;
 
@@ -1160,6 +1173,10 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
+
+              // Increase reduction for cut nodes (~3 Elo)
+              if (cutNode)
+                  r += 2;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
