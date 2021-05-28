@@ -1098,7 +1098,7 @@ moves_loop: // When in check, search starts from here
           }
       }
 	  
-	  else if (givesCheck && captureOrPromotion && (distance(pos.square<KING>(~us),to_sq(move)) < 3))
+	  else if (givesCheck && (abs(ss->staticEval) > Value(200)))
           extension = 1;
 
       // Add extension to new depth
