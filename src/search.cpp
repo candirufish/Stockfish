@@ -1098,7 +1098,7 @@ moves_loop: // When in check, search starts from here
           }
       }
 	  
-	  else if (ss->inCheck)
+	  else if (givesCheck || ss->inCheck)
           extension = 1;
 
       // Add extension to new depth
