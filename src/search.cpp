@@ -1098,8 +1098,8 @@ moves_loop: // When in check, search starts from here
           }
       }
 	  
-	  else if (givesCheck 
-			&&  pos.see_ge(move))
+      else if (    givesCheck
+               && pos.is_discovered_check_on_king(~us, move))
           extension = 1;
 
       // Add extension to new depth
