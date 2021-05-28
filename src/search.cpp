@@ -1099,7 +1099,7 @@ moves_loop: // When in check, search starts from here
       }
 	  
 	  else if (givesCheck 
-			&& depth > 7
+			&& depth > 5
 			&& (abs(ss->staticEval) > Value(200)))
           extension = 1;
 
