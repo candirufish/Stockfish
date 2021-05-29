@@ -1155,7 +1155,9 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 
-		  if (givesCheck && abs(ss->staticEval) > Value(100))
+		  if (givesCheck 
+		  && !cutNode
+		  && abs(ss->staticEval) > Value(100))
 			  r--;
 		  
           if (!captureOrPromotion)
