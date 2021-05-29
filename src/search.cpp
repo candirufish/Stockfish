@@ -1097,6 +1097,9 @@ moves_loop: // When in check, search starts from here
                   return beta;
           }
       }
+	  
+	  else if (givesCheck && improving)
+          extension = 1;
 
       // Add extension to new depth
       newDepth += extension;
