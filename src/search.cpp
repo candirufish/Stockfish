@@ -1098,7 +1098,9 @@ moves_loop: // When in check, search starts from here
           }
       }
 	  
-	  else if (givesCheck && improving)
+	  else if (givesCheck 
+			&& (abs(ss->staticEval) > Value(200))
+			&& improving)
           extension = 1;
 
       // Add extension to new depth
