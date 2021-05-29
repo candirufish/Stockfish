@@ -1099,8 +1099,9 @@ moves_loop: // When in check, search starts from here
       }
 	  
 	  else if (givesCheck 
-			&& pos.rule50_count() <= 10
-			&& abs(ss->staticEval) > Value(100))
+			&& depth > 6
+			&& abs(ss->staticEval) <= Value(200)
+			&& abs(ss->staticEval) >= Value(10))
           extension = 1;
 
       // Add extension to new depth
