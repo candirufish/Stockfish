@@ -1099,7 +1099,7 @@ moves_loop: // When in check, search starts from here
       }
 	  
 	  else if (givesCheck 
-			&& (abs(ss->staticEval) > Value(200))
+			&& (abs(ss->staticEval) > Value(100))
 			&& improving)
           extension = 1;
 
