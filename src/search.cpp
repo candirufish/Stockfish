@@ -1154,18 +1154,19 @@ moves_loop: // When in check, search starts from here
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
-              r += 1 + !captureOrPromotion;		 
+              r += 1 + !captureOrPromotion;		
+
+		  if (givesCheck 
+				&& captureOrPromotion
+				&& LateEndgame
+				&& abs(ss->staticEval) > Value(100))
+			      r--;
 
           if (!captureOrPromotion)
           {
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
-                  r++;
-			  
-			  if (givesCheck 
-					&& LateEndgame
-					&& abs(ss->staticEval) > Value(100))
-			      r--;
+                  r++;			 
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
