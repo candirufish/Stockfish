@@ -1161,7 +1161,9 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r++;
 			  
-			   if (givesCheck)
+			  if (givesCheck 
+			  && type_of(movedPiece) != PAWN
+			  && abs(ss->staticEval) > Value(100))
 			      r--;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
