@@ -563,7 +563,7 @@ namespace {
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool formerPv, givesCheck, improving, didLMR, priorCapture;
     bool captureOrPromotion, doFullDepthSearch, moveCountPruning,
-         ttCapture, singularQuietLMR;
+         ttCapture, singularQuietLMR, LateEndgame;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
 
@@ -994,6 +994,7 @@ moves_loop: // When in check, search starts from here
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+	  LateEndgame = pos.non_pawn_material(WHITE) + pos.non_pawn_material(BLACK) <= 4 * RookValueMg;
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1154,6 +1155,11 @@ moves_loop: // When in check, search starts from here
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
               r += 1 + !captureOrPromotion;
+		  
+		  if (givesCheck 
+		  && LateEndgame
+		  && abs(ss->staticEval) > Value(100))
+			      r--;
 
           if (!captureOrPromotion)
           {
