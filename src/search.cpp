@@ -1097,10 +1097,12 @@ moves_loop: // When in check, search starts from here
                   return beta;
           }
       }
-      else if (   givesCheck
-               && depth > 6
-               && abs(ss->staticEval) > Value(150))
+      else if (givesCheck 
+			&& depth > 6
+			&& abs(ss->staticEval) <= Value(200)
+			&& abs(ss->staticEval) >= Value(10))
           extension = 1;
+
 
       // Add extension to new depth
       newDepth += extension;
