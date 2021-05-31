@@ -1016,7 +1016,7 @@ moves_loop: // When in check, search starts from here
               if (   !givesCheck
                   && lmrDepth < 1
 				  && distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) >= 2
-				  && type_of(pos.piece_on(to_sq(move))) == PAWN
+				  && (type_of(pos.piece_on(to_sq(move))) == PAWN || type_of(pos.piece_on(to_sq(move))) == ROOK)
                   && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] < 0)
                   continue;
 
