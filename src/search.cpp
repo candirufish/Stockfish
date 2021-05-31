@@ -1164,6 +1164,11 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
+			  
+			  if (givesCheck
+				  && abs(ss->staticEval) <= Value(200)
+				  && abs(ss->staticEval) >= Value(10))
+			      r--;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
