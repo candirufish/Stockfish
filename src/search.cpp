@@ -355,6 +355,11 @@ void Thread::search() {
                   if (rootMoves[pvLast].tbRank != rootMoves[pvFirst].tbRank)
                       break;
           }
+		  
+		  shortPv =    rootDepth > 12
+					&& abs(rootMoves[pvIdx].previousScore) <= Value(2)
+                    && int(rootMoves[pvIdx].pv.size()) < rootDepth / 3;
+
 
           // Reset UCI info selDepth for each depth and each PV line
           selDepth = 0;
@@ -1098,7 +1103,7 @@ moves_loop: // When in check, search starts from here
           }
       }
       else if (   givesCheck
-               && depth > 6
+               && thisThread->shortPv
                && abs(ss->staticEval) > Value(100))
           extension = 1;
 
