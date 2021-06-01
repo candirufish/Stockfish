@@ -1103,7 +1103,7 @@ moves_loop: // When in check, search starts from here
 			&& abs(ss->staticEval) > Value(100))
           extension = 1;
 
-		  else if ( depth <= 5 
+		  else if ( depth <= 6 
 			&& type_of(movedPiece) != PAWN
 		    && pos.see_ge(move)
 			&& thisThread->mainHistory[us][from_to(move)] >= 0)
