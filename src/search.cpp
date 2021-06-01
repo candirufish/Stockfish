@@ -1105,8 +1105,7 @@ moves_loop: // When in check, search starts from here
 			&& abs(ss->staticEval) > Value(100))
           extension = 1;
 
-		  else if ( depth <= 5
-			&& !likelyFailLow
+		  else if (!likelyFailLow
 		    && pos.see_ge(move)
 			&& thisThread->mainHistory[us][from_to(move)] >= 0)
           extension = 1;
