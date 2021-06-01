@@ -1103,9 +1103,8 @@ moves_loop: // When in check, search starts from here
 			&& abs(ss->staticEval) > Value(100))
           extension = 1;
 		  
-		  else if ( depth < 7 
-		    && pos.is_discovered_check_on_king(~us, move)
-			&& abs(ss->staticEval) > Value(100))
+		  else if ( depth < 5 
+		    && pos.is_discovered_check_on_king(~us, move))
           extension = 1;
 	  }
 
