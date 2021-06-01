@@ -1097,10 +1097,17 @@ moves_loop: // When in check, search starts from here
                   return beta;
           }
       }
-      else if (   givesCheck
-               && depth > 6
-               && abs(ss->staticEval) > Value(100))
+      else if (givesCheck)	
+	  {
+		  if (depth > 6  
+			&& abs(ss->staticEval) > Value(100))
           extension = 1;
+
+		  else if ( depth <= 5 
+		    && pos.see_ge(move)
+			&& thisThread->mainHistory[us][from_to(move)] >= -1000)
+          extension = 1;
+	  }
 
       // Add extension to new depth
       newDepth += extension;
