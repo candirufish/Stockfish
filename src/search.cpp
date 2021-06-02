@@ -1011,10 +1011,12 @@ moves_loop: // When in check, search starts from here
           int lmrDepth = std::max(newDepth - reduction(improving, depth, moveCount), 0);
 
           if (   captureOrPromotion
-              || givesCheck)
+              || givesCheck || pos.is_discovered_check_on_king(~us, move))
           {
               // Capture history based pruning when the move doesn't give check
               if (   !givesCheck
+			      && !pos.is_discovered_check_on_king(~us, move)
+				  && type_of(pos.piece_on(to_sq(move))) != BISHOP 
                   && lmrDepth < 1
                   && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] < 0)
                   continue;
