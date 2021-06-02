@@ -1098,13 +1098,14 @@ moves_loop: // When in check, search starts from here
                   return beta;
           }
       }
-      else if (givesCheck && depth > 6)	
+      else if (givesCheck 
+			&& depth > 6
+			&& !captureOrPromotion)	
 	  {
 		  if (abs(ss->staticEval) > Value(100))
           extension = 1;
 
-		  else if (!captureOrPromotion
-		  && pos.is_discovered_check_on_king(~us, move))
+		  else if (pos.is_discovered_check_on_king(~us, move))
           extension = 1;
 	  }
 
