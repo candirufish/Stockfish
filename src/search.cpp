@@ -1103,7 +1103,8 @@ moves_loop: // When in check, search starts from here
 		  if (abs(ss->staticEval) > Value(100))
           extension = 1;
 		  
-		  else if (pos.see_ge(move))
+		  else if (pos.see_ge(move)
+			  && !captureOrPromotion)
           extension = 1;
 	  }
 
