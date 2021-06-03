@@ -1167,8 +1167,8 @@ moves_loop: // When in check, search starts from here
                   r++;
 			  
 			  if (ss->inCheck 
-			  && abs(ss->staticEval) < Value(100)
-			  && pos.rule50_count() >= 16
+			  && abs(bestValue) < Value(100)
+			  && pos.rule50_count() >= 11
 			  && type_of(movedPiece) == KING
 			  )
                   r++;
