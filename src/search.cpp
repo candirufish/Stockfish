@@ -1165,7 +1165,14 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
-
+			  
+			  if (ss->inCheck 
+			  && Pawns::probe(pos)->passed_count() == 0
+			  && pos.rule50_count() >= 11
+			  && type_of(movedPiece) == KING
+			  )
+				   r++;
+				   
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
                              + (*contHist[1])[movedPiece][to_sq(move)]
