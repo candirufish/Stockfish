@@ -1166,9 +1166,10 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r++;
 			  
-			  if (ss->inCheck 
-			  && Pawns::probe(pos)->passed_count() == 0
+			  if (ss->inCheck 			   
+			  && depth >= 10
 			  && pos.rule50_count() >= 11
+			  && Pawns::probe(pos)->passed_count() == 0			  
 			  && type_of(movedPiece) == KING
 			  )
 				   r++;
