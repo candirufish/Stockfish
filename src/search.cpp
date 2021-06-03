@@ -1167,7 +1167,7 @@ moves_loop: // When in check, search starts from here
                   r++;
 			  
 			  if (ss->inCheck 
-			  && depth >= 6
+			  && depth >= 10
 			  && abs(bestValue) < Value(100)
 			  && pos.rule50_count() >= 16
 			  && type_of(movedPiece) == KING
