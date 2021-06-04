@@ -1100,7 +1100,7 @@ moves_loop: // When in check, search starts from here
       }
       else if (   givesCheck
                && depth > 6
-               && (bestValue - ss->staticEval > -PawnValueMg))
+               && (bestValue - ss->staticEval > -RookValueEg))
           extension = 1;
 
       // Add extension to new depth
