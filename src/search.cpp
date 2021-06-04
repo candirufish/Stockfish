@@ -1168,7 +1168,7 @@ moves_loop: // When in check, search starts from here
 			  
 			  if (ss->inCheck 
 			  && pos.rule50_count() >= 16
-			  && pos.non_pawn_material()  >= 4 * RookValueMg
+			  && pos.non_pawn_material()  <= 4 * RookValueMg
 			  && type_of(movedPiece) == KING
 			  )
                   r++;
