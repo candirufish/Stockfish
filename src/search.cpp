@@ -1125,7 +1125,6 @@ moves_loop: // When in check, search starts from here
       // cases where we extend a son if it has good chances to be "interesting".
       if (    depth >= 3
           &&  moveCount > 1 + 2 * rootNode
-		  && (bestValue - ss->staticEval > -(2 * BishopValueEg))
           && (  !captureOrPromotion
               || (cutNode && (ss-1)->moveCount > 1)
               || !ss->ttPv)
@@ -1160,6 +1159,10 @@ moves_loop: // When in check, search starts from here
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
               r += 1 + !captureOrPromotion;
+		  
+		  if (captureOrPromotion
+		  && bestValue - ss->staticEval > -(4 * BishopValueEg))
+		      r--;
 
           if (!captureOrPromotion)
           {
