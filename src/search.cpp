@@ -1131,6 +1131,11 @@ moves_loop: // When in check, search starts from here
           && (!PvNode || ss->ply > 1 || thisThread->id() % 4 != 3))
       {
           Depth r = reduction(improving, depth, moveCount);
+		  
+		  if (captureOrPromotion		  
+		  && bestValue - ss->staticEval > -(4 * BishopValueEg)
+		  && thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] >= 0)
+		      r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
