@@ -1168,7 +1168,6 @@ moves_loop: // When in check, search starts from here
 			  
 			  if (ss->inCheck 
 			  && thisThread->bestMoveChanges <= 2
-			  && pos.rule50_count() >= 16
 			  && type_of(movedPiece) == KING
 			  )
 			      r++;
