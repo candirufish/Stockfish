@@ -1161,7 +1161,7 @@ moves_loop: // When in check, search starts from here
               r += 1 + !captureOrPromotion;
 		  
 		  if (captureOrPromotion
-		  && depth <= 5 
+		  && depth <= 7 
 		  && bestValue - ss->staticEval > -(4 * BishopValueEg))
 		      r--;
 
