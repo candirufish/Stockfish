@@ -1100,8 +1100,9 @@ moves_loop: // When in check, search starts from here
       }
       else if (   givesCheck
                && depth > 6
-               && (bestValue - ss->staticEval > -(4 * BishopValueEg)))
-          extension = pos.see_ge(move) ? 2 : 1;
+               && (bestValue - ss->staticEval > -(4 * BishopValueEg))
+			   && pos.see_ge(move))
+          extension = 1;
 
       // Add extension to new depth
       newDepth += extension;
