@@ -1098,15 +1098,11 @@ moves_loop: // When in check, search starts from here
                   return beta;
           }
       }
-      else if (givesCheck && depth > 6)	
-	  {
-		  if (bestValue - ss->staticEval > -(4 * BishopValueEg))
+      else if (givesCheck 
+	  && depth > 6
+	  && bestValue - ss->staticEval > -(4 * BishopValueEg)
+	  && pos.is_discovered_check_on_king(~us, move))		 
           extension = 1;
-		  
-		  else if (pos.is_discovered_check_on_king(~us, move))
-          extension = 1;
-	  }
-
 
       // Add extension to new depth
       newDepth += extension;
