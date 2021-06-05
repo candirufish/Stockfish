@@ -1164,7 +1164,7 @@ moves_loop: // When in check, search starts from here
 			  
 			  if (   givesCheck
                && depth > 6
-               && (bestValue - ss->staticEval > -(4 * BishopValueEg)))
+               && abs(ss->staticEval) > Value(100))
                   r--;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
