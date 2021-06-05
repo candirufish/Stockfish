@@ -1162,7 +1162,7 @@ moves_loop: // When in check, search starts from here
 		  
 		  if (captureOrPromotion
 		  && !PvNode
-		  && thisThread->bestMoveChanges >= 2
+		  && thisThread->bestMoveChanges >= 4
 		  && bestValue - ss->staticEval > -(4 * BishopValueEg))
 		      r--;
 
