@@ -1099,6 +1099,7 @@ moves_loop: // When in check, search starts from here
           }
       }
        else if (   givesCheck
+			   && depth > 7
                && (bestValue - ss->staticEval > -(4 * BishopValueEg)))
           extension = 1;
 
