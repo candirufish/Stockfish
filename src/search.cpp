@@ -1146,7 +1146,7 @@ moves_loop: // When in check, search starts from here
           if (   (rootNode || !PvNode)
               && thisThread->rootDepth > 10
               && thisThread->bestMoveChanges <= 2)
-              r += 1 + (givesCheck && !captureOrPromotion && type_of(movedPiece) != PAWN && std::abs(bestValue) >= 2);
+              r += 1 + (givesCheck && !captureOrPromotion && type_of(movedPiece) != PAWN && std::abs(bestValue) >= 2 && pos.rule50_count() >= 11);
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
           if ((ss-1)->moveCount > 13)
