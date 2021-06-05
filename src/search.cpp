@@ -1098,11 +1098,7 @@ moves_loop: // When in check, search starts from here
                   return beta;
           }
       }
-      else if (   givesCheck
-               && depth > 6
-               && abs(ss->staticEval) > Value(100))
-          extension = 1;
-
+	  
       // Add extension to new depth
       newDepth += extension;
 
@@ -1159,6 +1155,11 @@ moves_loop: // When in check, search starts from here
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
               r += 1 + !captureOrPromotion;
+		  
+		  if (   givesCheck
+               && depth > 6
+               && abs(ss->staticEval) > Value(100))
+              r--;
 
           if (!captureOrPromotion)
           {
