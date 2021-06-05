@@ -1161,7 +1161,7 @@ moves_loop: // When in check, search starts from here
               r += 1 + !captureOrPromotion;
 		  
 		  if (captureOrPromotion
-		  && bestValue - ss->staticEval > -(4 * BishopValueEg))
+		  && bestValue - ss->staticEval > -(3 * BishopValueEg))
 		      r--;
 
           if (!captureOrPromotion)
