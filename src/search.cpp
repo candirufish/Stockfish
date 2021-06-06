@@ -1137,6 +1137,7 @@ moves_loop: // When in check, search starts from here
               r--;
 		  
 		  if (captureOrPromotion
+		  && givesCheck
 		  && !cutNode
 		  && bestValue - ss->staticEval > -(2 * BishopValueEg))
 		      r--;
