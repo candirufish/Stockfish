@@ -1163,6 +1163,12 @@ moves_loop: // When in check, search starts from here
           if (!captureOrPromotion)
           {
               // Increase reduction if ttMove is a capture (~3 Elo)
+			  
+			  if (type_of(movedPiece) == KING
+				  && Pawns::probe(pos)->passed_count() >= 1
+			      && bestValue - ss->staticEval > -(2 * BishopValueEg))
+				  r--;
+			  
               if (ttCapture)
                   r++;
 
