@@ -1162,6 +1162,11 @@ moves_loop: // When in check, search starts from here
 
           if (!captureOrPromotion)
           {
+			  
+			  if (bestValue - ss->staticEval <  -(4 * BishopValueEg) && !givesCheck)
+                  r++;
+
+			  
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
