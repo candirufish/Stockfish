@@ -1167,7 +1167,7 @@ moves_loop: // When in check, search starts from here
                   r++;
 			  
 			  if (ss->inCheck 
-			  && rootNode
+			  && !rootNode
 			  && type_of(movedPiece) == KING
 			  )
 				   r++;
