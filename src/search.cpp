@@ -1163,7 +1163,7 @@ moves_loop: // When in check, search starts from here
           if (!captureOrPromotion)
           {
 			  
-			  if (ss->staticEval < -RookValueEg && !givesCheck && type_of(movedPiece) != KING && type_of(movedPiece)!= PAWN)
+			  if (ss->staticEval < -QueenValueEg && !givesCheck && type_of(movedPiece) != KING && type_of(movedPiece)!= PAWN)
                   r++;
 
               // Increase reduction if ttMove is a capture (~3 Elo)
