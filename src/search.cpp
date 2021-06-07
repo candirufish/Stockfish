@@ -1102,7 +1102,7 @@ moves_loop: // When in check, search starts from here
                && depth > 6
 			   && !rootNode
 			   && !excludedMove 
-               && bestValue - ss->staticEval > -(4 * RookValueEg))
+               && bestValue - ss->staticEval > -(QueenValueEg))
           extension = 1;
 
       // Add extension to new depth
