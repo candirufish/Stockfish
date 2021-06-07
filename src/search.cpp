@@ -1132,8 +1132,8 @@ moves_loop: // When in check, search starts from here
       {
           Depth r = reduction(improving, depth, moveCount);
 
-          if (PvNode)
-              r -= (captureOrPromotion && !rootNode) ? 2 : 1;
+          if (PvNode && !rootNode)
+              r -= (captureOrPromotion) ? 1 : 2;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
