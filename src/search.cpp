@@ -1100,6 +1100,8 @@ moves_loop: // When in check, search starts from here
       }
       else if (   givesCheck
                && depth > 6
+			   && move == ttMove
+			   && !rootNode
 			   && !excludedMove 
                && bestValue - ss->staticEval > -(4 * RookValueEg))
           extension = 1;
