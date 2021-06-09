@@ -1100,7 +1100,8 @@ moves_loop: // When in check, search starts from here
       }
       else if (   givesCheck
                && depth > 6
-               && bestValue - ss->staticEval < -(2 * BishopValueEg))
+			   && abs(ss->staticEval) > Value(100)
+               && bestValue - ss->staticEval > -(4 * BishopValueEg))
           extension = 1;
 
       // Add extension to new depth
