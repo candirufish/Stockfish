@@ -1163,7 +1163,13 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 		  
-		  if ((to_sq(move) == (type_of(move) == PROMOTION)) == to_sq((ss-1)->currentMove) && (ss-1)->statScore > 0 && cutNode)
+		   ss->statScore =  thisThread->mainHistory[us][from_to(move)]
+                + (*contHist[0])[movedPiece][to_sq(move)]
+                + (*contHist[1])[movedPiece][to_sq(move)]
+                + (*contHist[3])[movedPiece][to_sq(move)]
+                    - 4923;
+		  
+		  if ((to_sq(move) == (type_of(move) == PROMOTION)) == to_sq((ss-1)->currentMove) && (ss-1)->statScore > 0 && ss->statScore < 0)
 			  r++;
 
           if (!captureOrPromotion)
@@ -1171,12 +1177,6 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
-
-              ss->statScore =  thisThread->mainHistory[us][from_to(move)]
-                             + (*contHist[0])[movedPiece][to_sq(move)]
-                             + (*contHist[1])[movedPiece][to_sq(move)]
-                             + (*contHist[3])[movedPiece][to_sq(move)]
-                             - 4923;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               if (!ss->inCheck)
