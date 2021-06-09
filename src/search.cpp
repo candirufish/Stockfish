@@ -1163,8 +1163,8 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 		  
-		  if ((to_sq(move) == (type_of(move) == PROMOTION)) == (to_sq((ss-1)->currentMove) && !givesCheck) && (ss-1)->statScore > 0)
-			  r += 2;
+		  if ((to_sq(move) == (type_of(move) == PROMOTION)) == to_sq((ss-1)->currentMove) && (ss-1)->statScore > 0)
+			  r += 3;
 
           if (!captureOrPromotion)
           {
