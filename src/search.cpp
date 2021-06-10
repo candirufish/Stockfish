@@ -1133,7 +1133,6 @@ moves_loop: // When in check, search starts from here
           Depth r = reduction(improving, depth, moveCount);
 		  
 		  if (captureOrPromotion
-				&& givesCheck
 				&& bestValue - ss->staticEval < -(PawnValueEg))
 		      r--;
 
