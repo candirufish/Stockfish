@@ -1180,8 +1180,8 @@ moves_loop: // When in check, search starts from here
                   r -= ss->statScore / 14721;
           }
 		  
-		  else if ((to_sq(move) == (type_of(move) == PROMOTION)) == to_sq((ss-1)->currentMove) && (ss-1)->statScore > 0)
-			  r++;
+		  else if (type_of((ss-1)->currentMove) == PROMOTION && to_sq((ss-1)->currentMove) == to_sq(move) && (ss-1)->statScore > 0)
+			  r += 2;
 
           // In general we want to cap the LMR depth search at newDepth. But if
           // reductions are really negative and movecount is low, we allow this move
