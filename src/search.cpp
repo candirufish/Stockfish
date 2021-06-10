@@ -358,6 +358,10 @@ void Thread::search() {
                   if (rootMoves[pvLast].tbRank != rootMoves[pvFirst].tbRank)
                       break;
           }
+		  
+		   shortPv =    rootDepth > 12
+              && abs(rootMoves[pvIdx].previousScore) <= Value(2)
+              && int(rootMoves[pvIdx].pv.size()) < rootDepth / 3;
 
           // Reset UCI info selDepth for each depth and each PV line
           selDepth = 0;
@@ -1179,6 +1183,9 @@ moves_loop: // When in check, search starts from here
               if (!ss->inCheck)
                   r -= ss->statScore / 14721;
           }
+		  
+		  if (thisThread->shortPv)
+               r--;
 
           // In general we want to cap the LMR depth search at newDepth. But if
           // reductions are really negative and movecount is low, we allow this move
