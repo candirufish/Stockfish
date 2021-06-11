@@ -1101,13 +1101,11 @@ moves_loop: // When in check, search starts from here
         else if (givesCheck
 		&& !rootNode
 		&& !excludedMove
+		&& pos.is_discovered_check_on_king(~us, move)
 		&& depth > 6)	
 	  {
 		  if (bestValue - ss->staticEval > -(4 * RookValueEg))
-          extension = 1;
-		  
-		  else if (pos.is_discovered_check_on_king(~us, move))
-          extension = 1;
+          extension = 1;		 
 	  }
 
       // Add extension to new depth
