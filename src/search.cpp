@@ -1132,6 +1132,7 @@ moves_loop: // When in check, search starts from here
       {
           Depth r = reduction(improving, depth, moveCount);
 
+      if (depth > 6) {
           if (PvNode)
               r--;
 
@@ -1145,12 +1146,6 @@ moves_loop: // When in check, search starts from here
               && !likelyFailLow)
               r -= 2;
 
-          // Increase reduction at root and non-PV nodes when the best move does not change frequently
-          if (   (rootNode || !PvNode)
-              && thisThread->rootDepth > 10
-              && thisThread->bestMoveChanges <= 2)
-              r++;
-
           // Decrease reduction if opponent's move count is high (~1 Elo)
           if ((ss-1)->moveCount > 13)
               r--;
@@ -1158,6 +1153,24 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
           if (singularQuietLMR)
               r--;
+		  
+		  // Decrease/increase reduction for moves with a good/bad history (~30 Elo)		  
+		   ss->statScore =  thisThread->mainHistory[us][from_to(move)]
+             + (*contHist[0])[movedPiece][to_sq(move)]
+             + (*contHist[1])[movedPiece][to_sq(move)]
+             + (*contHist[3])[movedPiece][to_sq(move)]
+              - 4923;
+			  
+			if (!ss->inCheck)
+                  r -= ss->statScore / 14721;
+		  
+	      }
+		  
+		  // Increase reduction at root and non-PV nodes when the best move does not change frequently
+          if (   (rootNode || !PvNode)
+              && thisThread->rootDepth > 10
+              && thisThread->bestMoveChanges <= 2)
+              r++;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
@@ -1169,15 +1182,6 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r++;
 
-              ss->statScore =  thisThread->mainHistory[us][from_to(move)]
-                             + (*contHist[0])[movedPiece][to_sq(move)]
-                             + (*contHist[1])[movedPiece][to_sq(move)]
-                             + (*contHist[3])[movedPiece][to_sq(move)]
-                             - 4923;
-
-              // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
-              if (!ss->inCheck)
-                  r -= ss->statScore / 14721;
           }
 
           // In general we want to cap the LMR depth search at newDepth. But if
