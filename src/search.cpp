@@ -1132,6 +1132,7 @@ moves_loop: // When in check, search starts from here
       {
           Depth r = reduction(improving, depth, moveCount);
 
+       if (depth > 6) {
           if (PvNode)
               r--;
 
@@ -1145,19 +1146,20 @@ moves_loop: // When in check, search starts from here
               && !likelyFailLow)
               r -= 2;
 
-          // Increase reduction at root and non-PV nodes when the best move does not change frequently
+          // Decrease reduction if opponent's move count is high (~1 Elo)
+          if ((ss-1)->moveCount > 13)
+              r--;
+		  
+		  // Decrease reduction if ttMove has been singularly extended (~1 Elo)
+          if (singularQuietLMR)
+              r--;
+	      }
+		  
+		  // Increase reduction at root and non-PV nodes when the best move does not change frequently
           if (   (rootNode || !PvNode)
               && thisThread->rootDepth > 10
               && thisThread->bestMoveChanges <= 2)
               r++;
-
-          // Decrease reduction if opponent's move count is high (~1 Elo)
-          if ((ss-1)->moveCount > 13)
-              r--;
-
-          // Decrease reduction if ttMove has been singularly extended (~1 Elo)
-          if (singularQuietLMR)
-              r--;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
