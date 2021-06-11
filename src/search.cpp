@@ -1154,6 +1154,8 @@ moves_loop: // When in check, search starts from here
           if (singularQuietLMR)
               r--;
 		  
+		  if (!captureOrPromotion)
+          {		  
 		  // Decrease/increase reduction for moves with a good/bad history (~30 Elo)		  
 		   ss->statScore =  thisThread->mainHistory[us][from_to(move)]
              + (*contHist[0])[movedPiece][to_sq(move)]
@@ -1163,7 +1165,7 @@ moves_loop: // When in check, search starts from here
 			  
 			if (!ss->inCheck)
                   r -= ss->statScore / 14721;
-		  
+				}
 	      }
 		  
 		  // Increase reduction at root and non-PV nodes when the best move does not change frequently
