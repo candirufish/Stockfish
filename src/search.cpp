@@ -1133,7 +1133,7 @@ moves_loop: // When in check, search starts from here
           Depth r = reduction(improving, depth, moveCount);
 
           if (PvNode)
-              r--;
+              r -= (bestValue - ss->staticEval < -(PawnValueEg)) && depth > 6 ? 2 : 1;
 		  
 		  if (depth > 6) {
 
