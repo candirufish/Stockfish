@@ -1104,7 +1104,7 @@ moves_loop: // When in check, search starts from here
 		&& pos.is_discovered_check_on_king(~us, move)
 		&& depth > 6)	
 	  {
-		  if (bestValue - ss->staticEval > -(4 * RookValueEg))
+		  if (abs(ss->staticEval) > Value(100))
           extension = 1;		 
 	  }
 
