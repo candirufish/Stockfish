@@ -1142,11 +1142,11 @@ moves_loop: // When in check, search starts from here
         // and node is not likely to fail low. (~3 Elo)
 		
 		 if (PvNode)
-              r--;
+             r -= depth > 6 ? 1 : 2;
 		  
          if (ss->ttPv
               && !likelyFailLow)
-             r -= 2;
+             r -= depth > 6 ? 1 : 2;
 
        if (depth > 6) {
 
