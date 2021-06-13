@@ -1171,16 +1171,16 @@ moves_loop: // When in check, search starts from here
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
-              r += 1 + !captureOrPromotion;
-		  
-		  if (doubleExtension && depth <= 10)
-              r++;
+              r += 1 + !captureOrPromotion;		  
 
           if (!captureOrPromotion)
           {
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
+			  
+			  if (doubleExtension && depth <= 10)
+              r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
