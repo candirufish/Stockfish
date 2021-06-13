@@ -1168,6 +1168,9 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
           if (singularQuietLMR)
               r--;
+		  
+		  if (type_of(move) == PROMOTION && promotion_type(move) != QUEEN && doubleExtension && depth <= 10)
+			  r++;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
