@@ -1153,7 +1153,7 @@ moves_loop: // When in check, search starts from here
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
               && !likelyFailLow)
-              r -= depth >= 6 ? 2 : 1;
+              r -= depth >= 6 ? 2 : 0;
 
           // Increase reduction at root and non-PV nodes when the best move does not change frequently
           if (   (rootNode || !PvNode)
