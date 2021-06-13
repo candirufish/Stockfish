@@ -1173,7 +1173,7 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 		  
-		  if (type_of(move) == PROMOTION && promotion_type(move) != QUEEN && doubleExtension)
+		  if (ss->inCheck && type_of(movedPiece) == KING && doubleExtension)
 			  r++;
 
           if (!captureOrPromotion)
