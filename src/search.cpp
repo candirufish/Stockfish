@@ -1179,8 +1179,8 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r++;
 			  
-			  if (doubleExtension && depth <= 10)
-              r++;
+			  if (doubleExtension)
+                  r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
