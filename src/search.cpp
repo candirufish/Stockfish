@@ -1057,7 +1057,7 @@ moves_loop: // When in check, search starts from here
       // a reduced search on all the other moves but the ttMove and if the
       // result is lower than ttValue minus a margin, then we will extend the ttMove.
       if (   !rootNode
-          &&  depth >= 7
+          && depth >= 6
           &&  move == ttMove
           && !excludedMove // Avoid recursive singular search
        /* &&  ttValue != VALUE_NONE Already implicit in the next condition */
@@ -1065,6 +1065,13 @@ moves_loop: // When in check, search starts from here
           && (tte->bound() & BOUND_LOWER)
           &&  tte->depth() >= depth - 3)
       {
+		  
+		if (   givesCheck
+               && abs(ss->staticEval) > Value(100))
+          extension = 1;
+		  
+		  
+	   else		{
           Value singularBeta = ttValue - 2 * depth;
           Depth singularDepth = (depth - 1) / 2;
 
@@ -1107,10 +1114,7 @@ moves_loop: // When in check, search starts from here
                   return beta;
           }
       }
-      else if (   givesCheck
-               && depth > 6
-               && abs(ss->staticEval) > Value(100))
-          extension = 1;
+	  }
 
       // Add extension to new depth
       newDepth += extension;
