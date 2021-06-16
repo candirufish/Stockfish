@@ -1108,7 +1108,7 @@ moves_loop: // When in check, search starts from here
           }
       }
       else if (   givesCheck
-               && depth > 6
+               && moveCount <= 5
                && abs(ss->staticEval) > Value(100))
           extension = 1;
 
