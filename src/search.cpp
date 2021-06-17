@@ -1022,7 +1022,8 @@ moves_loop: // When in check, search starts from here
                   continue;
 
               // SEE based pruning
-              if (!pos.see_ge(move, Value(-218) * depth)) // (~25 Elo)
+			  bool qcap = type_of(pos.piece_on(to_sq(move))) == QUEEN;
+              if (!pos.see_ge(move, Value(-218) * (depth * qcap))) // (~25 Elo)
                   continue;
           }
           else
