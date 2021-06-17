@@ -1022,7 +1022,7 @@ moves_loop: // When in check, search starts from here
                   continue;
 
               // SEE based pruning
-			  bool danger = captureOrPromotion && distance(to_sq(move), pos.square<KING>(~us)) < 3;
+			  bool danger = captureOrPromotion && givesCheck && distance(to_sq(move), pos.square<KING>(~us)) < 3;
               if (!pos.see_ge(move, Value(-218) * (depth + danger))) // (~25 Elo)
                   continue;
           }
