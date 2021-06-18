@@ -564,7 +564,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, didLMR, priorCapture;
+    bool givesCheck, canCheck, improving, didLMR, priorCapture;
     bool captureOrPromotion, doFullDepthSearch, moveCountPruning,
          ttCapture, singularQuietLMR;
     Piece movedPiece;
@@ -941,7 +941,8 @@ moves_loop: // When in check, search starts from here
     const PieceToHistory* contHist[] = { (ss-1)->continuationHistory, (ss-2)->continuationHistory,
                                           nullptr                   , (ss-4)->continuationHistory,
                                           nullptr                   , (ss-6)->continuationHistory };
-
+	
+	canCheck = false;
     Move countermove = thisThread->counterMoves[pos.piece_on(prevSq)][prevSq];
 
     MovePicker mp(pos, ttMove, depth, &thisThread->mainHistory,
@@ -997,6 +998,7 @@ moves_loop: // When in check, search starts from here
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+	  canCheck |= givesCheck;
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1013,10 +1015,11 @@ moves_loop: // When in check, search starts from here
           int lmrDepth = std::max(newDepth - reduction(improving, depth, moveCount), 0);
 
           if (   captureOrPromotion
-              || givesCheck)
+              || givesCheck || canCheck)
           {
               // Capture history based pruning when the move doesn't give check
               if (   !givesCheck
+				  && !canCheck
                   && lmrDepth < 1
                   && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] < 0)
                   continue;
