@@ -1172,7 +1172,8 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 		  
-		  if ((ss-1)->staticEval > (ss-3)->staticEval
+		  if (depth >= 6
+		    && (ss-1)->staticEval > (ss-3)->staticEval
 			&& bestValue - ss->staticEval < -(PawnValueEg))
 			  r--;
 
