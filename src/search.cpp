@@ -1113,7 +1113,7 @@ moves_loop: // When in check, search starts from here
 			   
            extension = 1;
 	  
-	  else if (captureOrPromotion
+	  if (captureOrPromotion
 		    && distance(to_sq(move), pos.square<KING>(~us)) < 3
 			&& bestValue - ss->staticEval < -(PawnValueEg))			
 			
