@@ -1174,7 +1174,7 @@ moves_loop: // When in check, search starts from here
 		  
 		  if ((ss-1)->captureOrPromotion 
 		   && (ss-2)->captureOrPromotion
-		   && thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] > 0)
+		   && (ss-3)->captureOrPromotion)
               	r--;
 
           if (!ss->captureOrPromotion)
