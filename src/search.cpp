@@ -1172,7 +1172,9 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !ss->captureOrPromotion;
 		  
-		  if ((ss-1)->captureOrPromotion && (ss-2)->captureOrPromotion)
+		  if ((ss-1)->captureOrPromotion 
+		   && (ss-2)->captureOrPromotion
+		   && bestValue - ss->staticEval < -(PawnValueEg))
               	r--;
 
           if (!ss->captureOrPromotion)
