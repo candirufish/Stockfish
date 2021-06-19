@@ -1145,9 +1145,10 @@ moves_loop: // When in check, search starts from here
           if (PvNode)
               r--;
 		  
-		  if (captureOrPromotion && type_of(movedPiece) != PAWN
+		  if (captureOrPromotion
 		    && distance(to_sq(move), pos.square<KING>(~us)) < 3
-			&& bestValue - ss->staticEval < -(PawnValueEg))
+			&& bestValue - ss->staticEval < -(PawnValueEg)
+			&& thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] < 0)
 			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
