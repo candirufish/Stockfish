@@ -1146,8 +1146,7 @@ moves_loop: // When in check, search starts from here
               r--;
 		  
 		  if (ss->captureOrPromotion && (ss-1)->captureOrPromotion 
-		    && distance(to_sq(move), pos.square<KING>(~us)) < 3
-			&& bestValue - ss->staticEval < -(PawnValueEg))
+		    && distance(to_sq(move), pos.square<KING>(~us)) < 3)
 			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
