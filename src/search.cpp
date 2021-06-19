@@ -1179,8 +1179,7 @@ moves_loop: // When in check, search starts from here
                   r++;
 			  
 			if ((ss-1)->captureOrPromotion 
-		    && distance(to_sq(move), pos.square<KING>(~us)) < 3
-			&& bestValue - ss->staticEval < -(PawnValueEg))
+		    && distance(to_sq(move), pos.square<KING>(~us)) < 3)
 			  r--;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
