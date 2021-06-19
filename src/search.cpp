@@ -1172,7 +1172,8 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 		  
-		  if (distance(to_sq(move), pos.square<KING>(~us)) < 3
+		  if (captureOrPromotion
+		    && distance(to_sq(move), pos.square<KING>(~us)) < 3
 			&& bestValue - ss->staticEval < -(PawnValueEg))
 			  r--;
 
