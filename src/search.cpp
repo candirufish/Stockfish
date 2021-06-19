@@ -1145,7 +1145,8 @@ moves_loop: // When in check, search starts from here
           if (PvNode)
               r--;
 		  
-		  if (captureOrPromotion && type_of(move) != PROMOTION
+		  if (depth >= 6
+		    && captureOrPromotion
 		    && distance(to_sq(move), pos.square<KING>(~us)) < 3
 			&& bestValue - ss->staticEval < -(PawnValueEg))
 			  r--;
