@@ -1184,7 +1184,9 @@ moves_loop: // When in check, search starts from here
                              + (*contHist[3])[movedPiece][to_sq(move)]
                              - 4923;
 							 
-			  if ((ss-1)->captureOrPromotion && (ss-2)->captureOrPromotion)
+			  if (type_of(movedPiece) == PAWN
+			  && (ss-1)->captureOrPromotion 
+			  && (ss-2)->captureOrPromotion)
               	r--;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
