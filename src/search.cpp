@@ -1128,6 +1128,8 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
+	  
+	  ss->kingmove = type_of(movedPiece) == KING;
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1177,6 +1179,12 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
+			  
+			  if (ss->kingmove 
+			   && (ss-1)->kingmove
+			   && Pawns::probe(pos)->passed_count() == 0
+			   && pos.rule50_count() >= 11)
+			      r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
