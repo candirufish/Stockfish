@@ -1128,6 +1128,10 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
+	  
+	  bool kingdanger = captureOrPromotion 
+		   && distance(to_sq(move), pos.square<KING>(~us)) < 3
+		   && bestValue - ss->staticEval < -(PawnValueEg);
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1144,6 +1148,9 @@ moves_loop: // When in check, search starts from here
 
           if (PvNode)
               r--;
+		  
+		  if (kingdanger)
+			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
@@ -1189,14 +1196,10 @@ moves_loop: // When in check, search starts from here
                   r -= ss->statScore / 14721;
           }
 		  
-		  bool kingdanger = captureOrPromotion 
-							&& distance(to_sq(move), pos.square<KING>(~us)) < 3
-							&& bestValue - ss->staticEval < -(PawnValueEg);
-
           // In general we want to cap the LMR depth search at newDepth. But if
           // reductions are really negative and movecount is low, we allow this move
           // to be searched deeper than the first move, unless ttMove was extended by 2.
-          Depth d = std::clamp(newDepth - r, 1, newDepth + (r < -1 && moveCount <= 5 && !doubleExtension) + kingdanger);
+          Depth d = std::clamp(newDepth - r, 1, newDepth + (r < -1 && moveCount <= 5 && !doubleExtension && !kingdanger));
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
