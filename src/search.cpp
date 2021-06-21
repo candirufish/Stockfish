@@ -1184,7 +1184,7 @@ moves_loop: // When in check, search starts from here
 			   && ss->kingmove 
 			   && (ss-1)->kingmove
 			   && Pawns::probe(pos)->passed_count() == 0
-			   && pos.rule50_count() >= 11)
+			   && pos.rule50_count() >= 16)
 			      r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
