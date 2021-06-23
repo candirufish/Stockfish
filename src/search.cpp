@@ -1001,7 +1001,7 @@ moves_loop: // When in check, search starts from here
           int lmrDepth = std::max(newDepth - reduction(improving, depth, moveCount), 0);
 
           if (   captureOrPromotion
-              || givesCheck)
+              || givesCheck || ttMove)
           {
               // Capture history based pruning when the move doesn't give check
               if (   !givesCheck
