@@ -1010,7 +1010,7 @@ moves_loop: // When in check, search starts from here
                   continue;
 
               // SEE based pruning
-			  bool lflcap = likelyFailLow && captureOrPromotion;
+			  bool lflcap = likelyFailLow && givesCheck;
               if (!pos.see_ge(move, Value(-218) * (depth + lflcap)))  // (~25 Elo)
                   continue;
           }
