@@ -1010,7 +1010,7 @@ moves_loop: // When in check, search starts from here
                   continue;
 
               // SEE based pruning
-			  bool ttcapgc = (captureOrPromotion || givesCheck) && ttMove;
+			  bool ttcapgc = captureOrPromotion && givesCheck && ttMove;
               if (!pos.see_ge(move, Value(-218) * (depth + ttcapgc))) // (~25 Elo)
                   continue;
           }
