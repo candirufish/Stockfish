@@ -553,8 +553,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, didLMR, priorCapture;
-    bool captureOrPromotion, doFullDepthSearch, moveCountPruning,
-         ttCapture, singularQuietLMR;
+    bool captureOrPromotion, doFullDepthSearch, moveCountPruning, singularQuietLMR;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
 
@@ -909,14 +908,14 @@ namespace {
 
 moves_loop: // When in check, search starts from here
 
-    ttCapture = ttMove && pos.capture_or_promotion(ttMove);
+    ss->ttCapture = ttMove && pos.capture_or_promotion(ttMove);
 
     // Step 11. A small Probcut idea, when we are in check
     probCutBeta = beta + 409;
     if (   ss->inCheck
         && !PvNode
         && depth >= 4
-        && ttCapture
+        && ss->ttCapture
         && (tte->bound() & BOUND_LOWER)
         && tte->depth() >= depth - 3
         && ttValue >= probCutBeta
@@ -1063,7 +1062,7 @@ moves_loop: // When in check, search starts from here
           if (value < singularBeta)
           {
               extension = 1;
-              singularQuietLMR = !ttCapture;
+              singularQuietLMR = !ss->ttCapture;
 
               // Avoid search explosion by limiting the number of double extensions to at most 3
               if (   !PvNode
@@ -1163,8 +1162,8 @@ moves_loop: // When in check, search starts from here
           if (!captureOrPromotion)
           {
               // Increase reduction if ttMove is a capture (~3 Elo)
-              if (ttCapture)
-                  r++;
+              if (ss->ttCapture)
+                  r += (depth <= 6 && (ss - 1)->ttCapture) ? 1 : 2;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
