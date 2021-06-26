@@ -1160,7 +1160,9 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 		  
-		  if (move == ss->killers[0])
+		  if (captureOrPromotion
+		  && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] > 0
+		  && move == ss->killers[0])
 			  r--;
 
           if (!captureOrPromotion)
