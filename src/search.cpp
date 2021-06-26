@@ -1160,11 +1160,8 @@ moves_loop: // When in check, search starts from here
           if (cutNode)
               r += 1 + !captureOrPromotion;
 		  
-		  if (captureOrPromotion
-		  && ttMove
-		  && depth <= 5
-		  && move == ss->killers[0])
-			  r--;
+		  if (move == ss->killers[0] && !cutNode)
+			  r -= 2;
 
           if (!captureOrPromotion)
           {
