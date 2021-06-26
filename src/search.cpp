@@ -1132,6 +1132,12 @@ moves_loop: // When in check, search starts from here
 
           if (PvNode)
               r--;
+		  
+		  if (ttMove && PvNode
+				&& depth <= 5
+				&& captureOrPromotion 
+				&& captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] > 0)
+			  r--; 
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
