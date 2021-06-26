@@ -1135,7 +1135,7 @@ moves_loop: // When in check, search starts from here
 		  if (PvNode
 		      && ss->distanceFromPv < 12 
               && !ttMove)
-               r += 2;
+               r += 1;
 
           if (PvNode)
               r--;
