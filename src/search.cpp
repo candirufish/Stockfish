@@ -1161,7 +1161,8 @@ moves_loop: // When in check, search starts from here
               r += 1 + !captureOrPromotion;
 		  
 		  if (captureOrPromotion
-		  && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] > 0
+		  && ttMove
+		  && depth <= 5
 		  && move == ss->killers[0])
 			  r--;
 
