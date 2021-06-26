@@ -1010,8 +1010,14 @@ moves_loop: // When in check, search starts from here
                   continue;
 
               // SEE based pruning
-              if (!pos.see_ge(move, Value(-218) * depth)) // (~25 Elo)
+			  bool ttmpv = ttMove && PvNode
+					&& (givesCheck
+						|| (captureOrPromotion
+						&& captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] > 0));
+              if (!pos.see_ge(move, Value(-218) * (depth + ttmpv))) // (~25 Elo)
                   continue;
+			  
+;
           }
           else
           {
