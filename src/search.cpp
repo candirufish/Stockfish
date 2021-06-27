@@ -1161,7 +1161,7 @@ moves_loop: // When in check, search starts from here
               r += 1 + !captureOrPromotion;
 		  
 		  if (move == ss->killers[0])
-			  r -= 2;
+			  r -= 3;
 
           if (!captureOrPromotion)
           {
