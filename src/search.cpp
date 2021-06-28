@@ -1166,7 +1166,7 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r++;
 			  
-			  if (PvNode && !improving & !ttMove)
+			  if (!PvNode && !improving)
 			      r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
