@@ -1116,6 +1116,8 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
+	  ss->KingDangerEv = distance(to_sq(move), pos.square<KING>(~us)) < 3
+						&& bestValue - ss->staticEval < -(PawnValueEg);
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1132,6 +1134,9 @@ moves_loop: // When in check, search starts from here
 
           if (PvNode)
               r--;
+		  
+		  if ((ss-1)->KingDangerEv && (captureOrPromotion || givesCheck))
+			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
