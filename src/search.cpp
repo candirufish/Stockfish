@@ -1135,7 +1135,7 @@ moves_loop: // When in check, search starts from here
               r--;
 		  
 		  if (captureOrPromotion && improving
-		     && type_of(movedPiece) == PAWN
+		     && type_of(movedPiece) != PAWN
 		     &&  (ss-1)->passpawncount < (ss)->passpawncount)
 			  r -= 2;
 
