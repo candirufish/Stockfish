@@ -1116,8 +1116,7 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
-	  ss->KingDangerEv = !captureOrPromotion && !givesCheck
-						&& distance(to_sq(move), pos.square<KING>(~us)) < 3
+	  ss->BadQuietEv = !captureOrPromotion && !givesCheck
 						&& bestValue - ss->staticEval < -(PawnValueEg);
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
@@ -1136,7 +1135,7 @@ moves_loop: // When in check, search starts from here
           if (PvNode)
               r--;
 		  
-		  if ((ss-1)->KingDangerEv && (captureOrPromotion || givesCheck))
+		  if ((ss-1)->BadQuietEv && (captureOrPromotion || givesCheck))
 			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
