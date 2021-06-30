@@ -1010,8 +1010,9 @@ moves_loop: // When in check, search starts from here
                   continue;
 
               // SEE based pruning
-              if (!pos.see_ge(move, Value(-218) * depth)) // (~25 Elo)
-                  continue;
+              bool danger = (captureOrPromotion || givesCheck) && distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) <= 2;
+              if (!pos.see_ge(move, Value(-218) * (depth + danger)))
+				  continue;
           }
           else
           {
@@ -1118,7 +1119,7 @@ moves_loop: // When in check, search starts from here
       pos.do_move(move, st, givesCheck);
 	  ss->KingDangerEv = !captureOrPromotion && !givesCheck
 						&& distance(to_sq(move), pos.square<KING>(~us)) < 3
-						&& bestValue - ss->staticEval < -(2 * PawnValueEg);
+						&& bestValue - ss->staticEval < -(PawnValueEg);
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
