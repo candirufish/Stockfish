@@ -1134,7 +1134,7 @@ moves_loop: // When in check, search starts from here
           if (PvNode)
               r--;
 		  
-		  if (captureOrPromotion
+		  if (captureOrPromotion && improving
 		     &&  (ss-1)->passpawncount < (ss)->passpawncount)
 			  r -= 2;
 
