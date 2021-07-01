@@ -1101,7 +1101,7 @@ moves_loop: // When in check, search starts from here
           extension = 1;
 		  
 	  else if (pos.non_pawn_material() == 0
-       			&&  bestValue - ss->staticEval < -(PawnValueEg)
+       			&&  bestValue - ss->staticEval > -(4 * RookValueEg)
        			&&  pos.rule50_count() <= 10
 				&&  depth >= 8
  				&&  PvNode)
