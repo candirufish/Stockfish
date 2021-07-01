@@ -1099,6 +1099,13 @@ moves_loop: // When in check, search starts from here
                && depth > 6
                && abs(ss->staticEval) > Value(100))
           extension = 1;
+		  
+	  else if (pos.non_pawn_material() == 0
+       			&&  bestValue - ss->staticEval < -(PawnValueEg)
+       			&&  pos.rule50_count() <= 10
+				&&  depth >= 8
+ 				&&  PvNode)
+			extension = 1;
 
       // Add extension to new depth
       newDepth += extension;
