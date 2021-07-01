@@ -1155,6 +1155,9 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
           if (singularQuietLMR)
               r--;
+		  
+		  if (improving && bestValue - ss->staticEval < -(PawnValueEg))
+			  r--;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
