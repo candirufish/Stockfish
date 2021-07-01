@@ -1158,7 +1158,7 @@ moves_loop: // When in check, search starts from here
 		  
 		  if (captureOrPromotion && improving 
 			&& bestValue - ss->staticEval < -(PawnValueEg))
-			  r++;
+			  r--;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
