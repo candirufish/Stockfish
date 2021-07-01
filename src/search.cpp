@@ -1156,7 +1156,8 @@ moves_loop: // When in check, search starts from here
           if (singularQuietLMR)
               r--;
 		  
-		  if (improving && bestValue - ss->staticEval < -(PawnValueEg))
+		  if (captureOrPromotion && improving 
+			&& bestValue - ss->staticEval < -(PawnValueEg))
 			  r++;
 
           // Increase reduction for cut nodes (~3 Elo)
