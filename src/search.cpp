@@ -1156,7 +1156,7 @@ moves_loop: // When in check, search starts from here
           if (singularQuietLMR)
               r--;
 		  
-		  if (captureOrPromotion && improving 
+		  if (captureOrPromotion && improving && !ss->inCheck 
 			&& bestValue - ss->staticEval < -(PawnValueEg))
 			  r++;
 
