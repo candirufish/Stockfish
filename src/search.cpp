@@ -1098,7 +1098,7 @@ moves_loop: // When in check, search starts from here
       else if (   givesCheck
                && depth > 6
                && (abs(ss->staticEval) > Value(100) 
-				  || type_of(movedPiece) == QUEEN))
+				  || (type_of(movedPiece) == QUEEN && pos.rule50_count() <= 10)))
           extension = 1;
 
       // Add extension to new depth
