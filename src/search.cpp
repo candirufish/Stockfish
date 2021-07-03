@@ -1116,6 +1116,7 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
+	  ss->passpawncount = Pawns::probe(pos)->passed_count();
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1132,6 +1133,12 @@ moves_loop: // When in check, search starts from here
 
           if (PvNode)
               r--;
+		  
+		  if (captureOrPromotion 
+		     && bestValue - ss->staticEval < (PawnValueEg)
+			 && pos.non_pawn_material() <= 5000
+		     &&  (ss-1)->passpawncount < (ss)->passpawncount)
+			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
