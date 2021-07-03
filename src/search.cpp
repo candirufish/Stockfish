@@ -1136,6 +1136,7 @@ moves_loop: // When in check, search starts from here
 		  
 		  if (captureOrPromotion 
 			 && pos.non_pawn_material() <= 5000
+			 && !improving
 		     &&  (ss-1)->passpawncount > (ss)->passpawncount)
 			  r++;
 
