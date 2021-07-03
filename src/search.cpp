@@ -1098,7 +1098,7 @@ moves_loop: // When in check, search starts from here
       else if (   givesCheck
                && depth > 6
                && (abs(ss->staticEval) > Value(100)
-			      || distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) <= 2))
+			      || captureOrPromotion))
           extension = 1;
 
       // Add extension to new depth
