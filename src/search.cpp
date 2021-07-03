@@ -1137,7 +1137,7 @@ moves_loop: // When in check, search starts from here
 		  if (captureOrPromotion 
 			 && pos.non_pawn_material() <= 5000
 		     &&  (ss-1)->passpawncount > (ss)->passpawncount)
-			  r--;
+			  r++;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
