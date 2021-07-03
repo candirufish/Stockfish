@@ -1116,8 +1116,8 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
-	  ss->WasImp = improving && !captureOrPromotion;
-	  ss->WasCPr = captureOrPromotion;
+	  ss->WasImp = improving && !captureOrPromotion && !givesCheck;
+	  ss->WasCPr = !captureOrPromotion && !givesCheck;
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
