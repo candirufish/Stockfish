@@ -354,7 +354,7 @@ void Thread::search() {
           if (rootDepth >= 4)
           {
               Value prev = rootMoves[pvIdx].previousScore;
-              delta = Value(15) + valueSpan;
+              delta = Value(12) + valueSpan;
               alpha = std::max(prev - delta,-VALUE_INFINITE);
               beta  = std::min(prev + delta, VALUE_INFINITE);
 
@@ -377,7 +377,7 @@ void Thread::search() {
 			 if (rootDepth >= 5) {
                   maxValue = std::max(maxValue, bestValue);
                   minValue = std::min(minValue, bestValue);
-                  valueSpan = (maxValue - minValue)/int(4 * rootDepth);
+                  valueSpan = (maxValue - minValue)/int(2 * rootDepth);
               }
 
               // Bring the best move to the front. It is critical that sorting
