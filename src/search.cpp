@@ -256,7 +256,7 @@ void Thread::search() {
   // The latter is needed for statScore and killer initialization.
   Stack stack[MAX_PLY+10], *ss = stack+7;
   Move  pv[MAX_PLY+1];
-  Value bestValue, alpha, beta, delta;
+  Value bestValue, alpha, beta, delta, maxValue, minValue, valueSpan = VALUE_ZERO;
   Move  lastBestMove = MOVE_NONE;
   Depth lastBestMoveDepth = 0;
   MainThread* mainThread = (this == Threads.main() ? Threads.main() : nullptr);
@@ -273,8 +273,8 @@ void Thread::search() {
 
   ss->pv = pv;
 
-  bestValue = delta = alpha = -VALUE_INFINITE;
-  beta = VALUE_INFINITE;
+  bestValue = delta = alpha = maxValue = -VALUE_INFINITE;
+  beta = minValue = VALUE_INFINITE;
 
   if (mainThread)
   {
@@ -354,7 +354,7 @@ void Thread::search() {
           if (rootDepth >= 4)
           {
               Value prev = rootMoves[pvIdx].previousScore;
-              delta = Value(18);
+              delta = Value(15) + valueSpan;
               alpha = std::max(prev - delta,-VALUE_INFINITE);
               beta  = std::min(prev + delta, VALUE_INFINITE);
 
@@ -373,6 +373,12 @@ void Thread::search() {
           {
               Depth adjustedDepth = std::max(1, rootDepth - failedHighCnt - searchAgainCounter);
               bestValue = Stockfish::search<Root>(rootPos, ss, alpha, beta, adjustedDepth, false);
+			  
+			 if (rootDepth >= 5) {
+                  maxValue = std::max(maxValue, bestValue);
+                  minValue = std::min(minValue, bestValue);
+                  valueSpan = (maxValue - minValue)/int(4 * rootDepth);
+              }
 
               // Bring the best move to the front. It is critical that sorting
               // is done with a stable algorithm because all the values but the
