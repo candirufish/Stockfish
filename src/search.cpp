@@ -1173,7 +1173,6 @@ moves_loop: // When in check, search starts from here
                              - 4923;
 							 
 			  if (move == ss->killers[0] 
-			  && (*contHist[0])[movedPiece][to_sq(move)] < 0
 			  && (*contHist[1])[movedPiece][to_sq(move)] < 0
 			  && (*contHist[3])[movedPiece][to_sq(move)] < 0
 			  && (*contHist[5])[movedPiece][to_sq(move)] < 0)
