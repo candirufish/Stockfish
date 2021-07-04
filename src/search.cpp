@@ -1172,7 +1172,11 @@ moves_loop: // When in check, search starts from here
                              + (*contHist[3])[movedPiece][to_sq(move)]
                              - 4923;
 							 
-			  if (move == ss->killers[0] && ss->statScore < 0)
+			  if (move == ss->killers[0] 
+			  && (*contHist[0])[movedPiece][to_sq(move)] < 0
+			  && (*contHist[1])[movedPiece][to_sq(move)] < 0
+			  && (*contHist[3])[movedPiece][to_sq(move)] < 0
+			  && (*contHist[5])[movedPiece][to_sq(move)] < 0)
 				  r++;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
