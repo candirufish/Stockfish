@@ -400,9 +400,9 @@ void Thread::search() {
               // re-search, otherwise exit the loop.
               if (bestValue <= alpha)
               {
+				  delta += delta / 4 + (alpha - bestValue) / 8;
                   beta = (alpha + beta) / 2;
                   alpha = std::max(bestValue - delta, -VALUE_INFINITE);
-				  delta += delta / 4 + (alpha - bestValue) / 8;
 
                   failedHighCnt = 0;
                   if (mainThread)
@@ -410,8 +410,8 @@ void Thread::search() {
               }
               else if (bestValue >= beta)
               {
-                  beta = std::min(bestValue + delta, VALUE_INFINITE);
 				  delta += delta / 4 + (bestValue - beta) / 8;
+                  beta = std::min(bestValue + delta, VALUE_INFINITE);
                   ++failedHighCnt;
               }
               else
