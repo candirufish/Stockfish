@@ -1173,7 +1173,7 @@ moves_loop: // When in check, search starts from here
                              - 4923;
 							 
 			  if (move == ss->killers[1] && ss->ttPv
-			  && ss->statScore > 0 && (ss-1)->statScore < 0)
+			  && ss->statScore > 0 && improving)
 				  r--;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
