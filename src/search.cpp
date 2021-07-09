@@ -1116,6 +1116,7 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
+	  ss->Qseq = !captureOrPromotion && !givesCheck && !ss->inCheck;
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1171,6 +1172,9 @@ moves_loop: // When in check, search starts from here
                              + (*contHist[1])[movedPiece][to_sq(move)]
                              + (*contHist[3])[movedPiece][to_sq(move)]
                              - 4923;
+			  if (move == ss->killers[1] && ss->statScore > 0 
+			     && ss->ttPv && (ss-1)->Qseq)
+				  r--;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               if (!ss->inCheck)
