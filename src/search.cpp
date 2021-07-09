@@ -1130,7 +1130,6 @@ moves_loop: // When in check, search starts from here
 		  if (PvNode
               && depth >= 6
 			  && !captureOrPromotion
-			  && type_of(movedPiece) != PAWN
               && !ttMove)
                r += 2;
 
