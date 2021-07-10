@@ -1126,11 +1126,14 @@ moves_loop: // When in check, search starts from here
           && (  !captureOrPromotion
               || (cutNode && (ss-1)->moveCount > 1)
               || !ss->ttPv)
-          && (!PvNode || ss->ply > 1 || thisThread->id() % 4 != 3))
+          && (!PvNode || !extension || ss->ply > 1 || thisThread->id() % 4 != 3))
       {
           Depth r = reduction(improving, depth, moveCount);
 
           if (PvNode)
+              r--;
+		  
+		  if (extension)
               r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
