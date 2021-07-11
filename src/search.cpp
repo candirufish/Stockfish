@@ -1129,6 +1129,7 @@ moves_loop: // When in check, search starts from here
 		  
 		  if (PvNode
               && depth >= 6
+			  && !captureOrPromotion
 			  && !extension
               && !ttMove)
                r += 2;
