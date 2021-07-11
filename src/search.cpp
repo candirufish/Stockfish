@@ -566,6 +566,7 @@ namespace {
     moveCount          = captureCount = quietCount = ss->moveCount = 0;
     bestValue          = -VALUE_INFINITE;
     maxValue           = VALUE_INFINITE;
+	ss->distanceFromPv = (PvNode ? 0 : ss->distanceFromPv);
 
     // Check for the available remaining time
     if (thisThread == Threads.main())
@@ -901,12 +902,6 @@ namespace {
          ss->ttPv = ttPv;
     }
 
-    // Step 10. If the position is not in TT, decrease depth by 2
-    if (   PvNode
-        && depth >= 6
-        && !ttMove)
-        depth -= 2;
-
 moves_loop: // When in check, search starts from here
 
     ttCapture = ttMove && pos.capture_or_promotion(ttMove);
@@ -1116,6 +1111,7 @@ moves_loop: // When in check, search starts from here
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
+	  (ss+1)->distanceFromPv = ss->distanceFromPv + moveCount - 1;
 
       // Step 16. Late moves reduction / extension (LMR, ~200 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1132,6 +1128,11 @@ moves_loop: // When in check, search starts from here
 
           if (PvNode)
               r--;
+		  
+		  if (ss->distanceFromPv >= 11
+              && depth >= 6
+              && !ttMove)
+               r += 2;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
