@@ -1129,10 +1129,11 @@ moves_loop: // When in check, search starts from here
           if (PvNode)
               r--;
 		  
-		  if (ss->distanceFromPv >= 11
+		  if (ss->distanceFromPv > 1
               && depth >= 6
+			  && !captureOrPromotion
               && !ttMove)
-               r += 2;
+               r += ss->distanceFromPv >= 11 ? 2: 1;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
