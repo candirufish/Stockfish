@@ -1130,6 +1130,7 @@ moves_loop: // When in check, search starts from here
               r--;
 		  
 		  if (ss->distanceFromPv >= 11
+		      && !captureOrPromotion
               && depth >= 6
               && !ttMove)
                r += 2;
