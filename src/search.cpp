@@ -601,6 +601,7 @@ namespace {
     (ss+1)->ttPv         = false;
     (ss+1)->excludedMove = bestMove = MOVE_NONE;
     (ss+2)->killers[0]   = (ss+2)->killers[1] = MOVE_NONE;
+	(ss+2)->killerHits[0]= (ss+2)->killerHits[1] = 0;
     ss->doubleExtensions = (ss-1)->doubleExtensions;
     Square prevSq        = to_sq((ss-1)->currentMove);
 
@@ -1170,6 +1171,9 @@ moves_loop: // When in check, search starts from here
                              + (*contHist[1])[movedPiece][to_sq(move)]
                              + (*contHist[3])[movedPiece][to_sq(move)]
                              - 4923;
+							 
+			  if (move == ss->killers[1] && ss->killerHits[1] < ss->killerHits[0])
+				  r--;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               if (!ss->inCheck)
@@ -1700,11 +1704,25 @@ moves_loop: // When in check, search starts from here
 
   void update_quiet_stats(const Position& pos, Stack* ss, Move move, int bonus, int depth) {
 
-    // Update killers
-    if (ss->killers[0] != move)
+   // Update killers
+    if (ss->killers[0] == move)
+        ss->killerHits[0]++;
+    else if (ss->killers[1] == move)
+        ss->killerHits[1]++;
+    else // put new entry on slot 2
     {
-        ss->killers[1] = ss->killers[0];
-        ss->killers[0] = move;
+        ss->killers[1] = move;
+        ss->killerHits[1] = 1;
+    }
+
+    if (ss->killerHits[1] > ss->killerHits[0])
+    {  // swap
+       Move m = ss->killers[1];
+       ss->killers[1] = ss->killers[0];
+       ss->killers[0] = m;
+       int h = ss->killerHits[1] ;
+       ss->killerHits[1] = ss->killerHits[0];
+       ss->killerHits[0] = h;
     }
 
     Color us = pos.side_to_move();
