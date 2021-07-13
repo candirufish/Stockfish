@@ -1067,6 +1067,7 @@ moves_loop: // When in check, search starts from here
 
               // Avoid search explosion by limiting the number of double extensions to at most 3
               if (   !PvNode
+			      && pos.rule50_count() <= 11
                   && value < singularBeta - 93
                   && ss->doubleExtensions < 3)
               {
