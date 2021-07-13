@@ -1133,7 +1133,7 @@ moves_loop: // When in check, search starts from here
           if (PvNode)
               r--;
 		  
-		  if (givesCheck && extension && pos.rule50_count() <= 11)
+		  if (move == ss->killers[1] && extension)
 			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
