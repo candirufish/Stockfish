@@ -1165,7 +1165,7 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r++;
 			  
-			  if (move == reverse_move((ss-2)->currentMove) && pos.rule50_count() >= 16)
+			  if (move == reverse_move((ss-2)->currentMove) && !improving && pos.rule50_count() >= 16)
                   r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
