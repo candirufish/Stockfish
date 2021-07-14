@@ -1157,7 +1157,7 @@ moves_loop: // When in check, search starts from here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0])
+          if (cutNode && move != ss->killers[0] && !(move == ss->killers[1] && ss->killerHits[1] < ss->killerHits[0]))
               r += 2;
 
           if (!captureOrPromotion)
@@ -1172,9 +1172,6 @@ moves_loop: // When in check, search starts from here
                              + (*contHist[3])[movedPiece][to_sq(move)]
                              - 4923;
 							 
-			  if (move == ss->killers[1] && ss->killerHits[1] < ss->killerHits[0]
-			     && ss->statScore > 0 && ss->ttPv)
-				  r--;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               if (!ss->inCheck)
