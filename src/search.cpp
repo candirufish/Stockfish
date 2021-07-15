@@ -1165,7 +1165,7 @@ moves_loop: // When in check, search starts from here
               if (ttCapture)
                   r++;
 			  
-			  if (move == reverse_move((ss-2)->currentMove) && type_of(movedPiece) == KING)
+			  if (move == reverse_move((ss-2)->currentMove) && type_of(movedPiece) == KING && !ss->inCheck)
                   r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
