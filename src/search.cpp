@@ -1131,7 +1131,7 @@ moves_loop: // When in check, search starts from here
           Depth r = reduction(improving, depth, moveCount);
 
           if (PvNode)
-              r--;
+              r -= (move == ss->killers[1] && ss->killerHits[1] < ss->killerHits[0]) ? 2 : 1;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
           if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
@@ -1157,7 +1157,7 @@ moves_loop: // When in check, search starts from here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0] && !(move == ss->killers[1] && ss->killerHits[1] < ss->killerHits[0]))
+          if (cutNode && move != ss->killers[0])
               r += 2;
 
           if (!captureOrPromotion)
