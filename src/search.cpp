@@ -1098,6 +1098,11 @@ moves_loop: // When in check, search starts from here
                && depth > 6
                && abs(ss->staticEval) > Value(100))
           extension = 1;
+		  
+	  else if (move == ss->killers[1] && ss->statScore > 0
+			   && type_of(movedPiece) == PAWN && pos.pawn_passed(us, to_sq(move)))
+		  extension = 1;
+	  
 
       // Add extension to new depth
       newDepth += extension;
