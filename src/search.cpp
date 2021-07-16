@@ -1171,7 +1171,7 @@ moves_loop: // When in check, search starts from here
                              + (*contHist[3])[movedPiece][to_sq(move)]
                              - 4923;
 							 
-			 if (move == ss->killers[1] && ss->statScore > 0
+			 if (move == ss->killers[1] && ss->statScore > 0 && ss->ttPv
 			   && type_of(movedPiece) == PAWN && pos.pawn_passed(us, to_sq(move)))
 			      r--;
 
