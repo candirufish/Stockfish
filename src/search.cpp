@@ -1159,9 +1159,6 @@ moves_loop: // When in check, search starts from here
           if (cutNode && move != ss->killers[0])
               r += 2;
 		  
-		  if (move == ss->killers[1] && type_of(movedPiece) == PAWN && pos.pawn_passed(us, to_sq(move)))
-			  r--;
-
           if (!captureOrPromotion)
           {
               // Increase reduction if ttMove is a capture (~3 Elo)
@@ -1173,6 +1170,10 @@ moves_loop: // When in check, search starts from here
                              + (*contHist[1])[movedPiece][to_sq(move)]
                              + (*contHist[3])[movedPiece][to_sq(move)]
                              - 4923;
+							 
+			 if (move == ss->killers[1] && ss->statScore > 0
+			   && type_of(movedPiece) == PAWN && pos.pawn_passed(us, to_sq(move)))
+			      r--;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               if (!ss->inCheck)
