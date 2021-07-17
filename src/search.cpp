@@ -1099,7 +1099,7 @@ moves_loop: // When in check, search starts from here
                && abs(ss->staticEval) > Value(100))
           extension = 1;
 		  
-	  else if (move == ss->killers[1] && depth > 6
+	  else if (move == ss->killers[1] && depth > 6 && move == ttMove
 			   && type_of(movedPiece) == PAWN && pos.pawn_passed(us, to_sq(move)))
 		  extension = 1;
 
