@@ -1035,6 +1035,15 @@ moves_loop: // When in check, search starts from here
                   continue;
           }
       }
+	  
+	  if (!captureOrPromotion && depth >= 3)		
+	  {
+		                ss->statScore =  thisThread->mainHistory[us][from_to(move)]
+                             + (*contHist[0])[movedPiece][to_sq(move)]
+                             + (*contHist[1])[movedPiece][to_sq(move)]
+                             + (*contHist[3])[movedPiece][to_sq(move)]
+                             - 4923;
+	  }
 
       // Step 14. Extensions (~75 Elo)
 
@@ -1099,7 +1108,7 @@ moves_loop: // When in check, search starts from here
                && abs(ss->staticEval) > Value(100))
           extension = 1;
 		  
-	  else if (move == ss->killers[1] && depth > 6 && move == ttMove
+	  else if (move == ss->killers[1] && depth > 6 && ss->statScore > 0
 			   && type_of(movedPiece) == PAWN && pos.pawn_passed(us, to_sq(move)))
 		  extension = 1;
 
@@ -1168,12 +1177,6 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
-
-              ss->statScore =  thisThread->mainHistory[us][from_to(move)]
-                             + (*contHist[0])[movedPiece][to_sq(move)]
-                             + (*contHist[1])[movedPiece][to_sq(move)]
-                             + (*contHist[3])[movedPiece][to_sq(move)]
-                             - 4923;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               if (!ss->inCheck)
