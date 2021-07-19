@@ -1010,7 +1010,8 @@ moves_loop: // When in check, search starts from here
                   continue;
 
               // SEE based pruning
-              if (!pos.see_ge(move, Value(-218) * (depth + ss->inCheck))) // (~25 Elo)
+			  bool opinc = captureOrPromotion && (ss-1)->inCheck && distance(pos.square<KING>(~pos.side_to_move()), to_sq(move)) <= 2;
+              if (!pos.see_ge(move, Value(-218) * (depth + opinc))) // (~25 Elo)
                   continue;
           }
           else
