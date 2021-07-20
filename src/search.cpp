@@ -901,12 +901,6 @@ namespace {
          ss->ttPv = ttPv;
     }
 
-    // Step 10. If the position is not in TT, decrease depth by 2
-    if (   PvNode
-        && depth >= 6
-        && !ttMove)
-        depth -= 2;
-
 moves_loop: // When in check, search starts from here
 
     ttCapture = ttMove && pos.capture_or_promotion(ttMove);
@@ -1128,6 +1122,8 @@ moves_loop: // When in check, search starts from here
           && (!PvNode || ss->ply > 1 || thisThread->id() % 4 != 3))
       {
           Depth r = reduction(improving, depth, moveCount);
+		  
+		  Depth t = r;
 
           if (PvNode)
               r--;
@@ -1164,6 +1160,12 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~3 Elo)
               if (ttCapture)
                   r++;
+			  
+			  if (PvNode
+              && depth >= 6
+              && t - r >= 3
+              && !ttMove)
+                 r += 2;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
