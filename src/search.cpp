@@ -1158,6 +1158,9 @@ moves_loop: // When in check, search starts from here
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode && move != ss->killers[0])
               r += 2;
+		  
+		  if (captureOrPromotion && type_of(pos.piece_on(to_sq(move))) == QUEEN)
+			  r--;
 
           if (!captureOrPromotion)
           {
