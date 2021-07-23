@@ -1159,7 +1159,8 @@ moves_loop: // When in check, search starts from here
           if (cutNode && move != ss->killers[0])
               r += 2;
 		  
-		  if (captureOrPromotion && type_of(pos.piece_on(to_sq(move))) == QUEEN)
+		  if (captureOrPromotion && type_of((ss-1)->currentMove) == PROMOTION
+		  && type_of(pos.piece_on(to_sq(move))) == QUEEN)
 			  r--;
 
           if (!captureOrPromotion)
