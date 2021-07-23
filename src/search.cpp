@@ -1172,8 +1172,7 @@ moves_loop: // When in check, search starts from here
                              - 4923;
 							 
               if (move == ss->killers[1]  && type_of(movedPiece) == PAWN
-			   && relative_rank(us, to_sq(move)) > RANK_6
-			   && pos.pawn_passed(us, to_sq(move)))
+			   && relative_rank(us, to_sq(move)) > RANK_6)
 			      r--;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
