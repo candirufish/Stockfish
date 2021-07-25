@@ -1101,7 +1101,6 @@ moves_loop: // When in check, search starts from here
 	      // Step 10. If the position is not in TT, decrease depth by 2
       if (   PvNode
         && depth >= 6
-		&& !captureOrPromotion
         && !ttMove)
         depth -= 2;
 
