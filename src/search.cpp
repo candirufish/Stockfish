@@ -1131,7 +1131,7 @@ moves_loop: // When in check, search starts from here
 
           if (PvNode)
               r--;		  
-		  else if (!improving)
+		  else if (!improving && !extension)
 			  r++;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
