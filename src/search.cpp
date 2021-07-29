@@ -1162,15 +1162,15 @@ moves_loop: // When in check, search starts from here
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
               r++;
-		  
-		  if (move == reverse_move((ss-2)->currentMove) && doubleExtension)
-			  r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
                          + (*contHist[1])[movedPiece][to_sq(move)]
                          + (*contHist[3])[movedPiece][to_sq(move)]
                          - 4923;
+		  		  
+		  if (ss->statScore < 0 && doubleExtension)
+			  r++;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
