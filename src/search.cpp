@@ -1132,10 +1132,6 @@ moves_loop: // When in check, search starts from here
           if (PvNode)
               r--;
 
-          // Decrease reduction if the ttHit running average is large (~0 Elo)
-          if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
-              r--;
-
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
@@ -1146,14 +1142,6 @@ moves_loop: // When in check, search starts from here
           if (   (rootNode || !PvNode)
               && thisThread->bestMoveChanges <= 2)
               r++;
-
-          // Decrease reduction if opponent's move count is high (~1 Elo)
-          if ((ss-1)->moveCount > 13)
-              r--;
-
-          // Decrease reduction if ttMove has been singularly extended (~1 Elo)
-          if (singularQuietLMR)
-              r--;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode && move != ss->killers[0])
@@ -1168,9 +1156,23 @@ moves_loop: // When in check, search starts from here
                          + (*contHist[1])[movedPiece][to_sq(move)]
                          + (*contHist[3])[movedPiece][to_sq(move)]
                          - 4923;
-
-          // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
-          r -= ss->statScore / 14721;
+		  if (!doubleExtension)
+		  {
+             // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
+             r -= ss->statScore / 14721;
+		  
+		     // Decrease reduction if the ttHit running average is large (~0 Elo)
+            if (thisThread->ttHitAverage > 537 * TtHitAverageResolution * TtHitAverageWindow / 1024)
+              r--;
+		  
+            // Decrease reduction if opponent's move count is high (~1 Elo)
+            if ((ss-1)->moveCount > 13)
+              r--;
+		  		  
+            // Decrease reduction if ttMove has been singularly extended (~1 Elo)
+            if (singularQuietLMR)
+              r--;		  		  
+		  }
 
           // In general we want to cap the LMR depth search at newDepth. But if
           // reductions are really negative and movecount is low, we allow this move
