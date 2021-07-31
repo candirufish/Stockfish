@@ -1128,6 +1128,7 @@ moves_loop: // When in check, search starts here
           && (!PvNode || ss->ply > 1 || thisThread->id() % 4 != 3))
       {
           Depth r = reduction(improving, depth, moveCount);
+		  Depth t = r;
 
           if (PvNode)
               r--;
@@ -1168,6 +1169,9 @@ moves_loop: // When in check, search starts here
                          + (*contHist[1])[movedPiece][to_sq(move)]
                          + (*contHist[3])[movedPiece][to_sq(move)]
                          - 4923;
+						 
+		  if (t - r >= 3 && move != ss->killers[0])
+			  r++;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
