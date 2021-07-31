@@ -1128,6 +1128,8 @@ moves_loop: // When in check, search starts from here
           && (!PvNode || ss->ply > 1 || thisThread->id() % 4 != 3))
       {
           Depth r = reduction(improving, depth, moveCount);
+		  
+		  Depth t = r;
 
           if (PvNode)
               r--;
@@ -1171,6 +1173,9 @@ moves_loop: // When in check, search starts from here
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
+		  
+		  if (t - r >= 3 && doubleExtension)
+			  r++;
 
           // In general we want to cap the LMR depth search at newDepth. But if
           // reductions are really negative and movecount is low, we allow this move
