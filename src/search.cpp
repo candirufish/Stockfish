@@ -991,7 +991,7 @@ moves_loop: // When in check, search starts here
 
       // Step 13. Pruning at shallow depth (~200 Elo)
       if (  !rootNode
-	      && !(ss->inCheck && depth == 1)  
+	      && !(ss->inCheck && pos.rule50_count() < 3)  
           && pos.non_pawn_material(us)
           && bestValue > VALUE_TB_LOSS_IN_MAX_PLY)
       {
