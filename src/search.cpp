@@ -1019,7 +1019,8 @@ moves_loop: // When in check, search starts here
               if (   lmrDepth < 5
                   && (*contHist[0])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1))
                   && (*contHist[1])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1))
-				  && (*contHist[3])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1)))
+				  && (*contHist[3])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1))
+				  && (*contHist[5])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1)))
                   continue;
 
               // Futility pruning: parent node (~5 Elo)
