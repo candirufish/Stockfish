@@ -1023,7 +1023,7 @@ moves_loop: // When in check, search starts here
                   continue;
 			     
 				 if (((*contHist[3])[movedPiece][to_sq(move)] < depth == 1 ? 0 : -stat_bonus(depth-1)) 
-					 || ((*contHist[5])[movedPiece][to_sq(move)] < depth == 1 ? 0 : -stat_bonus(depth-1)))
+					 && ((*contHist[5])[movedPiece][to_sq(move)] < depth == 1 ? 0 : -stat_bonus(depth-1)))
 				  continue;
 			    
 				 }
