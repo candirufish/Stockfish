@@ -1022,6 +1022,7 @@ moves_loop: // When in check, search starts here
                   continue;
 				  
 			  if (lmrDepth < 1
+			  && (*contHist[3])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1))
 			  && thisThread->mainHistory[us][from_to(move)] < -6200)
 			      continue;
 
