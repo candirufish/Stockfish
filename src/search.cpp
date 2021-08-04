@@ -1020,6 +1020,10 @@ moves_loop: // When in check, search starts here
                   && (*contHist[0])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1))
                   && (*contHist[1])[movedPiece][to_sq(move)] < (depth == 1 ? 0 : -stat_bonus(depth-1)))
                   continue;
+				  
+			  if (lmrDepth < 1
+			  && thisThread->mainHistory[us][from_to(move)] < -6200)
+			      continue;
 
               // Futility pruning: parent node (~5 Elo)
               if (   !ss->inCheck
