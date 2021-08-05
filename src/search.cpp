@@ -912,6 +912,9 @@ namespace {
 moves_loop: // When in check, search starts here
 
     ttCapture = ttMove && pos.capture_or_promotion(ttMove);
+	
+	if (ttCapture)
+        improving = false;
 
     // Step 11. A small Probcut idea, when we are in check
     probCutBeta = beta + 409;
