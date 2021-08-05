@@ -1516,12 +1516,6 @@ moves_loop: // When in check, search starts here
                                                                 [pos.moved_piece(move)]
                                                                 [to_sq(move)];
 
-      // Continuation history based pruning
-      if (  !captureOrPromotion
-          && bestValue > VALUE_TB_LOSS_IN_MAX_PLY
-          && (*contHist[0])[pos.moved_piece(move)][to_sq(move)] < CounterMovePruneThreshold)
-          continue;
-
       // Make and search the move
       pos.do_move(move, st, givesCheck);
       value = -qsearch<nodeType>(pos, ss+1, -beta, -alpha, depth - 1);
