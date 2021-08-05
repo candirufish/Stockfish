@@ -1023,7 +1023,7 @@ moves_loop: // When in check, search starts here
 						continue;
 						
 				     if (lmrDepth < 1
-					 && (*contHist[3])[movedPiece][to_sq(move)] < 23 - 23 * depth * depth)
+					 && (*contHist[3])[movedPiece][to_sq(move)] < 0)
 						continue;
 				  }
 
