@@ -1024,7 +1024,7 @@ moves_loop: // When in check, search starts here
                   continue;
 				  
               if (   lmrDepth < 3
-			      && !ss->inCheck
+			      && likelyFailLow
                   && (*contHist[0])[movedPiece][to_sq(move)] < 0
                   && (*contHist[1])[movedPiece][to_sq(move)] < 0
 				  && (*contHist[3])[movedPiece][to_sq(move)] < 0
