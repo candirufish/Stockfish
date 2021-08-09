@@ -1171,7 +1171,7 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
 		  
-		  if (!captureOrPromotion && depth < 6
+		  if (!rootNode && pos.non_pawn_material(us) && !captureOrPromotion && depth < 6
 		   && (*contHist[0])[movedPiece][to_sq(move)] < CounterMovePruneThreshold
            && (*contHist[1])[movedPiece][to_sq(move)] < CounterMovePruneThreshold)
 		      r++;
