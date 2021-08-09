@@ -1169,7 +1169,7 @@ moves_loop: // When in check, search starts here
 		  
 		  // Increase reduction for cut nodes (~3 Elo)
           if (cutNode && !(move == ss->killers[0] && !captureOrPromotion))
-              r += 1 + (!captureOrPromotion && ss->statScore > 0 );
+              r += 1 + (!captureOrPromotion && ss->statScore < 0 );
 
           // In general we want to cap the LMR depth search at newDepth. But if
           // reductions are really negative and movecount is low, we allow this move
