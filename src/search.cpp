@@ -1200,7 +1200,7 @@ moves_loop: // When in check, search starts here
                                         : -stat_bonus(newDepth);
 										
 			  if ((ss-1)->captureOrPromotion && ss->captureOrPromotion)
-                  thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] << bonus / 4;
+                  thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] << bonus / 6;
               else 
                   update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
           }
