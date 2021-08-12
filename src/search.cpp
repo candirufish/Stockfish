@@ -1199,7 +1199,7 @@ moves_loop: // When in check, search starts here
               int bonus = value > alpha ?  stat_bonus(newDepth)
                                         : -stat_bonus(newDepth);
 										
-			  if (captureOrPromotion && type_of(pos.piece_on(to_sq(move))) != PAWN)
+			  if (captureOrPromotion && type_of(pos.piece_on(to_sq(move))) != PAWN && improving)
                   thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] << bonus / 2;
               else 
                   update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
