@@ -1133,7 +1133,7 @@ moves_loop: // When in check, search starts here
           if (PvNode)
               r--;
 		  
-		  if ((ss-1)->Shuffle && captureOrPromotion && type_of(pos.piece_on(to_sq(move))) == PAWN)
+		  if ((ss-1)->Shuffle && captureOrPromotion && type_of(pos.piece_on(to_sq(move))) != PAWN)
 			  r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
