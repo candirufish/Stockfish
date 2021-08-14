@@ -1165,8 +1165,8 @@ moves_loop: // When in check, search starts here
                          - 4923;
 						 
 		  // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0])
-		      r += (move == ss->killers[1] && ss->ttPv && !captureOrPromotion) ? -1 : 2;
+          if (cutNode)
+		      r += ((move == ss->killers[0] || move == ss->killers[1]) && ss->ttPv && !captureOrPromotion) ? -1 : 2;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
