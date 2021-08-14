@@ -1207,6 +1207,9 @@ moves_loop: // When in check, search starts here
 		      if (move == ss->killers[1])
                     bonus += bonus / 8;				
 			 }
+			 
+			  if (move == countermove)
+                    bonus += bonus / 2;
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
           }
