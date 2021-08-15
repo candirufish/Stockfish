@@ -1636,7 +1636,7 @@ moves_loop: // When in check, search starts here
     Piece moved_piece = pos.moved_piece(bestMove);
     PieceType captured = type_of(pos.piece_on(to_sq(bestMove)));
 	
-	bool stopShuffle = pos.rule50_count() > 20 && pos.capture_or_promotion(bestMove);
+	bool stopShuffle = pos.rule50_count() > 16 && pos.capture_or_promotion(bestMove);
 
     bonus1 = stat_bonus(depth + 1 + stopShuffle);
     bonus2 = (bestValue > beta + PawnValueMg || stopShuffle) ? bonus1                                 // larger bonus
