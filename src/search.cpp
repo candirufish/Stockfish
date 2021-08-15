@@ -1154,10 +1154,6 @@ moves_loop: // When in check, search starts here
           if (singularQuietLMR)
               r--;
 
-          // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0])
-              r += 2;
-
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
               r++;
@@ -1167,6 +1163,10 @@ moves_loop: // When in check, search starts here
                          + (*contHist[1])[movedPiece][to_sq(move)]
                          + (*contHist[3])[movedPiece][to_sq(move)]
                          - 4923;
+						 
+		 // Increase reduction for cut nodes (~3 Elo)
+          if (cutNode && move != ss->killers[0])
+		      r += (move == ss->killers[1] && ss->ttPv && !captureOrPromotion && ss->statScore > 0) ? -2 : 2;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
