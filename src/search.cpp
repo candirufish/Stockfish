@@ -1155,7 +1155,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0] && move != ss->killers[2])
+          if (cutNode && move != ss->killers[0])
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
@@ -1198,6 +1198,9 @@ moves_loop: // When in check, search starts here
           {
               int bonus = value > alpha ?  stat_bonus(newDepth)
                                         : -stat_bonus(newDepth);
+										
+		      if (move == ss->killers[2])
+                    bonus += bonus / 2;
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
           }
