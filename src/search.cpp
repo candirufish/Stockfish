@@ -1200,7 +1200,7 @@ moves_loop: // When in check, search starts here
                                         : -stat_bonus(newDepth);
 										
 		      if (move == ss->killers[2])
-                    bonus += bonus / 4;
+                    bonus += bonus / 6;
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
           }
