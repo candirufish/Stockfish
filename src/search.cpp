@@ -1019,9 +1019,9 @@ moves_loop: // When in check, search starts here
           {
               // Continuation history based pruning (~20 Elo)
               if (   lmrDepth < 5
-                  && (*contHist[0])[movedPiece][to_sq(move)] < -158 * lmrDepth * lmrDepth
-                  && (*contHist[1])[movedPiece][to_sq(move)] < -158 * lmrDepth * lmrDepth)
-                  continue;
+                  && (*contHist[0])[movedPiece][to_sq(move)] < -227 * lmrDepth * lmrDepth
+                  && (*contHist[1])[movedPiece][to_sq(move)] < -158 * lmrDepth * lmrDepth
+				  && (*contHist[3])[movedPiece][to_sq(move)] < -158 * lmrDepth * lmrDepth)
 
               // Futility pruning: parent node (~5 Elo)
               if (   !ss->inCheck
