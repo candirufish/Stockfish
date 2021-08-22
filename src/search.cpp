@@ -552,7 +552,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, didLMR, priorCapture;
+    bool givesCheck, improving, didLMR, priorCapture, rneg;
     bool captureOrPromotion, doFullDepthSearch, moveCountPruning,
          ttCapture, singularQuietLMR;
     Piece movedPiece;
@@ -1170,6 +1170,9 @@ moves_loop: // When in check, search starts here
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
+		  
+		  if (r < - 1)
+			  rneg = true;
 
           // In general we want to cap the LMR depth search at newDepth. But if
           // reductions are really negative and movecount is low, we allow this move
@@ -1194,12 +1197,16 @@ moves_loop: // When in check, search starts here
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth, !cutNode);
 
           // If the move passed LMR update its stats
-          if (didLMR && !captureOrPromotion)
+          if (didLMR)
           {
               int bonus = value > alpha ?  stat_bonus(newDepth)
                                         : -stat_bonus(newDepth);
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
+			  if (captureOrPromotion && rneg)
+                  thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] << bonus / 4;
+              else 
+                  update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
           }
       }
 
