@@ -1145,7 +1145,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction at root and non-PV nodes when the best move does not change frequently
           if (   (rootNode || !PvNode)
-			  && us == rootColor
+			  && us != rootColor
               && thisThread->bestMoveChanges <= 2)
               r++;
 
