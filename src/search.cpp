@@ -945,6 +945,7 @@ moves_loop: // When in check, search starts here
     value = bestValue;
     singularQuietLMR = moveCountPruning = false;
     bool doubleExtension = false;
+	bool CapExtension = false;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1099,7 +1100,10 @@ moves_loop: // When in check, search starts here
       else if (   (PvNode || cutNode) 
                && captureOrPromotion 
                && moveCount != 1)
-          extension = 1;
+        {
+            extension = 1;
+            CapExtension = true;
+        }
 
       // Check extensions
       else if (   givesCheck
@@ -1176,6 +1180,9 @@ moves_loop: // When in check, search starts here
                          + (*contHist[1])[movedPiece][to_sq(move)]
                          + (*contHist[3])[movedPiece][to_sq(move)]
                          - 4923;
+						 
+		  if (CapExtension)
+              ss->statScore += thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] - 682;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 14721;
