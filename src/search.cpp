@@ -1169,7 +1169,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode && move != ss->killers[0])
-              r += 2 - CapExtension;
+              r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
@@ -1207,12 +1207,17 @@ moves_loop: // When in check, search starts here
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth, !cutNode);
 
           // If the move passed LMR update its stats
-          if (didLMR && !captureOrPromotion)
+          if (didLMR)
           {
               int bonus = value > alpha ?  stat_bonus(newDepth)
                                         : -stat_bonus(newDepth);
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
+			  
+			  if (CapExtension)				  
+                  thisThread->captureHistory[movedPiece][to_sq(move)][type_of(pos.captured_piece())] << bonus / 2;
+              else 
+                  update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
           }
       }
 
