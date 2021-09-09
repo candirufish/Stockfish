@@ -945,6 +945,7 @@ moves_loop: // When in check, search starts here
     value = bestValue;
     singularQuietLMR = moveCountPruning = false;
     bool doubleExtension = false;
+	bool CapExtension = false;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1099,7 +1100,10 @@ moves_loop: // When in check, search starts here
       else if (   (PvNode || cutNode) 
                && captureOrPromotion 
                && moveCount != 1)
-          extension = 1;
+        {
+            extension = 1;
+            CapExtension = true;
+        }
 
       // Check extensions
       else if (   givesCheck
@@ -1137,7 +1141,7 @@ moves_loop: // When in check, search starts here
       {
           Depth r = reduction(improving, depth, moveCount);
 
-          if (PvNode)
+          if (PvNode && !CapExtension)
               r--;
 
           // Decrease reduction if the ttHit running average is large (~0 Elo)
@@ -1325,7 +1329,7 @@ moves_loop: // When in check, search starts here
     // Bonus for prior countermove that caused the fail low
     else if (   (depth >= 3 || PvNode)
              && !priorCapture)
-        update_continuation_histories(ss-1, pos.piece_on(prevSq), prevSq, stat_bonus(depth) * (1 + (PvNode || cutNode)));
+        update_continuation_histories(ss-1, pos.piece_on(prevSq), prevSq, stat_bonus(depth + (PvNode || cutNode)));
 
     if (PvNode)
         bestValue = std::min(bestValue, maxValue);
