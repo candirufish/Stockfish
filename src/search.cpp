@@ -1100,6 +1100,14 @@ moves_loop: // When in check, search starts here
                && captureOrPromotion 
                && moveCount != 1)
           extension = 1;
+		  
+	  else if (pos.non_pawn_material() == 0
+       			&&  abs(ss->staticEval) <= Value(160)
+				&&  abs(ss->staticEval) >= Value(10)
+       			&&  pos.rule50_count() <= 10
+				&&  depth >= 8
+ 				&&  (PvNode || improving))
+			extension = 1;
 
       // Check extensions
       else if (   givesCheck
