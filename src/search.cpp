@@ -1096,7 +1096,7 @@ moves_loop: // When in check, search starts here
       }
 
       // Capture extensions for PvNodes and cutNodes
-      else if (   (PvNode || cutNode || pos.rule50_count() > 8)
+      else if (   (PvNode || cutNode || pos.rule50_count() > 16)
                && captureOrPromotion 
                && moveCount != 1)
           extension = 1;
