@@ -1105,6 +1105,12 @@ moves_loop: // When in check, search starts here
                && captureOrPromotion 
                && moveCount != 1)
           extension = 1;
+		  
+      else if (   move == ss->killers[0]
+               && pos.advanced_pawn_push(move)
+               && pos.pawn_passed(us, to_sq(move)))
+          extension = 1;
+  
 
       // Check extensions
       else if (   givesCheck
