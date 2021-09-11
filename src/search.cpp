@@ -909,11 +909,6 @@ namespace {
         && !ttMove)
         depth -= 2;
 
-    if (   cutNode
-        && depth >= 9
-        && !ttMove)
-        depth--;
-
 moves_loop: // When in check, search starts here
 
     ttCapture = ttMove && pos.capture_or_promotion(ttMove);
@@ -1141,6 +1136,12 @@ moves_loop: // When in check, search starts here
           && (!PvNode || ss->ply > 1 || thisThread->id() % 4 != 3))
       {
           Depth r = reduction(improving, depth, moveCount);
+
+
+		  if (cutNode
+			 && depth >= 9
+			 && !ttMove)
+			  r++;
 
           if (PvNode)
               r--;
