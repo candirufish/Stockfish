@@ -1108,6 +1108,7 @@ moves_loop: // When in check, search starts here
 		  
       else if (   move == ss->killers[2] && move == ss->killers[0]
 			   && cutNode
+			   && moveCount != 1
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
           extension = 1;
