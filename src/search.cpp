@@ -1055,6 +1055,10 @@ moves_loop: // When in check, search starts here
                   continue;
 
               history += thisThread->mainHistory[us][from_to(move)];
+			  
+			  if (   lmrDepth < 3
+                  && history < 0)
+				  continue;
 
               // Futility pruning: parent node (~9 Elo)
               if (   !ss->inCheck
