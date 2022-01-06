@@ -1122,7 +1122,7 @@ moves_loop: // When in check, search starts here
           extension = 1;
 
       // Quiet ttMove extensions (~0 Elo)
-      else if (   (PvNode || cutNode)
+      else if (   (PvNode || (cutNode && ss->ttPv))
                && move == ttMove
                && move == ss->killers[0]
                && (*contHist[0])[movedPiece][to_sq(move)] >= 10000)
