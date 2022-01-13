@@ -1115,7 +1115,7 @@ moves_loop: // When in check, search starts here
               extension = -2;
       }
       
-      else if (pos.rule50_count() <= 6)		  
+      else if (pos.rule50_count() <= 11)		  
 		{  
 	  // Check extensions (~1 Elo)
 			if (   givesCheck
