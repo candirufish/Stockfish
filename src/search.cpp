@@ -1178,7 +1178,7 @@ moves_loop: // When in check, search starts here
           if (cutNode && move != ss->killers[0])
               r += 2;
 		  
-		  if (!captureOrPromotion)
+		  if (!captureOrPromotion && type_of(movedPiece) != PAWN)
           {
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
