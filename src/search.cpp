@@ -1187,7 +1187,7 @@ moves_loop: // When in check, search starts here
 		  if (!captureOrPromotion 
 		     && ss->inCheck
 			 && !ttMove
-			 && pos.rule50_count() > 16
+			 && !improving 
 			 && type_of(movedPiece) == KING)
 			  r++;
 
