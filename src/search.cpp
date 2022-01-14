@@ -1186,6 +1186,7 @@ moves_loop: // When in check, search starts here
 		  
 		  if (!captureOrPromotion 
 		     && ss->inCheck
+			 && !ttMove
 			 && type_of(movedPiece) == KING)
 			  r++;
 
