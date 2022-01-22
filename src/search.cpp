@@ -1154,7 +1154,7 @@ moves_loop: // When in check, search starts here
           if (ttCapture)
               r++;
 		  
-		  if (move == countermove && complexity > 1000)
+		  if (move == ss->killers[0] && complexity > 1000)
 			  r--;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
