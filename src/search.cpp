@@ -1170,6 +1170,7 @@ moves_loop: // When in check, search starts here
           int deeper =   r >= -1                   ? 0
                        : moveCount <= 5            ? 2
                        : PvNode && depth > 6       ? 1
+					   : complexity > 1000 && rootNode && depth <= 6 ? 1
                        : cutNode && moveCount <= 7 ? 1
                        :                             0;
 
