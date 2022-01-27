@@ -1147,7 +1147,7 @@ moves_loop: // When in check, search starts here
           if ((ss-1)->moveCount > 13)
               r--;
 		  
-		  if (rootNode && ss->staticEval != VALUE_NONE && bestValue - ss->staticEval < -200)
+		  if (rootNode && ss->staticEval != VALUE_NONE && bestValue - ss->staticEval < -100)
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
