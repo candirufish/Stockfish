@@ -1148,7 +1148,7 @@ moves_loop: // When in check, search starts here
               r--;
 		  
 		  if (rootNode && complexity > 1000
-		     && ss->staticEval != VALUE_NONE && bestValue - ss->staticEval < -200)
+		     && ss->staticEval != VALUE_NONE && bestValue - ss->staticEval < -400)
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
