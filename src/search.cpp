@@ -1102,7 +1102,7 @@ moves_loop: // When in check, search starts here
 			  
 		  else if (	  rootNode
 				   && move == ttMove
-				   && depth > 6
+				   && depth < 6
 				   && complexity > 1000)
 				extension = 1;
       }
