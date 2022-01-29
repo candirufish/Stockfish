@@ -1087,10 +1087,9 @@ moves_loop: // When in check, search starts here
                   extension = -2;
           }
 		  
-		  else if (  cutNode
+		  else if (  rootNode
                && captureOrPromotion
-		       && complexity > 1000
-               && moveCount != 1)
+		       && complexity > 1000)
           extension = 1;
 
           // Check extensions (~1 Elo)
