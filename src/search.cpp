@@ -1086,8 +1086,8 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2;
 			  
-			  else if (ttValue <= value)
-                  extension = -1;
+			  else if (ttValue <= value && complexity < 50)
+                  extension = -2;
           }
 
           // Check extensions (~1 Elo)
