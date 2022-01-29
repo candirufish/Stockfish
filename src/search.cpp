@@ -1089,8 +1089,7 @@ moves_loop: // When in check, search starts here
 		  
 		  else if (  PvNode 
                && captureOrPromotion
-			   &&  abs(ss->staticEval) <= Value(200)
-			   &&  abs(ss->staticEval) >= Value(10)
+			   && pos.rule50_count() <= 10
 		       && complexity > 1000)
               extension = 1;
 
