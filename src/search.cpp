@@ -1086,7 +1086,12 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2;
           }
-
+		  
+		  else if (	  pos.non_pawn_material() == 0
+		         && pos.rule50_count() <= 10
+		         && complexity > 1000)
+		      extension = 1;
+		  		  
           // Check extensions (~1 Elo)
           else if (   givesCheck
                    && depth > 6
