@@ -1087,7 +1087,7 @@ moves_loop: // When in check, search starts here
                   extension = -2;
           }
 		  
-		  else if (   (PvNode || cutNode)
+		  else if (   PvNode
                && captureOrPromotion
 		       && complexity > 1000
                && moveCount != 1)
