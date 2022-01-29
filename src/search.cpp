@@ -1087,7 +1087,8 @@ moves_loop: // When in check, search starts here
                   extension = -2;
           }
 		  
-		  else if (	  pos.non_pawn_material() == 0
+		  else if (	 PvNode
+		         && pos.non_pawn_material() == 0
 		         && pos.rule50_count() <= 10
 		         && complexity > 1000)
 		      extension = 1;
