@@ -1088,7 +1088,7 @@ moves_loop: // When in check, search starts here
           }
 		  
 		  else if (  rootNode
-		       && depth > 6
+		       && depth <= 6
                && captureOrPromotion
 		       && complexity > 1000)
               extension = 1;
