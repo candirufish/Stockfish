@@ -1137,7 +1137,7 @@ moves_loop: // When in check, search starts here
               && bestMoveCount <= 3)
               r--;
 			  
-		  if (!PvNode && !captureOrPromotion 
+		  if (!ss->ttPv && !captureOrPromotion 
 			 && !improving && complexity < 50)
               r++;
 
