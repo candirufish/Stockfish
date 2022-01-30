@@ -1136,6 +1136,10 @@ moves_loop: // When in check, search starts here
           if (   PvNode
               && bestMoveCount <= 3)
               r--;
+			  
+		  if (!PvNode && !captureOrPromotion 
+			 && !improving && complexity < 50)
+              r++;
 
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
