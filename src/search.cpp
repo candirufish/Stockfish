@@ -1086,6 +1086,12 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2;
           }
+		  
+		  else if (  rootNode
+		       && depth > 6
+               && captureOrPromotion
+		       && complexity > 1000)
+              extension = 1;
 
           // Check extensions (~1 Elo)
           else if (   givesCheck
