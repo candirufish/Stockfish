@@ -1087,7 +1087,7 @@ moves_loop: // When in check, search starts here
                   extension = -2;
           }
 		  
-		  else if (	   PvNode
+		  else if (	   rootNode
 		           &&  captureOrPromotion
 				   &&  pos.see_ge(move)
 				   &&  complexity > 1000)
