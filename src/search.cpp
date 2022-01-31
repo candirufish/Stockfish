@@ -1119,6 +1119,7 @@ moves_loop: // When in check, search starts here
       pos.do_move(move, st, givesCheck);
 
       bool doDeeperSearch = false;
+	  bool lmrext = false;
 
       // Step 16. Late moves reduction / extension (LMR, ~98 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1172,6 +1173,8 @@ moves_loop: // When in check, search starts here
                        : PvNode && depth > 6       ? 1
                        : cutNode && moveCount <= 7 ? 1
                        :                             0;
+	
+		  lmrext = deeper > 0;
 
           Depth d = std::clamp(newDepth - r, 1, newDepth + deeper);
 
@@ -1199,7 +1202,7 @@ moves_loop: // When in check, search starts here
               int bonus = value > alpha ?  stat_bonus(newDepth)
                                         : -stat_bonus(newDepth);
 
-              if (captureOrPromotion)
+              if (captureOrPromotion && lmrext)
                   bonus /= 4;
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
