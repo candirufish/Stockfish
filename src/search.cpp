@@ -1508,12 +1508,14 @@ moves_loop: // When in check, search starts here
 
           if (futilityValue <= alpha)
           {
+			  if(!PvNode)
               bestValue = std::max(bestValue, futilityValue);
               continue;
           }
 
           if (futilityBase <= alpha && !pos.see_ge(move, VALUE_ZERO + 1))
           {
+			  if(!PvNode)
               bestValue = std::max(bestValue, futilityBase);
               continue;
           }
