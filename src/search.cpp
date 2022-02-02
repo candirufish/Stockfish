@@ -57,6 +57,9 @@ using Eval::evaluate;
 using namespace Search;
 
 namespace {
+	
+	int SB=75, CE=100, QE=10000;
+	TUNE(SB, CE, QE);
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
@@ -1037,9 +1040,7 @@ moves_loop: // When in check, search starts here
                   continue;
           }
       }
-
-	  int SB1=75, CE1=100, QE1=10000;
-	  TUNE(SB1, CE1, QE1);
+	  
       // Step 14. Extensions (~66 Elo)
       // We take care to not overdo to avoid search getting stuck.
       if (ss->ply < thisThread->rootDepth * 2)
@@ -1071,7 +1072,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - SB1
+                      && value < singularBeta - SB
                       && ss->doubleExtensions <= 6)
                       extension = 2;
               }
@@ -1092,14 +1093,14 @@ moves_loop: // When in check, search starts here
           // Check extensions (~1 Elo)
           else if (   givesCheck
                    && depth > 6
-                   && abs(ss->staticEval) > CE1)
+                   && abs(ss->staticEval) > CE)
               extension = 1;
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
                    && move == ttMove
                    && move == ss->killers[0]
-                   && (*contHist[0])[movedPiece][to_sq(move)] >= QE1)
+                   && (*contHist[0])[movedPiece][to_sq(move)] >= QE)
               extension = 1;
       }
 
