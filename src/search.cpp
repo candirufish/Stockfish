@@ -1155,7 +1155,7 @@ moves_loop: // When in check, search starts here
           if (ttCapture)
               r++;
 		  
-		  if (!captureOrPromotion && (ss-1)->research && complexity < 50)
+		  if (!captureOrPromotion && (ss-1)->research)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
