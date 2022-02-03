@@ -1158,6 +1158,7 @@ moves_loop: // When in check, search starts here
 		  if (  !ss->inCheck
 		     && !PvNode 
 		     && !(captureOrPromotion || givesCheck) 
+			 &&  ss->staticEval < -400
 			 && (ss-1)->research)
               r++;
 
