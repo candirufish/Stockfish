@@ -158,7 +158,7 @@ namespace {
 void Search::init() {
 
   for (int i = 1; i < MAX_MOVES; ++i)
-      Reductions[i] = int((214/10.0 + std::log(Threads.size()) / 2) * std::log(i));
+      Reductions[i] = int((21.4 + std::log(Threads.size()) / 2) * std::log(i));
 }
 
 
@@ -1135,7 +1135,7 @@ moves_loop: // When in check, search starts here
       // We use various heuristics for the sons of a node after the first son has
       // been searched. In general we would like to reduce them, but there are many
       // cases where we extend a son if it has good chances to be "interesting".
-      if (    depth >= 2
+      if (    depth >= 3
           &&  moveCount > 1 + 1 * rootNode
           && (   !ss->ttPv
               || !captureOrPromotion
