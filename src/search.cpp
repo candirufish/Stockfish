@@ -778,6 +778,7 @@ namespace {
     // return a fail low.
     if (   !PvNode
         && depth <= 6
+		&& ttMove == MOVE_NONE
         && eval < alpha - 486 - 314 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
