@@ -64,7 +64,7 @@ namespace {
   int DPTR1 = 3, DPTR2 = 8, PC4 = 401, PC5 = 2, PC6 = 3, PC7 = 3, CAP1 = 7, CAP2 = 424, CAP3 = 138, CAP4 = 7, CAP5 = 214, QUP1 = 11, QUP2 = 147;
   int QUP3 = 125, QUP4 = 64, QUP5 = 23, QUP6 = 31, EXT1 = 6, EXT2 = 2, EXT3 = 3, EXT4 = 4, EXT5 = 1, EXT6 = 52, EXT7 = 8, EXT8 = 2;
   int EXT9 = 8, EXT10 = 81, EXT11 = 7546, LMR1 = 2, LMR2 = 1, LMR3 = 3, LMR4 = 7, LMR5 = 4123, LMR6 = 17417, LMR7 = 5, LMR8 = 3;
-  int LMR9 = 7, LMR10 = 76, LMR11 = 11, LMR12 = 6, PBA1 = 4, PBA2 = 71, PBA3 = 3, PBA4 = 3, QS1 = 139, QS2 = 2, QS3 = 1, QS4 = 1, QS5 = 1, SA1 = PawnValueMg, SA2 = 2;
+  int LMR9 = 7, LMR10 = 76, LMR11 = 11, LMR12 = 6, PBA1 = 4, PBA2 = 71, PBA3 = 3, PBA4 = 3, QS1 = 139, QS2 = 2, QS5 = 1, SA1 = PawnValueMg, SA2 = 2;
 
   auto f1 = [](int m){if (m<30) return Range(m-20,m+20); else return Range(m / 2, m * 3 / 2);};
 
