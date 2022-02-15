@@ -55,32 +55,34 @@ using namespace Search;
 
 namespace {
 
-  int FM1 = 147, RE1 = 1627, RE2 = 992, SB1 = 8, SB2 = 281, SB3 = 241, SB4 = 1949, RED1 = 2114;
-  int OP1 = 33, CMPL1 = 211, DLT1 = 19, DLT2 = 18321, SGMTR1 = 4, SGMTR2 = 11, SGMTR3 = 92, SGMTR4 = 119;
-  int SGMOP1 = 9, SGMOP2 = 18, SGMOP3 = 115, SGMOP4 = 12250, SGMOP5 = 187, DLT3 = 2, FE1 = 66, FE2 = 8097, SEA1 = 16, SEA2 = 2000;
-  int TMR1 = 8, TMR2 = 173, TMR3 = 94, TMR4 = 166, TMR5 = 235, CMPL2 = 293, CMPL3 = 15250, INC1 = 49;
-  int IMPR1 = 184, RZR1 = 6, RZR2 = 486, RZR3 = 314, FPC1 = 8, FPC2 = 22266, FPC3 = 256, NMP1 = 15075, NMP2 = 18;
-  int NMP3 = 19, NMP4 = 215, NMP5 = 30, NMP6 = 184, NMP7 = 4, NMP8 = 3, NMP9 = 4, NMP10 = 799, PC1 = 204, PC2 = 52, PC3 = 4;
-  int DPTR1 = 3, DPTR2 = 8, PC4 = 401, PC5 = 2, PC6 = 3, PC7 = 3, CAP1 = 7, CAP2 = 424, CAP3 = 138, CAP4 = 7, CAP5 = 214, QUP1 = 11, QUP2 = 147;
-  int QUP3 = 125, QUP4 = 64, QUP5 = 23, QUP6 = 31, EXT1 = 6, EXT2 = 2, EXT3 = 3, EXT4 = 4, EXT5 = 1, EXT6 = 52, EXT7 = 8, EXT8 = 2;
-  int EXT9 = 8, EXT10 = 81, EXT11 = 7546, LMR1 = 2, LMR2 = 1, LMR3 = 3, LMR4 = 7, LMR5 = 4123, LMR6 = 17417, LMR7 = 5, LMR8 = 3;
-  int LMR9 = 7, LMR10 = 76, LMR11 = 11, LMR12 = 6, PBA1 = 4, PBA2 = 71, PBA3 = 3, PBA4 = 3, QS1 = 139, QS2 = 2, QS5 = 1, SA1 = PawnValueMg, SA2 = 2;
+int FM1 = 147, RE1 = 1627, RE2 = 992, SB1 = 8, SB2 = 281, SB3 = 241, SB4 = 1949, RED1 = 2114;
+int OP1 = 33, CMPL1 = 211, DLT1 = 19, DLT2 = 18321, SGMTR1 = 4, SGMTR2 = 11, SGMTR3 = 92, SGMTR4 = 119;
+int SGMOP1 = 9, SGMOP2 = 18, SGMOP3 = 115, SGMOP4 = 12250, SGMOP5 = 187, DLT3 = 2, FE1 = 66, FE2 = 8097, SEA1 = 16, SEA2 = 2000;
+int TMR1 = 8, TMR2 = 173, TMR3 = 94, TMR4 = 166, TMR5 = 235, CMPL2 = 293, CMPL3 = 15250, INC1 = 49;
+int IMPR1 = 184, RZR1 = 6, RZR2 = 486, RZR3 = 314, FPC1 = 8, FPC2 = 22266, FPC3 = 256, NMP1 = 15075, NMP2 = 18;
+int NMP3 = 19, NMP4 = 215, NMP5 = 30, NMP6 = 184, NMP7 = 4, NMP8 = 3, NMP9 = 4, NMP10 = 799, PC1 = 204, PC2 = 52, PC3 = 4;
+int DPTR1 = 3, DPTR2 = 8, PC4 = 401, PC5 = 2, PC6 = 3, PC7 = 3, CAP1 = 7, CAP2 = 424, CAP3 = 138, CAP4 = 7, CAP5 = 214, QUP1 = 11, QUP2 = 147;
+int QUP3 = 125, QUP4 = 64, QUP5 = 23, QUP6 = 31, EXT1 = 6, EXT2 = 2, EXT3 = 3, EXT4 = 4, EXT5 = 1, EXT6 = 52, EXT7 = 8, EXT8 = 2;
+int EXT9 = 8, EXT10 = 81, EXT11 = 7546, LMR1 = 2, LMR2 = 1, LMR3 = 3, LMR4 = 7, LMR5 = 4123, LMR6 = 17417, LMR7 = 5, LMR8 = 3;
+int LMR9 = 7, LMR10 = 76, LMR11 = 11, LMR12 = 6, PBA1 = 4, PBA2 = 71, PBA3 = 3, PBA4 = 3, QS1 = 139;
+int QS2 = 2, QS3 = 1, QS4 = 1, QS5 = 1, SA1 = PawnValueMg, SA2 = 2;
 
-  auto f1 = [](int m){if (m<30) return Range(m-20,m+20); else return Range(m / 2, m * 3 / 2);};
+auto f1 = [](int m){if (m<30) return Range(m-20,m+20); else return Range(m / 2, m * 3 / 2);};
 
-  TUNE(FM1, RE1, RE2, SB1, SB2, SB3, SB4, RED1);
-  TUNE(SetRange(f1), OP1, CMPL1, DLT1, DLT2, SGMTR1, SGMTR2, SGMTR3, SGMTR4);
-  TUNE(SGMOP1, SGMOP2, SGMOP3, SGMOP4, SGMOP5, FE1, FE2);
-  TUNE(TMR1, TMR2, TMR3, TMR4, TMR5, CMPL2, CMPL3, INC1);
-  TUNE(SEA2, IMPR1, RZR2, RZR3, FPC2, FPC3, NMP1, NMP2);
-  TUNE(NMP3, NMP4, NMP5, NMP6, NMP10, PC1, PC2);
-  TUNE(PC4, CAP2, CAP3, CAP4, CAP5, QUP2);
-  TUNE(QUP3, QUP4, QUP5, QUP6, EXT6);
-  TUNE( EXT10, EXT11, LMR5, LMR6);
-  TUNE( LMR10, LMR11, PBA2, QS1, SA1);
-  TUNE(NMP7, NMP8, NMP9, FPC1, RZR1, DLT3, SEA1, QS2, SA2);
-  TUNE(EXT9, EXT8, EXT7, EXT5, EXT4, EXT1, EXT2, EXT3, QUP1, CAP1, DPTR1, DPTR2, PC5, PC3, PC6, PC7);
-  TUNE(QS2, QS5, PBA4, PBA3, PBA1, LMR1, LMR2, LMR3, LMR4, LMR7, LMR8 , LMR9, LMR12);
+TUNE(FM1, RE1, RE2, SB1, SB2, SB3, SB4, RED1);
+TUNE(SetRange(f1), OP1, CMPL1, DLT1, DLT2, SGMTR1, SGMTR2, SGMTR3, SGMTR4);
+TUNE(SGMOP1, SGMOP2, SGMOP3, SGMOP4, SGMOP5, FE1, FE2);
+TUNE(TMR1, TMR2, TMR3, TMR4, TMR5, CMPL2, CMPL3, INC1);
+TUNE(SEA2, IMPR1, RZR2, RZR3, FPC2, FPC3, NMP1, NMP2);
+TUNE(NMP3, NMP4, NMP5, NMP6, NMP10, PC1, PC2);
+TUNE(PC4, CAP2, CAP3, CAP4, CAP5, QUP2);
+TUNE(QUP3, QUP4, QUP5, QUP6, EXT6);
+TUNE(EXT10, EXT11, LMR5, LMR6);
+TUNE(LMR10, LMR11, PBA2, QS1, SA1);
+TUNE(NMP7, NMP8, NMP9, FPC1, RZR1, DLT3, SEA1, QS2, SA2);
+TUNE(EXT9, EXT8, EXT7, EXT5, EXT4, EXT1, EXT2, EXT3, QUP1, CAP1, DPTR1, DPTR2, PC5, PC3, PC6, PC7);
+TUNE(QS2, QS5, PBA4, PBA3, PBA1, LMR1, LMR2, LMR3, LMR4, LMR7, LMR8 , LMR9, LMR12);
+TUNE(QS3,QS4);
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
@@ -1573,8 +1575,8 @@ moves_loop: // When in check, search starts here
       // Continuation history based pruning (~2 Elo)
       if (  !captureOrPromotion
           && bestValue > VALUE_TB_LOSS_IN_MAX_PLY
-          && (*contHist[0])[pos.moved_piece(move)][to_sq(move)] < CounterMovePruneThreshold
-          && (*contHist[1])[pos.moved_piece(move)][to_sq(move)] < CounterMovePruneThreshold)
+          && (*contHist[0])[pos.moved_piece(move)][to_sq(move)] < QS3 - 1
+          && (*contHist[1])[pos.moved_piece(move)][to_sq(move)] < QS4 - 1)
           continue;
 
       // movecount pruning for quiet check evasions
