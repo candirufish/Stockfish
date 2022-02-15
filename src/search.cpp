@@ -81,7 +81,6 @@ namespace {
   TUNE(NMP7, NMP8, NMP9, FPC1, RZR1, DLT3, SEA1, QS2, SA2);
   TUNE(EXT9, EXT8, EXT7, EXT5, EXT4, EXT1, EXT2, EXT3, QUP1, CAP1, DPTR1, DPTR2, PC5, PC3, PC6, PC7);
   TUNE(QS2, QS5, PBA4, PBA3, PBA1, LMR1, LMR2, LMR3, LMR4, LMR7, LMR8 , LMR9, LMR12);
-  TUNE( QS3, QS4);
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
@@ -1574,8 +1573,8 @@ moves_loop: // When in check, search starts here
       // Continuation history based pruning (~2 Elo)
       if (  !captureOrPromotion
           && bestValue > VALUE_TB_LOSS_IN_MAX_PLY
-          && (*contHist[0])[pos.moved_piece(move)][to_sq(move)] < QS3 - 1
-          && (*contHist[1])[pos.moved_piece(move)][to_sq(move)] < QS4 - 1)
+          && (*contHist[0])[pos.moved_piece(move)][to_sq(move)] < CounterMovePruneThreshold
+          && (*contHist[1])[pos.moved_piece(move)][to_sq(move)] < CounterMovePruneThreshold)
           continue;
 
       // movecount pruning for quiet check evasions
