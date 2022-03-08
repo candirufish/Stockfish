@@ -1101,7 +1101,8 @@ moves_loop: // When in check, search starts here
           // Check extensions (~1 Elo)
           else if (   givesCheck
                    && depth > 9
-                   && abs(ss->staticEval) > 71)
+				   && !ss->inCheck 
+				   && abs(ss->staticEval - bestValue) > 250)
               extension = 1;
 
           // Quiet ttMove extensions (~0 Elo)
