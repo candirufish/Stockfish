@@ -1098,7 +1098,7 @@ moves_loop: // When in check, search starts here
                   extension = -2;
 			  
 			  else if (ttValue <= value)
-                  extension = std::max(-5, -(newDepth - 1));
+                  extension = -4;
           }
 
           // Check extensions (~1 Elo)
