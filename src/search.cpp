@@ -1097,6 +1097,9 @@ moves_loop: // When in check, search starts here
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
                   extension = -2;
+			  
+			  else if (ttValue <= value && complexity < 200)
+                  extension = std::max(-2, -(newDepth - 1));
           }
 
           // Check extensions (~1 Elo)
