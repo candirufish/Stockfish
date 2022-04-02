@@ -1113,7 +1113,8 @@ moves_loop: // When in check, search starts here
               extension = 1;
 			  
 	      // Castling extension
-          if (type_of(move) == CASTLING)
+          if (type_of(move) == CASTLING
+				   && complexity > 200)
               extension = 1;
 
       }
