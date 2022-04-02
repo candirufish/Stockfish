@@ -956,6 +956,8 @@ moves_loop: // When in check, search starts here
                          && ttMove
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
+						 
+	bool PvEvalLmr  = PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250;
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
@@ -1169,7 +1171,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction at PvNodes if bestvalue
           // is vastly different from static evaluation
-          if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
+          if (PvEvalLmr)
               r--;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
