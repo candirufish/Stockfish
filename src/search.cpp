@@ -1112,9 +1112,9 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5491)
               extension = 1;
 			  
-	      // Castling extension
-          if (type_of(move) == CASTLING
-				   && complexity > 200)
+	      // Promotion extension
+          if ( type_of(move) == PROMOTION 
+				   && promotion_type(move) == QUEEN)
               extension = 1;
 
       }
