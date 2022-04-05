@@ -1216,7 +1216,7 @@ moves_loop: // When in check, search starts here
               int bonus = value > alpha ?  stat_bonus(newDepth)
                                         : -stat_bonus(newDepth);
 
-              if (capture)
+              if (capture || type_of(move) == PROMOTION)
                   bonus /= 6;
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
