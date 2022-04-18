@@ -1147,7 +1147,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction at some PvNodes (~2 Elo)
           if (   PvNode
-              && bestMoveCount <= 3)
+              && bestMoveCount <= 3 && ttMove)
               r--;
 
           // Decrease reduction if position is or has been on the PV
@@ -1170,7 +1170,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction at PvNodes if bestvalue
           // is vastly different from static evaluation
-          if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250  && ttMove)
+          if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
               r--;
 
           // Increase depth based reduction if PvNode
