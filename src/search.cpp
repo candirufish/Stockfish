@@ -1170,11 +1170,11 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction at PvNodes if bestvalue
           // is vastly different from static evaluation
-          if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
+          if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250  && ttMove)
               r--;
 
           // Increase depth based reduction if PvNode
-          if (PvNode && ttMove)
+          if (PvNode)
               r -= 15 / ( 3 + depth );
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
