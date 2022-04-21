@@ -916,6 +916,7 @@ namespace {
 
     if (   cutNode
         && depth >= 8
+		&& !ss->ttPv
         && !ttMove)
         depth--;
 
