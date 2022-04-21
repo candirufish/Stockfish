@@ -916,6 +916,7 @@ namespace {
 
     if (   cutNode
         && depth >= 8
+		&& move != ss->killers[0]
         && !ttMove)
         depth--;
 
