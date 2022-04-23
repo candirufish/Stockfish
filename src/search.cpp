@@ -918,6 +918,10 @@ namespace {
         && depth >= 8
         && !ttMove)
         depth--;
+		
+    if (   excludedMove
+         && depth >= 3)
+		 depth--;
 
 moves_loop: // When in check, search starts here
 
