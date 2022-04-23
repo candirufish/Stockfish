@@ -1177,8 +1177,7 @@ moves_loop: // When in check, search starts here
               r -= 1 + 15 / ( 3 + depth );
 		  
 		  if (    type_of(move) == PROMOTION 
-			   && promotion_type(move) == QUEEN
-			   && !capture)
+			   && promotion_type(move) == QUEEN)
 			  r--;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
