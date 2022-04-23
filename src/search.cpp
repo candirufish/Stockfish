@@ -1175,6 +1175,11 @@ moves_loop: // When in check, search starts here
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
               r -= 1 + 15 / ( 3 + depth );
+		  
+		  if (    type_of(move) == PROMOTION 
+			   && promotion_type(move) == QUEEN
+			   && !capture)
+			  r--;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
