@@ -920,7 +920,7 @@ namespace {
         depth--;
 		
     if (   excludedMove
-         && depth >= 3)
+         && depth >= 6)
 		 depth--;
 
 moves_loop: // When in check, search starts here
