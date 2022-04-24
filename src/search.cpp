@@ -957,6 +957,8 @@ moves_loop: // When in check, search starts here
                          && ttMove
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
+						 
+	bool negExt = false;
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
@@ -1097,11 +1099,11 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
-                  extension = -2;
+                  extension = -2, negExt = true;
 
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
               else if (ttValue <= alpha && ttValue <= value)
-                  extension = -1;
+                  extension = -1, negExt = true;
           }
 
           // Check extensions (~1 Elo)
@@ -1342,8 +1344,9 @@ moves_loop: // When in check, search starts here
                          quietsSearched, quietCount, capturesSearched, captureCount, depth);
 
     // Bonus for prior countermove that caused the fail low
-    else if (   (depth >= 4 || PvNode)
-             && !priorCapture)
+    else if (   (depth >= 4 || PvNode || ttMove)
+             && !priorCapture
+		     && !negExt)
     {
         //Assign extra bonus if current node is PvNode or cutNode
         //or fail low was really bad
