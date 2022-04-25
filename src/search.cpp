@@ -1120,6 +1120,7 @@ moves_loop: // When in check, search starts here
 		  // Promotion extension
           if ( type_of(move) == PROMOTION 
 				   && promotion_type(move) == QUEEN
+				   && depth < 6
 				   && moveCount == 1
 				   && !capture)
               extension = 1;
