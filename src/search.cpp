@@ -1120,7 +1120,7 @@ moves_loop: // When in check, search starts here
 		  // Promotion extension
           if ( type_of(move) == PROMOTION 
 				   && promotion_type(move) == QUEEN
-				   && (PvNode || cutNode)
+				   && moveCount == 1
 				   && !capture)
               extension = 1;
       }
