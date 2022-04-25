@@ -1119,6 +1119,7 @@ moves_loop: // When in check, search starts here
 			  
 		  // Complexity extension
           if ( depth < 6
+				   && PvNode
 				   && complexity > 1000
 				   && moveCount == 1
 				   && MoveList<LEGAL>(pos).size() == 1)
