@@ -1010,11 +1010,12 @@ moves_loop: // When in check, search starts here
           int lmrDepth = std::max(newDepth - reduction(improving, depth, moveCount, delta, thisThread->rootDelta), 0);
 
           if (   capture
-              || givesCheck)
+              || givesCheck || type_of(move) == PROMOTION)
           {
               // Futility pruning for captures (~0 Elo)
               if (   !pos.empty(to_sq(move))
                   && !givesCheck
+			      && type_of(move) != PROMOTION 
                   && !PvNode
                   && lmrDepth < 6
                   && !ss->inCheck
