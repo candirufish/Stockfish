@@ -1015,7 +1015,7 @@ moves_loop: // When in check, search starts here
               // Futility pruning for captures (~0 Elo)
               if (   !pos.empty(to_sq(move))
                   && !givesCheck
-			      && type_of(move) != PROMOTION 
+			      && !(type_of(move) == PROMOTION & promotion_type(move) == QUEEN)
                   && !PvNode
                   && lmrDepth < 6
                   && !ss->inCheck
