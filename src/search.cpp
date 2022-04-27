@@ -777,7 +777,7 @@ namespace {
     // Step 7. Razoring.
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
-    if (   !(PvNode && pos.rule50_count() <= 10)
+    if (   !(PvNode && pos.rule50_count() <= 20)
         && depth <= 7
         && eval < alpha - 348 - 258 * depth * depth)
     {
