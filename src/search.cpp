@@ -1072,10 +1072,12 @@ moves_loop: // When in check, search starts here
               Value singularBeta = ttValue - 3 * depth;
               Depth singularDepth = (depth - 1) / 2;
 
+			  bool temp = ss->improving;
               ss->excludedMove = move;
               value = search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
               ss->excludedMove = MOVE_NONE;
 
+			  ss->improving = temp;
               if (value < singularBeta)
               {
                   extension = 1;
@@ -1097,11 +1099,16 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
+			  {
                   extension = -2;
-			  
+				  ss->improving = temp;
+			  }
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
               else if (ttValue <= alpha && ttValue <= value) 
+			  {
                   extension = -1;
+				  ss->improving = temp;
+			  }
           }
 
           // Check extensions (~1 Elo)
