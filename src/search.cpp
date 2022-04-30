@@ -1173,7 +1173,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Decrease reduction for PvNodes based on depth
-          if (PvNode)
+          if (PvNode && !rootNode)
               r -= 1 + 15 / ( 3 + depth );
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
@@ -1220,7 +1220,7 @@ moves_loop: // When in check, search starts here
               int bonus = value > alpha ?  stat_bonus(newDepth)
                                         : -stat_bonus(newDepth);
 
-              if (capture && !ttCapture)
+              if (capture)
                   bonus /= 6;
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
