@@ -1204,7 +1204,7 @@ moves_loop: // When in check, search starts here
 
           // If the son is reduced and fails high it will be re-searched at full depth
           doFullDepthSearch = value > alpha && d < newDepth;
-          doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d)) && (ss+1)->cutoffCnt == 0;
+          doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d)) && (ss+1)->cutoffCnt != 0;
           didLMR = true;
       }
       else
