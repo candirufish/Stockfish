@@ -1184,7 +1184,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
-              r += ss->statScore < 0 ? 2 : 1;
+              r += ss->statScore < 0 && (ss-1)->statScore > 0 ? 2 : 1;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
