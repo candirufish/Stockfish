@@ -1321,7 +1321,7 @@ moves_loop: // When in check, search starts here
           }
       }
       else
-         ss->cutoffCnt = 0;
+         ss->cutoffCnt = -1;
 
 
       // If the move is worse than some previously searched move, remember it to update its stats later
