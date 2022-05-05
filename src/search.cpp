@@ -957,6 +957,7 @@ moves_loop: // When in check, search starts here
                          && ttMove
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
+	bool negExt = false;
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
@@ -1097,7 +1098,7 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
-                  extension = -2;
+                  extension = -2, negExt = true;
 
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
               else if (ttValue <= alpha && ttValue <= value)
@@ -1178,15 +1179,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
-		  {
-			  if (!ss->inCheck 
-			  && ttCapture 
-			  && !(capture || givesCheck)
-			  && ss->staticEval < -400)
-			      r += 2;
-			  else
-				  r++;
-		  }
+		      r += negExt ? 2 : 1;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
