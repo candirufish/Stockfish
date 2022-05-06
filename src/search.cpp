@@ -1172,7 +1172,7 @@ moves_loop: // When in check, search starts here
           ss->PvEvLmr = false;
           if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
              {
-              r -= (ss-1)->PvEvLmr ? 2 : 1;
+              r--;
               ss->PvEvLmr = true;
              }
 
@@ -1197,6 +1197,7 @@ moves_loop: // When in check, search starts here
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
+		               : PvNode && (ss-2)->PvEvLmr ? 2
                        : moveCount <= 4            ? 2
                        : PvNode && depth > 4       ? 1
                        : cutNode && moveCount <= 8 ? 1
