@@ -1169,8 +1169,12 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction at PvNodes if bestvalue
           // is vastly different from static evaluation
+          ss->PvEvLmr = false;
           if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
-              r--;
+             {
+              r -= (ss-2)->PvEvLmr ? 2 : 1;
+              ss->PvEvLmr = true;
+             }
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
@@ -1211,6 +1215,7 @@ moves_loop: // When in check, search starts here
       {
           doFullDepthSearch = !PvNode || moveCount > 1;
           didLMR = false;
+          ss->PvEvLmr = false;
       }
 
       // Step 18. Full depth search when LMR is skipped or fails high
