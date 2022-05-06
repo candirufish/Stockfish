@@ -1134,7 +1134,7 @@ moves_loop: // When in check, search starts here
 
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
-	  ss->badMv = ss->staticEval > alpha && eval < alpha && ss->staticEval - eval < 50 && !improving;
+	  ss->badMv = ss->staticEval > alpha && eval < alpha && ss->staticEval - eval < 50;
 
       bool doDeeperSearch = false;
 
