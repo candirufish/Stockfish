@@ -1098,11 +1098,16 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
-                  extension = -2, negExt = true;
+			  {
+                  extension = -2;
+				  if (value > singularBeta && singularBeta < beta)
+					  negExt = true;
+			  }
 
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
               else if (ttValue <= alpha && ttValue <= value)
                   extension = -1;
+			  
           }
 
           // Check extensions (~1 Elo)
@@ -1179,7 +1184,10 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
-		      r += negExt ? 2 : 1;
+		     r++;
+		 
+		  if (negExt && !PvNode)
+		     r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
