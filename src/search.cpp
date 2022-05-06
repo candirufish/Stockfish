@@ -1172,7 +1172,7 @@ moves_loop: // When in check, search starts here
           ss->PvEvLmr = false;
           if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
              {
-              r -= (ss-2)->PvEvLmr ? 2 : 1;
+              r -= (ss-1)->PvEvLmr ? 2 : 1;
               ss->PvEvLmr = true;
              }
 
