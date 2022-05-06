@@ -1155,7 +1155,8 @@ moves_loop: // When in check, search starts here
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
-              && !likelyFailLow)
+              && !likelyFailLow
+			  && !repeating)
               r -= 2;
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
@@ -1176,7 +1177,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Decrease reduction for PvNodes based on depth
-          if (PvNode && !repeating)
+          if (PvNode)
               r -= 1 + 15 / ( 3 + depth );
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
