@@ -1183,7 +1183,7 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if (repeating && !PvNode && pos.rule50_count() > 80)
+          if (repeating && !ss->ttPv)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
