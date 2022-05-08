@@ -1189,6 +1189,13 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
 
+          ss->highRLmr = false;
+          if (r >= 3)
+              ss->highRLmr = true;
+
+          if ((ss-1)->highRLmr)
+              r--;
+
           // In general we want to cap the LMR depth search at newDepth. But if reductions
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
@@ -1211,6 +1218,7 @@ moves_loop: // When in check, search starts here
       {
           doFullDepthSearch = !PvNode || moveCount > 1;
           didLMR = false;
+          ss->highRLmr = false;
       }
 
       // Step 18. Full depth search when LMR is skipped or fails high
