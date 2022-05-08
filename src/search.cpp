@@ -1193,7 +1193,7 @@ moves_loop: // When in check, search starts here
           if (r >= 3)
               ss->highRLmr = true;
 
-          if ((ss-1)->highRLmr)
+          if ((ss-1)->highRLmr && PvNode)
               r--;
 
           // In general we want to cap the LMR depth search at newDepth. But if reductions
