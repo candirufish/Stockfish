@@ -1116,6 +1116,10 @@ moves_loop: // When in check, search starts here
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5491)
               extension = 1;
+			  
+		   else if (PvNode && pos.rule50_count() > 80
+             && (capture || type_of(movedPiece) == PAWN))
+              extension = 1;
       }
 
       // Add extension to new depth
@@ -1175,10 +1179,6 @@ moves_loop: // When in check, search starts here
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
               r -= 1 + 15 / ( 3 + depth );
-
-          if (PvNode && pos.rule50_count() > 80
-             && (capture || type_of(movedPiece) == PAWN))
-              r -= 2;
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
