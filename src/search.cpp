@@ -1118,6 +1118,7 @@ moves_loop: // When in check, search starts here
               extension = 1;
 			  
 		   else if (PvNode && pos.rule50_count() > 80
+		     && moveCount != 1
              && (capture || type_of(movedPiece) == PAWN))
               extension = 1;
       }
