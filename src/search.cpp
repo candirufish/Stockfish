@@ -1176,7 +1176,8 @@ moves_loop: // When in check, search starts here
           if (PvNode)
               r -= 1 + 15 / ( 3 + depth );
 
-          if (PvNode && pos.rule50_count() > 40
+          if (PvNode && !rootNode
+             && pos.rule50_count() > 80
              && (capture || type_of(movedPiece) == PAWN))
               r--;
 
