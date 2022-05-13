@@ -1192,7 +1192,7 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
 
-          if (checkCount > 5 && pos.rule50_count() > 80)
+          if (!PvNode && checkCount > 5 && pos.rule50_count() > 80)
               r++;
 
           // In general we want to cap the LMR depth search at newDepth. But if reductions
