@@ -1111,7 +1111,7 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 9
                    && abs(ss->staticEval) > 71)
-              extension = checkCount == 1 ? 2 : 1;
+              extension = 1;
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
@@ -1191,6 +1191,9 @@ moves_loop: // When in check, search starts here
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
+
+          if (checkCount > 5 && pos.rule50_count() > 80)
+              r++;
 
           // In general we want to cap the LMR depth search at newDepth. But if reductions
           // are really negative and movecount is low, we allow this move to be searched
