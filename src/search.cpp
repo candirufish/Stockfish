@@ -963,7 +963,7 @@ moves_loop: // When in check, search starts here
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
-    while ((move = mp.next_move(moveCountPruning && move != ss->killers[0])) != MOVE_NONE)
+    while ((move = mp.next_move(moveCountPruning && moveCount > 2)) != MOVE_NONE)
     {
       assert(is_ok(move));
 
