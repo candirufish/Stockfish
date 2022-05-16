@@ -1553,9 +1553,6 @@ moves_loop: // When in check, search starts here
               bestValue = std::max(bestValue, futilityBase);
               continue;
           }
-
-          if (moveCount > 2)
-              continue;
       }
 
       // Do not search moves with negative SEE values (~5 Elo)
