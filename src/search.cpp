@@ -961,11 +961,9 @@ moves_loop: // When in check, search starts here
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
 
-    bool PvEval = PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250;
-
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
-    while ((move = mp.next_move(moveCountPruning && !PvEval)) != MOVE_NONE)
+    while ((move = mp.next_move(moveCountPruning && !(PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250))) != MOVE_NONE)
     {
       assert(is_ok(move));
 
@@ -1174,7 +1172,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction at PvNodes if bestvalue
           // is vastly different from static evaluation
-          if (PvEval)
+          if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
               r--;
 
           // Decrease reduction for PvNodes based on depth
