@@ -1166,10 +1166,6 @@ moves_loop: // When in check, search starts here
           if (cutNode && move != ss->killers[0])
               r += 2;
 
-          // Increase reduction if ttMove is a capture (~3 Elo)
-          if (ttCapture)
-              r++;
-
           // Decrease reduction at PvNodes if bestvalue
           // is vastly different from static evaluation
           if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250)
@@ -1181,6 +1177,10 @@ moves_loop: // When in check, search starts here
 
           if (!capture)
          {
+          // Increase reduction if ttMove is a capture (~3 Elo)
+          if (ttCapture)
+              r++;
+
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
