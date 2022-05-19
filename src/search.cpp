@@ -1167,7 +1167,7 @@ moves_loop: // When in check, search starts here
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
-          if (ttCapture && !ss->inCheck)
+          if (ttCapture)
               r++;
 
           // Decrease reduction at PvNodes if bestvalue
@@ -1176,7 +1176,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Decrease reduction for PvNodes based on depth
-          if (PvNode)
+          if (PvNode && !ss->inCheck)
               r -= 1 + 15 / ( 3 + depth );
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
