@@ -1197,7 +1197,7 @@ moves_loop: // When in check, search starts here
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                          ? 0
-                       : gcExt && pos.rule50_count() > 80 ? 0
+                       : gcExt && !ss->ttPv               ? 0
                        : moveCount <= 4                   ? 2
                        : PvNode && depth > 4              ? 1
                        : cutNode && moveCount <= 8 ?        1
