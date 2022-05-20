@@ -787,7 +787,10 @@ namespace {
         {
         value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
         if (value < alpha)
+		    {
+			ss->cutoffCnt = 0;
             return value;
+		    }
         }
        else if (depth <= 7)
         {
