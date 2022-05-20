@@ -785,7 +785,7 @@ namespace {
     {
         if (!ss->ttPv)
         {
-        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 3, cutNode);
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 5, cutNode);
         if (value < alpha)
             return value;
         }
