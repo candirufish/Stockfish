@@ -556,7 +556,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, didLMR, priorCapture;
-    bool capture, doFullDepthSearch, moveCountPruning, ttCapture;
+    bool capture, doFullDepthSearch, moveCountPruning, ttCapture, gcExt;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
 
@@ -995,6 +995,7 @@ moves_loop: // When in check, search starts here
       capture = pos.capture(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+      gcExt = false;
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1111,7 +1112,7 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 9
                    && abs(ss->staticEval) > 71)
-              extension = 1;
+              extension = 1, gcExt = true;
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
@@ -1148,6 +1149,7 @@ moves_loop: // When in check, search starts here
           &&  moveCount > 1 + (PvNode && ss->ply <= 1)
           && (   !ss->ttPv
               || !capture
+              || !gcExt
               || (cutNode && (ss-1)->moveCount > 1)))
       {
           Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
