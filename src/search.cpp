@@ -1146,7 +1146,7 @@ moves_loop: // When in check, search starts here
       // been searched. In general we would like to reduce them, but there are many
       // cases where we extend a son if it has good chances to be "interesting".
       if (    depth >= 2
-          &&  moveCount > 1 + (PvNode && ss->ply <= 1)
+          &&  moveCount > 1 + (PvNode && (ss->ply <= 1 || us == rootColor))
           && (   !ss->ttPv
               || !capture
               || (cutNode && (ss-1)->moveCount > 1)))
@@ -1198,7 +1198,6 @@ moves_loop: // When in check, search starts here
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
                        : moveCount <= 4            ? 2
-                       : PvNode && us == rootColor ? 1
                        : PvNode && depth > 4       ? 1
                        : cutNode && moveCount <= 8 ? 1
                        :                             0;
