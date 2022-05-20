@@ -783,7 +783,7 @@ namespace {
     if (   !PvNode
         && eval < alpha - 348 - 258 * depth * depth)
     {
-        if (!ss->ttPv && !improving)
+        if (!ss->ttPv && complexity <= 1000)
         {
         value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
         if (value < alpha)
