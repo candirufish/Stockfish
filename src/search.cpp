@@ -783,7 +783,7 @@ namespace {
     if (   !PvNode
         && eval < alpha - 348 - 258 * depth * depth)
     {
-        if ((thisThread->id() & 7) == 7)
+        if (!ss->ttPv && (thisThread->id() & 7) == 7)
         {
         value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
         if (value < alpha)
