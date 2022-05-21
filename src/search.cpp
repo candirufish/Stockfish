@@ -1139,6 +1139,7 @@ moves_loop: // When in check, search starts here
       pos.do_move(move, st, givesCheck);
 
       bool doDeeperSearch = false;
+      bool redux = false;
 
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1168,7 +1169,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
-              r++;
+              r++, redux = true;
 
           // Decrease reduction at PvNodes if bestvalue
           // is vastly different from static evaluation
@@ -1196,6 +1197,7 @@ moves_loop: // When in check, search starts here
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
+                       : redux                     ? 0
                        : moveCount <= 4            ? 2
                        : PvNode                    ? 1
                        : cutNode && moveCount <= 8 ? 1
