@@ -1197,7 +1197,6 @@ moves_loop: // When in check, search starts here
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
-                       : gcExt && !PvNode && !cutNode && ss->ttPv ? 0
                        : moveCount <= 4            ? 2
                        : PvNode && depth > 4       ? 1
                        : cutNode && moveCount <= 8 ? 1
@@ -1208,7 +1207,7 @@ moves_loop: // When in check, search starts here
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
           // If the son is reduced and fails high it will be re-searched at full depth
-          doFullDepthSearch = value > alpha && d < newDepth;
+          doFullDepthSearch = value > alpha && d < newDepth && !gcExt;
           doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d));
           didLMR = true;
       }
