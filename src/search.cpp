@@ -1161,7 +1161,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
           if ((ss-1)->moveCount > 7)
-              r -= 1;
+              r--;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode && move != ss->killers[0])
@@ -1198,7 +1198,7 @@ moves_loop: // When in check, search starts here
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
                        : moveCount <= 4            ? 2
-                       : PvNode && !PvLmr          ? 1
+                       : PvNode && PvLmr           ? 1
                        : cutNode && moveCount <= 8 ? 1
                        :                             0;
 
