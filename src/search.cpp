@@ -1183,7 +1183,7 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if ((ss-1)->research)
+          if ((ss-1)->research && !ss->ttPv)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
@@ -1200,7 +1200,7 @@ moves_loop: // When in check, search starts here
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
                        : moveCount <= 4            ? 2
-                       : PvNode && depth > 4       ? 1
+                       : PvNode                    ? 1
                        : cutNode && moveCount <= 8 ? 1
                        :                             0;
 
