@@ -1196,12 +1196,14 @@ moves_loop: // When in check, search starts here
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
+                       : (ss-1)->didLmrExt         ? 0
                        : moveCount <= 4            ? 2
                        : PvNode                    ? 1
                        : cutNode && moveCount <= 8 ? 1
                        :                             0;
 
           Depth d = std::clamp(newDepth - r, 1, newDepth + deeper);
+          ss->didLmrExt = d > newDepth;
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
@@ -1214,6 +1216,7 @@ moves_loop: // When in check, search starts here
       {
           doFullDepthSearch = !PvNode || moveCount > 1;
           didLMR = false;
+          ss->didLmrExt = false;
       }
 
       // Step 18. Full depth search when LMR is skipped or fails high
