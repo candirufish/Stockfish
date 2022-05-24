@@ -1079,13 +1079,12 @@ moves_loop: // When in check, search starts here
               value = search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
               ss->excludedMove = MOVE_NONE;
 
-              if (value < singularBeta)
+              if (value < singularBeta && !(ss-1)->didLmrExt)
               {
                   extension = 1;
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && !(ss-1)->didLmrExt
                       && value < singularBeta - 26
                       && ss->doubleExtensions <= 8)
                       extension = 2;
