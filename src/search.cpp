@@ -953,6 +953,7 @@ moves_loop: // When in check, search starts here
 
     value = bestValue;
     moveCountPruning = false;
+    bool dblExt = false;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1087,7 +1088,7 @@ moves_loop: // When in check, search starts here
                   if (  !PvNode
                       && value < singularBeta - 26
                       && ss->doubleExtensions <= 8)
-                      extension = 2;
+                      extension = 2, dblExt = true;
               }
 
               // Multi-cut pruning
@@ -1183,6 +1184,9 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
+          if ((ss-1)->superExt && !ss->ttPv)
+              r++;
+
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
                          + (*contHist[1])[movedPiece][to_sq(move)]
@@ -1202,6 +1206,7 @@ moves_loop: // When in check, search starts here
                        :                             0;
 
           Depth d = std::clamp(newDepth - r, 1, newDepth + deeper);
+          ss->superExt = d > newDepth && dblExt;
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
@@ -1214,6 +1219,7 @@ moves_loop: // When in check, search starts here
       {
           doFullDepthSearch = !PvNode || moveCount > 1;
           didLMR = false;
+          ss->superExt = false;
       }
 
       // Step 18. Full depth search when LMR is skipped or fails high
