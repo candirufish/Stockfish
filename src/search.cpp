@@ -57,6 +57,8 @@ using Eval::evaluate;
 using namespace Search;
 
 namespace {
+    int RZR1 = 348, RZR2 = 258, RZR3 = 7, RZR4 = 7, RZR5 = 348, RZR6 = 258;
+    TUNE(RZR1, RZR2, RZR3, RZR4, RZR5, RZR6);
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
@@ -780,14 +782,22 @@ namespace {
     // Step 7. Razoring.
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
-    if (   !PvNode
-        && depth <= 7
-        && eval < alpha - 348 - 258 * depth * depth)
+    if (!PvNode)
     {
+        if (!ss->ttPv && eval < alpha - RZR1 - RZR2 * depth * depth)
+        {
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - RZR3, cutNode);
+        if (value < alpha)
+            return value;
+        }
+       else if (depth <= RZR4 && eval < alpha - RZR5 - RZR6 * depth * depth)
+        {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
+        }
     }
+
 
     // Step 8. Futility pruning: child node (~25 Elo).
     // The depth condition is important for mate finding.
