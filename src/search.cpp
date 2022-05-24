@@ -1066,7 +1066,6 @@ moves_loop: // When in check, search starts here
           if (   !rootNode
               &&  depth >= 4 - (thisThread->previousDepth > 27) + 2 * (PvNode && tte->is_pv())
               &&  move == ttMove
-              && !(ss-1)->didLmrExt
               && !excludedMove // Avoid recursive singular search
            /* &&  ttValue != VALUE_NONE Already implicit in the next condition */
               &&  abs(ttValue) < VALUE_KNOWN_WIN
@@ -1086,6 +1085,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
+                      && !(ss-1)->didLmrExt
                       && value < singularBeta - 26
                       && ss->doubleExtensions <= 8)
                       extension = 2;
