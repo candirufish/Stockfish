@@ -1115,7 +1115,6 @@ moves_loop: // When in check, search starts here
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
-                   && !(ss-1)->didLmrExt
                    && move == ttMove
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5491)
@@ -1182,6 +1181,9 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
+              r++;
+
+          if ((ss-1)->didLmrExt)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
