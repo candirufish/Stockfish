@@ -786,7 +786,7 @@ namespace {
         if (!ss->ttPv)
         {
         value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
-        if (value < alpha)
+        if (value >= beta)
             return value;
         }
        else if (depth <= 7)
@@ -1205,7 +1205,7 @@ moves_loop: // When in check, search starts here
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
                        : moveCount <= 4            ? 2
-                       : PvNode && depth > 4       ? 1
+                       : PvNode                    ? 1
                        : cutNode && moveCount <= 8 ? 1
                        :                             0;
 
