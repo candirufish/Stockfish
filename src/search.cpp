@@ -1192,7 +1192,7 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
 
-        if (abs(ss->staticEval) > VALUE_KNOWN_WIN && !PvNode)
+        if (bestValue < -VALUE_KNOWN_WIN)
           r++;
 
           // In general we want to cap the LMR depth search at newDepth. But if reductions
