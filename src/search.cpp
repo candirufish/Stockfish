@@ -1202,7 +1202,7 @@ moves_loop: // When in check, search starts here
                        :                             0;
 
           if (capture)
-              r = std::min(r, 4);
+              r = std::min(r, 5);
 
           Depth d = std::clamp(newDepth - r, 1, newDepth + deeper);
 
