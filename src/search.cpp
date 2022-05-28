@@ -784,9 +784,18 @@ namespace {
         && depth <= 7
         && eval < alpha - 348 - 258 * depth * depth)
     {
+        if (!ss->ttPv)
+        {
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
+        if (value < eval)
+            return value;
+        }
+       else if (depth <= 7)
+        {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
+        }
     }
 
     // Step 8. Futility pruning: child node (~25 Elo).
