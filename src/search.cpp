@@ -1085,6 +1085,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
+                      && !(ss-1)->research
                       && value < singularBeta - 26
                       && ss->doubleExtensions <= 8)
                       extension = 2;
@@ -1181,9 +1182,6 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
-              r++;
-
-          if ((ss-1)->research && ss->ttPv)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
