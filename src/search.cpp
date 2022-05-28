@@ -1318,16 +1318,18 @@ moves_loop: // When in check, search starts here
               else
               {
                   ss->cutoffCnt++;
+
+                  if ((ss)->cutoffCnt > 3)
+                       ss->statScore = 0;
+
                   assert(value >= beta); // Fail high
                   break;
               }
           }
       }
       else
-      {
-         ss->statScore = 0;
          ss->cutoffCnt = 0;
-      }
+
 
       // If the move is worse than some previously searched move, remember it to update its stats later
       if (move != bestMove)
