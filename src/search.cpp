@@ -787,7 +787,7 @@ namespace {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
         {
-            if (complexity > 1000)
+            if (complexity > 400)
                  ss->cutoffCnt = 0;
 
             return value;
