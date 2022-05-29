@@ -1317,7 +1317,11 @@ moves_loop: // When in check, search starts here
               }
               else
               {
-                  ss->cutoffCnt++;
+                  if (value > VALUE_KNOWN_WIN)
+                       ss->cutoffCnt += 2;
+                  else
+                       ss->cutoffCnt++;
+
                   assert(value >= beta); // Fail high
                   break;
               }
