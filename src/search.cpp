@@ -783,15 +783,15 @@ namespace {
     if (   !PvNode
         && eval < alpha - 348 - 258 * depth * depth)
     {
-        if (!ss->ttPv)
-        {
-        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
-        if (value < eval)
-            return value;
-        }
-       else if (depth <= 7)
+       if (depth <= 7)
         {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
+        if (value < alpha)
+            return value;
+        }
+        else if (!ss->ttPv)
+        {
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
         if (value < alpha)
             return value;
         }
