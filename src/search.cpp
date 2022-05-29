@@ -1318,7 +1318,7 @@ moves_loop: // When in check, search starts here
               else
               {
                   if (value > VALUE_KNOWN_WIN)
-                       ss->cutoffCnt += 2;
+                       ss->cutoffCnt += 3;
                   else
                        ss->cutoffCnt++;
 
