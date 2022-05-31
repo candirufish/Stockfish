@@ -1189,7 +1189,7 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
 
-          if (ss->inCheck)
+          if (ss->inCheck && cutNode)
               r = std::min(r, 3);
 
           // In general we want to cap the LMR depth search at newDepth. But if reductions
