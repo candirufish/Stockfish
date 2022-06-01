@@ -1202,8 +1202,9 @@ moves_loop: // When in check, search starts here
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
-          if (value > alpha && d + 6 < newDepth && complexity > 1000)
-              value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, (d + newDepth)/2, true);
+          if (value > alpha && depth <= 6 && !PvNode)
+              value = -qsearch<NonPV>(pos, ss+1, -(alpha+1), -alpha);
+
 
           // If the son is reduced and fails high it will be re-searched at full depth
           doFullDepthSearch = value > alpha && d < newDepth;
