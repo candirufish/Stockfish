@@ -1205,13 +1205,11 @@ moves_loop: // When in check, search starts here
           if (value > alpha && d + 6 < newDepth)
            {
               value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, (d + newDepth)/2, true);
-              if (value > alpha)
-                  ss->cutoffCnt++;
+              doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d));
            }
 
           // If the son is reduced and fails high it will be re-searched at full depth
           doFullDepthSearch = value > alpha && d < newDepth;
-          doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d));
           didLMR = true;
       }
       else
