@@ -1356,7 +1356,7 @@ moves_loop: // When in check, search starts here
 
     // Bonus for prior countermove that caused the fail low
     else if (   (depth >= 4 || PvNode)
-             && !priorCapture)
+             && !priorCapture && (ss)->cutoffCnt ==  0)
     {
         //Assign extra bonus if current node is PvNode or cutNode
         //or fail low was really bad
