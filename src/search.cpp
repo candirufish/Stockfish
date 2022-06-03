@@ -1100,7 +1100,7 @@ moves_loop: // When in check, search starts here
               {
                   extension = -1;
                   if (  !PvNode
-                     && ttValue >= beta + 25)
+                     && ttValue >= beta - 25)
                      extension = -2;
               }
 
