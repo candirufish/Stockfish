@@ -786,7 +786,12 @@ namespace {
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
+        {
+            if (value < alpha - 10)
+                 ss->cutoffCnt = 0;
+
             return value;
+        }
     }
 
     // Step 8. Futility pruning: child node (~25 Elo).
