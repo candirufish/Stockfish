@@ -1364,7 +1364,7 @@ moves_loop: // When in check, search starts here
                           || cutNode
                           || bestValue < alpha - 70 * depth;
 
-        if (value < alpha)
+        if (extraBonus && value < alpha)
             ss->cutoffCnt = 0;
 
         update_continuation_histories(ss-1, pos.piece_on(prevSq), prevSq, stat_bonus(depth) * (1 + extraBonus));
