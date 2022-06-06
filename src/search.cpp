@@ -1173,7 +1173,7 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if ((ss-2)->nodeType == Root)
+          if (PvNode && (ss-2)->nodeType == Root)
               r--;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
