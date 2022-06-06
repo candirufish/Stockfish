@@ -58,9 +58,6 @@ using namespace Search;
 
 namespace {
 
-  // Different node types, used as a template parameter
-  enum NodeType { NonPV, PV, Root };
-
   // Futility margin
   Value futility_margin(Depth d, bool improving) {
     return Value(168 * (d - improving));
@@ -565,6 +562,7 @@ namespace {
     Thread* thisThread = pos.this_thread();
     thisThread->depth  = depth;
     ss->inCheck        = pos.checkers();
+    ss->nodeType       = nodeType;
     priorCapture       = pos.captured_piece();
     Color us           = pos.side_to_move();
     moveCount          = captureCount = quietCount = ss->moveCount = 0;
@@ -950,6 +948,7 @@ moves_loop: // When in check, search starts here
 
     value = bestValue;
     moveCountPruning = false;
+    ss->mcp = false;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1004,7 +1003,8 @@ moves_loop: // When in check, search starts here
           && bestValue > VALUE_TB_LOSS_IN_MAX_PLY)
       {
           // Skip quiet moves if movecount exceeds our FutilityMoveCount threshold (~7 Elo)
-          moveCountPruning = moveCount >= futility_move_count(improving, depth);
+           if (!PvNode && (ss-1)->nodeType == NonPV)
+              ss->mcp = moveCountPruning = moveCount >= futility_move_count(improving, depth);
 
           // Reduced depth of the next LMR search
           int lmrDepth = std::max(newDepth - reduction(improving, depth, moveCount, delta, thisThread->rootDelta), 0);
@@ -1169,7 +1169,11 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
+           {
               r -= 1 + 15 / ( 3 + depth );
+             if ((ss-1)->mcp)
+                 r--;
+           }
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)

@@ -31,6 +31,9 @@ class Position;
 
 namespace Search {
 
+  // Different node types, used as a template parameter
+  enum NodeType { NonPV, PV, Root };
+
 /// Threshold used for countermoves based pruning
 constexpr int CounterMovePruneThreshold = 0;
 
@@ -52,8 +55,10 @@ struct Stack {
   bool inCheck;
   bool ttPv;
   bool ttHit;
+  bool mcp;
   int doubleExtensions;
   int cutoffCnt;
+  NodeType nodeType;
 };
 
 
