@@ -1365,7 +1365,7 @@ moves_loop: // When in check, search starts here
                           || bestValue < alpha - 70 * depth;
 
         if (extraBonus)
-            ss->cutoffCnt = 0;
+            ss->cutoffCnt--;
 
         update_continuation_histories(ss-1, pos.piece_on(prevSq), prevSq, stat_bonus(depth) * (1 + extraBonus));
     }
