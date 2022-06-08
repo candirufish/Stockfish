@@ -556,7 +556,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, didLMR, priorCapture;
+    bool givesCheck, improving, didLMR, priorCapture, qsExt;
     bool capture, doFullDepthSearch, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -908,6 +908,7 @@ namespace {
          ss->ttPv = ttPv;
     }
 
+     qsExt = false;
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
@@ -915,8 +916,10 @@ namespace {
         depth -= 3;
 
     if (depth <= 0)
+	{
+        qsExt = true;
         return qsearch<PV>(pos, ss, alpha, beta);
-
+	}
     if (    cutNode
         &&  depth >= 8
         && !ttMove)
@@ -1119,6 +1122,9 @@ moves_loop: // When in check, search starts here
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5491)
               extension = 1;
+
+          else if (qsExt)
+               extension = 1;
       }
 
       // Add extension to new depth
