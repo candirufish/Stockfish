@@ -915,7 +915,13 @@ namespace {
         depth -= 3;
 
     if (depth <= 0)
-        return qsearch<PV>(pos, ss, alpha, beta);
+    {
+        value = qsearch<PV>(pos, ss, alpha, beta);
+        if (value > alpha)
+            ss->cutoffCnt++;
+
+        return value;
+    }
 
     if (    cutNode
         &&  depth >= 8
