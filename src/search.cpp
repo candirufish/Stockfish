@@ -1124,7 +1124,7 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5491)
               extension = 1;
 
-          else if ((ss-2)->qsExt)
+          else if ((ss-2)->qsExt || (ss-4)->qsExt)
               extension = 1;
       }
 
