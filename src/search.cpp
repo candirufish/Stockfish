@@ -920,7 +920,7 @@ namespace {
 
     else if (PvNode
          && !ttMove
-         && depth >= 4)
+         && depth >= 5)
         depth--;
 
     if (    cutNode
