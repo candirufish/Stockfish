@@ -780,14 +780,22 @@ namespace {
     // Step 7. Razoring.
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
-    if (   !PvNode
-        && depth <= 7
-        && eval < alpha - 348 - 258 * depth * depth)
-    {
-        value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
+     if (   !PvNode
+         && eval < alpha - 348 - 258 * depth * depth)
+     {
+        if (!ttMove)
+        {
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
         if (value < alpha)
             return value;
-    }
+        }
+       else if (depth <= 7)
+        {
+         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
+         if (value < alpha)
+             return value;
+        }
+     }
 
     // Step 8. Futility pruning: child node (~25 Elo).
     // The depth condition is important for mate finding.
