@@ -1199,7 +1199,7 @@ moves_loop: // When in check, search starts here
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
-          if (value > alpha && d + 6 < newDepth && !ttMove)
+          if (value > alpha && d + 6 < newDepth && !likelyFailLow)
               value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, (d + newDepth)/2, true);
 
           // If the son is reduced and fails high it will be re-searched at full depth
