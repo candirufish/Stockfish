@@ -906,11 +906,14 @@ namespace {
          ss->ttPv = ttPv;
     }
 
-    // Step 11. If the position is not in TT, decrease depth by 2 or 1 depending on node type (~3 Elo)
-    if (   PvNode
-        && depth >= 3
+    // Step 11. If the position is not in TT, decrease depth by 3.
+    // Use qsearch if depth is equal or below zero (~4 Elo)
+    if (    PvNode
         && !ttMove)
-        depth -= 2;
+        depth -= 3;
+
+    if (depth <= 0)
+        return qsearch<PV>(pos, ss, alpha, beta);
 
     if (   cutNode
         && depth >= 8
@@ -1080,6 +1083,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
+                      && (ss-1)->nodeType == NonPV
                       && value < singularBeta - 26
                       && ss->doubleExtensions <= 8)
                       extension = 2;
@@ -1171,9 +1175,6 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
-              r++;
-
-          if (!PvNode && (ss-1)->nodeType == NonPV)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
