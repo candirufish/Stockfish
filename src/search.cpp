@@ -914,7 +914,7 @@ namespace {
         && !ttMove)
         depth -= 3;
 
-    if (depth <= 0)
+    if (depth <= 0 || (PvNode && ttMove && depth == 1 ))
         return qsearch<PV>(pos, ss, alpha, beta);
 
     if (    cutNode
