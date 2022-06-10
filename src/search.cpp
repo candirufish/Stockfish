@@ -1187,13 +1187,18 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
 
+          bool nglext =       (ss->ply & 1)
+                              && (   (ss-1)->moveCount > 1
+                                  || (ss-3)->moveCount > 1
+                                  || (ss-5)->moveCount > 1);
+
           // In general we want to cap the LMR depth search at newDepth. But if reductions
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
                        : moveCount <= 4            ? 2
                        : PvNode || cutNode         ? 1
-                       : ((ss->ply & 1) && (ss-1)->moveCount > 1) ?  -1
+                       : nglext                    ? -1
                        :                             0;
 
           Depth d = std::clamp(newDepth - r, 1, newDepth + deeper);
