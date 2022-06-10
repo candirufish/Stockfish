@@ -1193,7 +1193,7 @@ moves_loop: // When in check, search starts here
           int deeper =   r >= -1                   ? 0
                        : moveCount <= 4            ? 2
                        : PvNode || cutNode         ? 1
-                       :                             0;
+                       :                             -1;
 
           Depth d = std::clamp(newDepth - r, 1, newDepth + deeper);
 
