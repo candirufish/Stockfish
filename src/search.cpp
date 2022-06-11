@@ -1140,6 +1140,9 @@ moves_loop: // When in check, search starts here
 
       bool doDeeperSearch = false;
 
+      if (likelyFailLow)
+         ss->cutoffCnt = 0;
+
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
       // We use various heuristics for the sons of a node after the first son has
       // been searched. In general we would like to reduce them, but there are many
@@ -1156,10 +1159,8 @@ moves_loop: // When in check, search starts here
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
               && !likelyFailLow)
-              {
-              ss->cutoffCnt--;
               r -= 2;
-              }
+
           // Decrease reduction if opponent's move count is high (~1 Elo)
           if ((ss-1)->moveCount > 7)
               r--;
