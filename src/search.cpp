@@ -924,7 +924,8 @@ namespace {
         depth--;
 
     btsearch = beta + 1111 - 211 * improving;
-    if (   cutNode
+    if (   !cutNode
+        && !PvNode
         && !ttMove
         && depth >= 8
         && ss->staticEval >= btsearch)
