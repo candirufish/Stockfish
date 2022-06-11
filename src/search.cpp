@@ -1145,7 +1145,7 @@ moves_loop: // When in check, search starts here
               && ttMove
               && (tte->bound() & BOUND_UPPER)
               && tte->depth() >= depth)
-           ss->cutoffCnt = 0;
+           ss->cutoffCnt--;
 
 
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
