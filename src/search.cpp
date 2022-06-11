@@ -1157,7 +1157,7 @@ moves_loop: // When in check, search starts here
           if (   ss->ttPv
               && !likelyFailLow)
               {
-              ss->cutoffCnt = 0;
+              ss->cutoffCnt--;
               r -= 2;
               }
           // Decrease reduction if opponent's move count is high (~1 Elo)
