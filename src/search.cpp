@@ -920,16 +920,15 @@ namespace {
 
     btsearch = beta + 1111 - 211 * improving;
     if (    cutNode
-        &&  depth >= 8
-        && !ttMove)
+        &&  depth >= 8)
         {
-           if (ss->staticEval >= btsearch)
+           if (!ss->ttHit && !excludedMove && ss->staticEval >= btsearch)
             {
              value = search<NonPV>(pos, ss, btsearch, btsearch + 1, depth - 2, cutNode);
              if (value > btsearch)
                    return value;
             }
-           else
+           else if (!ttMove)
                depth--;
         }
 moves_loop: // When in check, search starts here
