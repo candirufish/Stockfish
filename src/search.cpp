@@ -1140,7 +1140,8 @@ moves_loop: // When in check, search starts here
 
       bool doDeeperSearch = false;
 
-      if (    cutNode
+      if (    !cutNode
+              && !PvNode
               && ttMove
               && (tte->bound() & BOUND_LOWER)
               && tte->depth() >= depth)
