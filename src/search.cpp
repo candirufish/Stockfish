@@ -918,20 +918,22 @@ namespace {
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
-    btsearch = beta + 1111 - 211 * improving;
     if (    cutNode
         &&  depth >= 8
         && !ttMove)
+        depth--;
+
+    btsearch = beta + 1111 - 211 * improving;
+    if (   !PvNode
+        && !ttMove
+        && depth >= 8
+        && ss->staticEval >= btsearch)
         {
-           if (ss->staticEval >= btsearch)
-            {
              value = search<NonPV>(pos, ss, btsearch, btsearch + 1, depth - 2, cutNode);
              if (value > btsearch)
                    return value;
-            }
-           else
-               depth--;
         }
+
 moves_loop: // When in check, search starts here
 
     // Step 12. A small Probcut idea, when we are in check (~0 Elo)
