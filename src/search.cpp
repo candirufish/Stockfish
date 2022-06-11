@@ -1140,12 +1140,11 @@ moves_loop: // When in check, search starts here
 
       bool doDeeperSearch = false;
 
-      if (!PvNode
-              && !cutNode
+      if (    cutNode
               && ttMove
               && (tte->bound() & BOUND_UPPER)
               && tte->depth() >= depth)
-           ss->cutoffCnt--;
+           ss->cutoffCnt = 0;
 
 
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
