@@ -960,7 +960,7 @@ moves_loop: // When in check, search starts here
                          && ttMove
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth
-                         && (ss+1)->cutoffCnt <= 3;
+                         && (ss+1)->cutoffCnt <= 4;
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
