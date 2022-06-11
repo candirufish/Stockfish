@@ -930,7 +930,7 @@ namespace {
         && depth >= 8
         && ss->staticEval >= btsearch)
         {
-             value = search<NonPV>(pos, ss, btsearch, btsearch + 1, depth - 2, cutNode);
+             value = search<NonPV>(pos, ss, btsearch, btsearch + 1, depth - 2, false);
              if (value > btsearch)
                    return value;
         }
