@@ -1106,7 +1106,7 @@ moves_loop: // When in check, search starts here
               else if (ttValue <= alpha && ttValue <= value)
                   extension = -1;
 
-              else if (value < alpha - 8 * depth)
+              else if (value < alpha - 6 * depth)
                   extension = -1;
           }
 
