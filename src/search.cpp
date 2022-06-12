@@ -1106,7 +1106,7 @@ moves_loop: // When in check, search starts here
               else if (ttValue <= alpha && ttValue <= value)
                   extension = -1;
 
-              else if (value < alpha && (ss+1)->cutoffCnt <= 3)
+              else if (value < alpha - 32 && (ss+1)->cutoffCnt <= 3)
                   extension = -1;
           }
 
