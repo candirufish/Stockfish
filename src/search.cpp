@@ -1238,6 +1238,10 @@ moves_loop: // When in check, search starts here
 
           value = -search<PV>(pos, ss+1, -beta, -alpha,
                               std::min(maxNextDepth, newDepth), false);
+         if (value > alpha)
+             ss->cutoffCnt++;
+         else
+             ss->cutoffCnt--;
       }
 
       // Step 19. Undo move
