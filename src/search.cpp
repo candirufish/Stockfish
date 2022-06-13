@@ -1178,7 +1178,7 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if (ss->inCheck && type_of(movedPiece) == KING && cutNode)
+          if (ss->inCheck && type_of(movedPiece) == KING && cutNode && ss->ttPv)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
