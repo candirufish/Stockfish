@@ -1121,10 +1121,8 @@ moves_loop: // When in check, search starts here
               extension = 1;
 
           else if (   PvNode
-                   && !ttMove
-                   && capture
                    && depth <= 3)
-              extension = 1;
+              extension = (abs(ttValue) < 2);
       }
 
       // Add extension to new depth
