@@ -1164,7 +1164,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode && move != ss->killers[0])
-              r += 2;
+              r += ss->inCheck && type_of(movedPiece) == KING ? 3 : 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
@@ -1191,7 +1191,6 @@ moves_loop: // When in check, search starts here
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
-                       : ss->inCheck && type_of(movedPiece) == KING && cutNode && move != ss->killers[0] ? 0
                        : moveCount <= 4            ? 2
                        : PvNode || cutNode         ? 1
                        :                             0;
