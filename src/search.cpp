@@ -1142,7 +1142,7 @@ moves_loop: // When in check, search starts here
 
       bool repeating =   to_sq((ss-2)->currentMove)   == from_sq(move)
                         && from_sq((ss-2)->currentMove) == to_sq(move)
-                        && !to_sq(ttMove);
+                        && !from_sq(ttMove);
 
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
       // We use various heuristics for the sons of a node after the first son has
