@@ -557,7 +557,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, didLMR, priorCapture;
-    bool capture, doFullDepthSearch, moveCountPruning, ttCapture, ttGivesCheck, flExt;
+    bool capture, doFullDepthSearch, moveCountPruning, ttCapture, flExt;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
 
@@ -953,7 +953,6 @@ moves_loop: // When in check, search starts here
 
     value = bestValue;
     moveCountPruning = false;
-    ttGivesCheck = false;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1089,7 +1088,7 @@ moves_loop: // When in check, search starts here
                   if (  !PvNode
                       && value < singularBeta - 26
                       && ss->doubleExtensions <= 8)
-                      extension = 2;
+                      extension = 2, flExt = true;
               }
 
               // Multi-cut pruning
@@ -1131,8 +1130,6 @@ moves_loop: // When in check, search starts here
       prefetch(TT.first_entry(pos.key_after(move)));
 
       // Update the current move (this must be done after singular extension search)
-      if (move == ttMove && givesCheck)
-            ttGivesCheck = true;
       ss->currentMove = move;
       ss->continuationHistory = &thisThread->continuationHistory[ss->inCheck]
                                                                 [capture]
@@ -1182,9 +1179,6 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if (ttGivesCheck && !flExt && !PvNode)
-              r++;
-
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
                          + (*contHist[1])[movedPiece][to_sq(move)]
@@ -1198,6 +1192,7 @@ moves_loop: // When in check, search starts here
           // are really negative and movecount is low, we allow this move to be searched
           // deeper than the first move (this may lead to hidden double extensions).
           int deeper =   r >= -1                   ? 0
+                       : flExt                     ? -1
                        : moveCount <= 4            ? 2
                        : PvNode || cutNode         ? 1
                        :                             0;
