@@ -1170,7 +1170,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
-              r++;
+              r += incking ? 2 : 1;
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
@@ -1187,7 +1187,7 @@ moves_loop: // When in check, search starts here
                          - 4334;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
-          r -= incking ? 0 : ss->statScore / 15914;
+          r -= ss->statScore / 15914;
 
           // In general we want to cap the LMR depth search at newDepth. But if reductions
           // are really negative and movecount is low, we allow this move to be searched
