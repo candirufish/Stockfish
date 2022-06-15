@@ -1170,7 +1170,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
-              r += incking ? 2 : 1;
+              r++;
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
@@ -1203,7 +1203,7 @@ moves_loop: // When in check, search starts here
 
           // If the son is reduced and fails high it will be re-searched at full depth
           doFullDepthSearch = value > alpha && d < newDepth;
-          doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d));
+          doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d)) && !incking;
           didLMR = true;
       }
       else
