@@ -1022,6 +1022,7 @@ moves_loop: // When in check, search starts here
               // Futility pruning for captures (~0 Elo)
               if (   !pos.empty(to_sq(move))
                   && !givesCheck
+                  && !(ss-2)->qsExt
                   && !PvNode
                   && lmrDepth < 6
                   && !ss->inCheck
@@ -1124,8 +1125,6 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5491)
               extension = 1;
 
-          else if (((ss-2)->qsExt || (ss-4)->qsExt) && PvNode)
-              extension = 1;
       }
 
       // Add extension to new depth
