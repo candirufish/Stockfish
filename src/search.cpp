@@ -1121,7 +1121,7 @@ moves_loop: // When in check, search starts here
               extension = 1;
 
           else if (capture
-                   && ss->ttPv
+                   && cutNode
                    && MoveList<LEGAL>(pos).size() == 1)
                 extension = 1;
       }
