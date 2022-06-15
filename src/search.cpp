@@ -1173,8 +1173,8 @@ moves_loop: // When in check, search starts here
               r++;
 
           // Decrease reduction for PvNodes based on depth
-          if (PvNode && !incking)
-              r -= 1 + 15 / ( 3 + depth );
+          if (PvNode)
+              r -= !incking + 15 / ( 3 + depth );
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
