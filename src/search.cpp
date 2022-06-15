@@ -1041,7 +1041,6 @@ moves_loop: // When in check, search starts here
 
               // Continuation history based pruning (~2 Elo)
               if (   lmrDepth < 5
-                  && !(ss-2)->qsExt
                   && history < -3875 * (depth - 1))
                   continue;
 
@@ -1050,6 +1049,7 @@ moves_loop: // When in check, search starts here
               // Futility pruning: parent node (~9 Elo)
               if (   !ss->inCheck
                   && lmrDepth < 11
+                  && !(ss-2)->qsExt
                   && ss->staticEval + 122 + 138 * lmrDepth + history / 60 <= alpha)
                   continue;
 
