@@ -1173,7 +1173,7 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if (PvNode && abs(ss->cplxtrack - (ss-1)->cplxtrack) > 512)
+          if (PvNode && abs(ss->cplxtrack - (ss-1)->cplxtrack) > 256)
               r--;
 
 
