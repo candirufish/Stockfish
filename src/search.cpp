@@ -1049,6 +1049,8 @@ moves_loop: // When in check, search starts here
           }
       }
 
+      if (move == ttMove && givesCheck)
+            ttGivesCheck = true;
       // Step 15. Extensions (~66 Elo)
       // We take care to not overdo to avoid search getting stuck.
       if (ss->ply < thisThread->rootDepth * 2)
@@ -1106,7 +1108,7 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 9
                    && abs(ss->staticEval) > 71)
-              extension = 1;
+              extension = 1, ttGivesCheck = false;
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
@@ -1124,8 +1126,6 @@ moves_loop: // When in check, search starts here
       prefetch(TT.first_entry(pos.key_after(move)));
 
       // Update the current move (this must be done after singular extension search)
-      if (move == ttMove && givesCheck)
-            ttGivesCheck = true;
       ss->currentMove = move;
       ss->continuationHistory = &thisThread->continuationHistory[ss->inCheck]
                                                                 [capture]
@@ -1164,8 +1164,8 @@ moves_loop: // When in check, search starts here
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
-          if (ttCapture)
-              r += 1 + ttGivesCheck;
+          if (ttCapture || ttGivesCheck)
+              r++;
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
