@@ -1145,6 +1145,7 @@ moves_loop: // When in check, search starts here
               || (cutNode && (ss-1)->moveCount > 1)))
       {
           Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
+          bool incking = ss->inCheck && type_of(movedPiece) == KING;
 
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
@@ -1153,7 +1154,7 @@ moves_loop: // When in check, search starts here
               r -= 2;
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
-          if ((ss-1)->moveCount > 7)
+          if ((ss-1)->moveCount > 7 && !incking)
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
@@ -1162,7 +1163,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
-              r++;
+              r += incking ? 2 : 1;
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
