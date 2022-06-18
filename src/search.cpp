@@ -921,7 +921,7 @@ namespace {
         &&  !PvNode
         &&  !ttMove
         && depth >= 8)
-        depth -= improving;
+        depth -= bool(complexity > 512);
 
 moves_loop: // When in check, search starts here
 
