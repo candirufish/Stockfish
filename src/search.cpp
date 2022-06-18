@@ -908,20 +908,19 @@ namespace {
         && !ttMove)
         depth -= 3;
 
+    if (ss->ttPv
+        &&  !cutNode
+        &&  !PvNode
+        &&  !ttMove)
+        depth--;
+
     if (depth <= 0)
-        return qsearch<PV>(pos, ss, alpha, beta);
+        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
 
     if (    cutNode
         &&  depth >= 8
         && !ttMove)
         depth--;
-
-    if (ss->ttPv
-        &&  !cutNode
-        &&  !PvNode
-        &&  !ttMove
-        && depth >= 8)
-        depth -= bool(complexity > 512);
 
 moves_loop: // When in check, search starts here
 
