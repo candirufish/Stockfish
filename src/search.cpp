@@ -913,7 +913,7 @@ namespace {
         && !ttMove)
         depth--;
 
-    else if (ss->ttPv
+    else if (improving
         &&  cutNode
         &&  !PvNode
         &&  !ttMove)
