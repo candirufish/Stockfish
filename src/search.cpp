@@ -1129,6 +1129,7 @@ moves_loop: // When in check, search starts here
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
 
+      ss->vkwtrack = VALUE_KNOWN_WIN < abs(ss->staticEval);
       bool doDeeperSearch = false;
 
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
@@ -1143,10 +1144,13 @@ moves_loop: // When in check, search starts here
       {
           Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
+          bool vkwstatic = ss->vkwtrack && (ss-2)->vkwtrack;
+
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
-              && !likelyFailLow)
+              && !likelyFailLow
+              && !vkwstatic)
               r -= 2;
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
