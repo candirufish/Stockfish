@@ -1097,8 +1097,8 @@ moves_loop: // When in check, search starts here
                   extension = -2;
 
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
-              else if (ttValue <= alpha && (ttValue <= value || VALUE_KNOWN_WIN < abs(ss->staticEval)))
-                  extension = -1;
+              else if (ttValue <= alpha && ttValue <= value)
+                  extension = VALUE_KNOWN_WIN < abs(ss->staticEval) ? -2 : -1;
 
           }
 
