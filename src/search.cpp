@@ -1132,6 +1132,7 @@ moves_loop: // When in check, search starts here
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
 
+      ss->vkwtrack = VALUE_KNOWN_WIN < abs(ss->staticEval);
       bool doDeeperSearch = false;
 
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
@@ -1180,6 +1181,9 @@ moves_loop: // When in check, search starts here
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
+
+          if (ss->vkwtrack && (ss-2)->vkwtrack && !PvNode)
+              r++;
 
           // In general we want to cap the LMR depth search at newDepth. But if reductions
           // are really negative and movecount is low, we allow this move to be searched
