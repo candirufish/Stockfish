@@ -1147,10 +1147,13 @@ moves_loop: // When in check, search starts here
       {
           Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
+          bool vkwstatic = ss->vkwtrack && (ss-2)->vkwtrack;
+
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
-              && !likelyFailLow)
+              && !likelyFailLow
+              && !vkwstatic)
               r -= 2;
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
@@ -1159,7 +1162,7 @@ moves_loop: // When in check, search starts here
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode && move != ss->killers[0])
-              r += ss->vkwtrack && (ss-2)->vkwtrack ? 3 : 2;
+              r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
