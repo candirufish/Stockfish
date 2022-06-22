@@ -903,9 +903,9 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 3;
+        depth -= 3 - bool(pos.rule50_count() > 80);
 
-    if (depth <= 0 && pos.rule50_count() < 80)
+    if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
     if (    cutNode
