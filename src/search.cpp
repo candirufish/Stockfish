@@ -1170,7 +1170,7 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if (PvNode && (ss->cplxtrack - 128) > (ss-1)->cplxtrack)
+          if (PvNode && (ss->cplxtrack - 512) > (ss-1)->cplxtrack)
               r -= complexity / 625;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
