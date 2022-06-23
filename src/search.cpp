@@ -903,7 +903,7 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 3 + bool(pos.non_pawn_material() > 5120) * 2;
+        depth -= pos.capture(move) ? 6 : 3;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
