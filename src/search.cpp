@@ -1110,12 +1110,6 @@ moves_loop: // When in check, search starts here
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5491)
               extension = 1;
-
-          else if (   (PvNode || cutNode)
-                   && ss->capture 
-                   && (ss-1)->capture
-                   && moveCount != 1)
-              extension = 1;
       }
 
       // Add extension to new depth
@@ -1149,6 +1143,8 @@ moves_loop: // When in check, search starts here
       {
           Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
+          bool tactical = ss->capture && (ss-1)->capture;
+
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
@@ -1160,7 +1156,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0])
+          if (cutNode && move != ss->killers[0] && !tactical)
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
