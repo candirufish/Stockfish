@@ -1171,7 +1171,7 @@ moves_loop: // When in check, search starts here
               r++;
 
           if (PvNode && (ss->cplxtrack - 512) > (ss-1)->cplxtrack)
-              r -= complexity / 625;
+              r -= 1 + complexity / 625;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
