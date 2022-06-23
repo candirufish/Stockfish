@@ -1165,6 +1165,9 @@ moves_loop: // When in check, search starts here
           if (PvNode)
               r -= 1 + 15 / (3 + depth);
 
+          if (PvNode && !ss->inCheck && abs(ss->staticEval - bestValue) > 250 && complexity > 512)
+              r--;
+
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
