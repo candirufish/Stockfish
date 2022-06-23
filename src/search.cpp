@@ -1143,11 +1143,11 @@ moves_loop: // When in check, search starts here
       {
           Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
-          bool tactical = ss->capture && (ss-1)->capture && (ss-2)->capture;
+          bool tactical = ss->capture && (ss-1)->capture;
 
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
-          if (   ss->ttPv
+          if (   (ss->ttPv || tactical)
               && !likelyFailLow)
               r -= 2;
 
@@ -1156,7 +1156,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0] && !tactical)
+          if (cutNode && move != ss->killers[0])
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
