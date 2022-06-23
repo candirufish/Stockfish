@@ -1114,6 +1114,7 @@ moves_loop: // When in check, search starts here
           else if (   PvNode
                    && ss->capture 
                    && (ss-1)->capture
+                   && (ss-2)->capture
                    && moveCount != 1)
               extension = 1;
       }
