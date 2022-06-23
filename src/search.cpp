@@ -902,8 +902,7 @@ namespace {
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
-        && !ttMove
-        && !(ss->ply & 1))
+        && !ttMove)
         depth -= 3;
 
     if (depth <= 0)
@@ -911,7 +910,8 @@ namespace {
 
     if (    cutNode
         &&  depth >= 8
-        && !ttMove)
+        && !ttMove
+        && !(ss->ply & 1))
         depth--;
 
 moves_loop: // When in check, search starts here
