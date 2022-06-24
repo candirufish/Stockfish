@@ -1167,7 +1167,7 @@ moves_loop: // When in check, search starts here
               r -= 1 + 15 / ( 3 + depth );
 
               // Decrease reduction at PvNodes according to complexity and eval gap
-              r -= std::clamp(complexity / 625 + abs(ss->staticEval - bestValue) / 250, 0, 2);
+              r -= std::clamp(complexity / 625 + abs(ss->staticEval - bestValue) / 250, 0, 3);
           }
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           else if ((ss+1)->cutoffCnt > 3)
