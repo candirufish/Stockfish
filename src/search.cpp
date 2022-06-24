@@ -1164,7 +1164,7 @@ moves_loop: // When in check, search starts here
           if (PvNode)
           {
               // Decrease reduction for PvNodes based on depth
-              r -= 1 + 15 / ( 3 + depth );
+              r -= 15 / ( 3 + depth );
 
               // Decrease reduction at PvNodes according to complexity and eval gap
               r -= std::clamp(complexity / 625 + abs(ss->staticEval - bestValue) / 250, 0, 2);
