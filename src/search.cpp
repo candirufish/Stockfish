@@ -1171,7 +1171,7 @@ moves_loop: // When in check, search starts here
               r++;
 
           if (PvNode && (ss->cplxtrack - 512) > (ss-1)->cplxtrack)
-              r -= std::clamp(complexity / 625, 1, 2);
+              r -= std::clamp(complexity / 625, 0, 2);
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
