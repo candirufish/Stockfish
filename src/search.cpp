@@ -1131,6 +1131,9 @@ moves_loop: // When in check, search starts here
 
       bool doDeeperSearch = false;
 
+      bool tactical = ss->capture && (ss-1)->capture 
+                      && to_sq((ss-1)->currentMove) == to_sq(move);
+
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
       // We use various heuristics for the sons of a node after the first son has
       // been searched. In general we would like to reduce them, but there are many
@@ -1143,8 +1146,6 @@ moves_loop: // When in check, search starts here
       {
           Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
-          bool tactical = ss->capture && (ss-1)->capture && (ss-2)->capture;
-
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
@@ -1156,7 +1157,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0] && !tactical)
+          if (cutNode && move != ss->killers[0])
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
@@ -1170,6 +1171,9 @@ moves_loop: // When in check, search starts here
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
+
+          if (tactical)
+              r--;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
