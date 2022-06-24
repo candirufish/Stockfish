@@ -1161,12 +1161,16 @@ moves_loop: // When in check, search starts here
           if (ttCapture)
               r++;
 
-          // Decrease reduction for PvNodes based on depth
           if (PvNode)
-              r -= 1 + 15 / (3 + depth);
+          {
+              // Decrease reduction for PvNodes based on depth
+              r -= 1 + 15 / ( 3 + depth );
 
+              // Decrease reduction at PvNodes according to complexity and eval gap
+              r -= std::clamp(complexity / 625 + abs(ss->staticEval - bestValue) / 250, 0, 1);
+          }
           // Increase reduction if next ply has a lot of fail high else reset count to 0
-          if ((ss+1)->cutoffCnt > 3 && !PvNode)
+          else if ((ss+1)->cutoffCnt > 3)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
