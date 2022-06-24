@@ -1147,7 +1147,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction if position is or has been on the PV
           // and node is not likely to fail low. (~3 Elo)
-          if (   (ss->ttPv || tactical)
+          if (   ss->ttPv
               && !likelyFailLow)
               r -= 2;
 
@@ -1165,7 +1165,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
-              r -= 1 + 15 / (3 + depth);
+              r -= tactical + 1 + 15 / (3 + depth);
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
