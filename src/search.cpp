@@ -1166,7 +1166,7 @@ moves_loop: // When in check, search starts here
           {
               r -= 1 + 15 / (3 + depth);
 
-              r -= std::clamp((ss->complexity / 625) - ((ss-1)->complexity / 625), 0, 1);
+              r -= (ss->complexity / 625) - ((ss-1)->complexity / 625);
           }
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
