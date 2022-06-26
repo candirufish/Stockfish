@@ -954,7 +954,8 @@ moves_loop: // When in check, search starts here
 
     int complexExt =  (ss->complexity / 625) - ((ss-1)->complexity / 625)
                    + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
-                   + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625);
+                   + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625)
+                   + ((ss-6)->complexity / 625) - ((ss-7)->complexity / 625);
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
