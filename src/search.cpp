@@ -952,6 +952,10 @@ moves_loop: // When in check, search starts here
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
 
+    int complexExt =  (ss->complexity / 625) - ((ss-1)->complexity / 625)
+                   + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
+                   + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625);
+
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
     while ((move = mp.next_move(moveCountPruning)) != MOVE_NONE)
@@ -1104,6 +1108,9 @@ moves_loop: // When in check, search starts here
                    && abs(ss->staticEval) > 71)
               extension = 1;
 
+          else if (PvNode && complexExt >= 1)
+              extension = 1;
+
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
                    && move == ttMove
@@ -1163,13 +1170,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
-          {
               r -= 1 + 15 / (3 + depth);
-
-              r -= (ss->complexity / 625) - ((ss-1)->complexity / 625) 
-                  + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
-                  + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625);
-          }
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
