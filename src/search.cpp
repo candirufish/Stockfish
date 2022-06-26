@@ -1108,7 +1108,7 @@ moves_loop: // When in check, search starts here
                    && abs(ss->staticEval) > 71)
               extension = 1;
 
-          else if (PvNode && depth >= 6 && complexExt >= 2)
+          else if (PvNode && move == ttMove && complexExt >= 2)
               extension = 1;
 
           // Quiet ttMove extensions (~0 Elo)
