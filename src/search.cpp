@@ -903,7 +903,9 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 3;
+        depth -= 3   + (ss->complexity / 625) - ((ss-1)->complexity / 625)
+                     + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
+                     + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625);
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
@@ -951,10 +953,6 @@ moves_loop: // When in check, search starts here
                          && ttMove
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
-
-    int complexExt =  (ss->complexity / 625) - ((ss-1)->complexity / 625)
-                   + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
-                   + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625);
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
@@ -1106,9 +1104,6 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 9
                    && abs(ss->staticEval) > 71)
-              extension = 1;
-
-          else if (PvNode && complexExt >= 1)
               extension = 1;
 
           // Quiet ttMove extensions (~0 Elo)
