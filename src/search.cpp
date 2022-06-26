@@ -1168,7 +1168,8 @@ moves_loop: // When in check, search starts here
 
               r -= (ss->complexity / 625) - ((ss-1)->complexity / 625) 
                   + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
-                  + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625);
+                  + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625)
+                  + ((ss-6)->complexity / 625) - ((ss-7)->complexity / 625);
           }
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
