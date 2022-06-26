@@ -953,8 +953,7 @@ moves_loop: // When in check, search starts here
                          && tte->depth() >= depth;
 
     int complexExt =  (ss->complexity / 625) - ((ss-1)->complexity / 625)
-                   + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
-                   + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625);
+                   + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625);
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
@@ -1108,7 +1107,7 @@ moves_loop: // When in check, search starts here
                    && abs(ss->staticEval) > 71)
               extension = 1;
 
-          else if (PvNode && complexExt >= 2)
+          else if (PvNode && complexExt >= 1)
               extension = 1;
 
           // Quiet ttMove extensions (~0 Elo)
