@@ -57,11 +57,12 @@ using Eval::evaluate;
 using namespace Search;
 
 namespace {
- int PVLMR1 = 1, PVLMR2 = 15, PVLMR3 = 3, CPLX1 = 625, CPLX2 = 625, CPLX3 = 625, CPLX4= 625;
+ int PVLMR1 = 1, PVLMR2 = 15, PVLMR3 = 3, CPLX1 = 625, CPLX2 = 625, CPLX3 = 625, CPLX4 = 625;
 
  TUNE(SetRange(0, 3), PVLMR1); 
+ TUNE(PVLMR2);
  TUNE(SetRange(1, 5), PVLMR3); 
- TUNE(PVLMR1, PVLMR2, PVLMR3, CPLX1, CPLX2, CPLX3, CPLX4);
+ TUNE(SetRange(1, 2048),CPLX1, CPLX2, CPLX3, CPLX4);
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
