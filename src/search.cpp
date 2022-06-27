@@ -903,7 +903,11 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 3   + (ss->complexity / 625) - ((ss-1)->complexity / 625)
+        depth -= 3;
+
+    if (    PvNode
+        &&  ttMove)
+        depth -= (ss->complexity / 625) - ((ss-1)->complexity / 625)
                      + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
                      + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625)
                      + ((ss-6)->complexity / 625) - ((ss-7)->complexity / 625);
