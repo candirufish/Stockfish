@@ -58,6 +58,10 @@ using namespace Search;
 
 namespace {
 
+   int S11D = 3, CPLX1 = 625, CPLX2 = 625, CPLX3 = 625, CPLX4 = 625, CPLX5 = 625, CPLX6 = 625, CPLX7 = 625, CPLX8 = 625;
+   TUNE(SetRange(0, 4), S11D); 
+   TUNE(SetRange(1, 2048),CPLX1, CPLX2, CPLX3, CPLX4, CPLX5, CPLX6, CPLX7, CPLX8);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -903,10 +907,10 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 3   + (ss->complexity / 625) - ((ss-1)->complexity / 625)
-                     + ((ss-2)->complexity / 625) - ((ss-3)->complexity / 625)
-                     + ((ss-4)->complexity / 625) - ((ss-5)->complexity / 625)
-                     + ((ss-6)->complexity / 625) - ((ss-7)->complexity / 625);
+        depth -= S11D   + (ss->complexity / CPLX1) - ((ss-1)->complexity / CPLX2)
+                     + ((ss-2)->complexity / CPLX3) - ((ss-3)->complexity / CPLX4)
+                     + ((ss-4)->complexity / CPLX5) - ((ss-5)->complexity / CPLX6)
+                     + ((ss-6)->complexity / CPLX7) - ((ss-7)->complexity / CPLX8);
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
