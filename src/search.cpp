@@ -905,6 +905,10 @@ namespace {
         && !ttMove)
         depth -= 3;
 
+    if (    PvNode
+        &&  ttMove)
+        depth -= complexity / 625;
+
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
