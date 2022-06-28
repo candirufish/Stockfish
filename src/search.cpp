@@ -921,7 +921,7 @@ namespace {
     {
         value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
         if (value > betaMargin)
-            depth -= 2;
+            depth -= 3;
     }
 
 moves_loop: // When in check, search starts here
