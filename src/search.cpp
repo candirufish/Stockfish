@@ -1185,6 +1185,9 @@ moves_loop: // When in check, search starts here
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
+          if (value > alpha && d + 6 < newDepth && !(ss-1)->research)
+              value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, (d + newDepth)/2, true);
+
           // If the son is reduced and fails high it will be re-searched at full depth
           doFullDepthSearch = value > alpha && d < newDepth;
           doDeeperSearch = value > (alpha + 78 + 11 * (newDepth - d));
@@ -1199,7 +1202,9 @@ moves_loop: // When in check, search starts here
       // Step 18. Full depth search when LMR is skipped or fails high
       if (doFullDepthSearch)
       {
+          ss->research = didLMR;
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth + doDeeperSearch, !cutNode);
+          ss->research = false;
 
           // If the move passed LMR update its stats
           if (didLMR)
