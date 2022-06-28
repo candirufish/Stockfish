@@ -910,14 +910,14 @@ namespace {
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
+    betaMargin = beta + 1111 - 211 * improving;
+
     if (    cutNode
         &&  depth >= 8
         && !ttMove)
         depth--;
 
-    betaMargin = beta + 1111 - 211 * improving;
-
-    if (!PvNode && !ss->ttHit && depth >= 3 && !excludedMove && ss->staticEval >= betaMargin)
+    else if (!PvNode && !ttMove && !ss->ttHit && depth >= 3 && !excludedMove && ss->staticEval >= betaMargin)
     {
         value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
         if (value > betaMargin)
