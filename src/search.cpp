@@ -721,6 +721,8 @@ namespace {
 
     CapturePieceToHistory& captureHistory = thisThread->captureHistory;
 
+    Value betaMargin = VALUE_NONE;
+
     // Step 6. Static evaluation of the position
     if (ss->inCheck)
     {
@@ -912,6 +914,15 @@ namespace {
         &&  depth >= 8
         && !ttMove)
         depth--;
+
+    betaMargin = beta + 1111 - 211 * improving;
+
+    if (!PvNode && !ss->ttHit && depth >= 3 && !excludedMove && ss->staticEval >= betaMargin)
+    {
+        value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
+        if (value > betaMargin)
+            depth--;
+    }
 
 moves_loop: // When in check, search starts here
 
