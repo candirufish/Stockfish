@@ -915,7 +915,7 @@ namespace {
         && !ttMove)
         depth--;
 
-    betaMargin = beta + 1111 - 211 * complexity / 625;
+    betaMargin = beta + 1111 - 211 * bool(complexity > 1000);
 
     if (!PvNode && !ss->ttHit && depth >= 3 && !excludedMove && ss->staticEval >= betaMargin)
     {
