@@ -913,7 +913,7 @@ namespace {
     {
         value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
         if (value > betaMargin)
-           depth -= 3;
+           depth -= 2;
     }
 
     if (depth <= 0)
