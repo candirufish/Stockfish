@@ -58,9 +58,6 @@ using namespace Search;
 
 namespace {
 
-  // Different node types, used as a template parameter
-  enum NodeType { NonPV, PV, Root };
-
   // Futility margin
   Value futility_margin(Depth d, bool improving) {
     return Value(168 * (d - improving));
@@ -565,6 +562,7 @@ namespace {
     Thread* thisThread = pos.this_thread();
     thisThread->depth  = depth;
     ss->inCheck        = pos.checkers();
+    ss->nodeType       = nodeType;
     priorCapture       = pos.captured_piece();
     Color us           = pos.side_to_move();
     moveCount          = captureCount = quietCount = ss->moveCount = 0;
@@ -903,7 +901,7 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 3;
+        depth -= 3 + (ss-1)->nodeType == PV;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
