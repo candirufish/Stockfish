@@ -57,12 +57,6 @@ using Eval::evaluate;
 using namespace Search;
 
 namespace {
- int PVLMR1 = 1, PVLMR2 = 15, PVLMR3 = 3, CPLX1 = 625, CPLX2 = 625, CPLX3 = 625, CPLX4 = 625;
-
- TUNE(SetRange(0, 3), PVLMR1); 
- TUNE(PVLMR2);
- TUNE(SetRange(1, 5), PVLMR3); 
- TUNE(SetRange(1, 2048),CPLX1, CPLX2, CPLX3, CPLX4);
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
@@ -1170,9 +1164,9 @@ moves_loop: // When in check, search starts here
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
           {
-              r -= PVLMR1 + PVLMR2 / (PVLMR3 + depth);
+              r -= 1 + 16 / (3 + depth);
 
-              r -= (ss->complexity / CPLX1) - ((ss-1)->complexity / CPLX2) + ((ss-2)->complexity / CPLX3) - ((ss-3)->complexity / CPLX4);
+              r -= (ss->complexity / 574) - ((ss-1)->complexity / 656) + ((ss-2)->complexity / 613) - ((ss-3)->complexity / 665);
           }
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
