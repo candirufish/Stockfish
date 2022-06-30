@@ -913,6 +913,13 @@ namespace {
         && !ttMove)
         depth--;
 
+    if (!PvNode && !ttMove && depth == 1 && eval < alpha - 700)
+    {
+        value = qsearch<NonPV>(pos, ss, alpha, alpha + 1);
+        if (value <= alpha)
+            return value;
+    }
+
 moves_loop: // When in check, search starts here
 
     // Step 12. A small Probcut idea, when we are in check (~0 Elo)
