@@ -1178,7 +1178,7 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
 
-          bool deeper = moveCount <= 4 && r < -1 && thisThread->id() % 2 == 1;
+          bool deeper = (PvNode || cutNode) && r < -1 && thisThread->id() % 2 == 1;
 
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
