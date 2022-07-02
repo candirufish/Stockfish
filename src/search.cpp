@@ -557,7 +557,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, didLMR, priorCapture;
-    bool capture, doFullDepthSearch, moveCountPruning, ttCapture;
+    bool capture, doFullDepthSearch, moveCountPruning, ttCapture, ttGivesCheck;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
 
@@ -944,6 +944,7 @@ moves_loop: // When in check, search starts here
 
     value = bestValue;
     moveCountPruning = false;
+    ttGivesCheck = false;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1120,6 +1121,8 @@ moves_loop: // When in check, search starts here
       prefetch(TT.first_entry(pos.key_after(move)));
 
       // Update the current move (this must be done after singular extension search)
+      if (move == ttMove && givesCheck)
+            ttGivesCheck = true;
       ss->currentMove = move;
       ss->continuationHistory = &thisThread->continuationHistory[ss->inCheck]
                                                                 [capture]
@@ -1168,6 +1171,9 @@ moves_loop: // When in check, search starts here
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
+
+          if (!ttGivesCheck && givesCheck && capture && more_than_one(pos.checkers()))
+              r--;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
