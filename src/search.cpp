@@ -903,7 +903,7 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= thisThread->id() % 2 == 1 ? 5 : 3;
+        depth -= thisThread->id() % 2 == 1 ? 6 : 3;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
