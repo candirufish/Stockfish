@@ -1178,12 +1178,10 @@ moves_loop: // When in check, search starts here
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
           r -= ss->statScore / 15914;
 
-          bool deeper = move == ss->killers[0] && r < -1;
-
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
-          Depth d = std::clamp(newDepth - r, 1, newDepth + deeper);
+          Depth d = std::clamp(newDepth - r, 1, newDepth + 1 + bool(move == ss->killers[0]));
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
