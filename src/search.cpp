@@ -906,7 +906,7 @@ namespace {
         depth -= 3;
 
     if (    PvNode
-        &&  pos.rule50_count() == 0
+        &&  pos.non_pawn_material() == 0
         &&  ttMove)
         depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
 
