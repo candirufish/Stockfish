@@ -1289,7 +1289,7 @@ moves_loop: // When in check, search starts here
                   // Reduce other moves if we have found at least one score improvement
                   if (   depth > 2
                       && depth < 7
-                      && thisThread->id() % 2 != 1
+                      && (thisThread->id() & 0) == 0
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
                      depth -= 1;
