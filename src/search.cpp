@@ -1090,7 +1090,7 @@ moves_loop: // When in check, search starts here
                   return singularBeta;
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
-              else if (ttValue >= beta)
+              else if (ttValue >= beta && !ss->inCheck)
                   extension = -2;
 
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
