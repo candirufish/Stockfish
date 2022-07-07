@@ -1103,7 +1103,7 @@ moves_loop: // When in check, search starts here
                    && depth > 9
                    && abs(ss->staticEval) > 71)
                 {
-              if (ss->inCheck && ss->doubleExtensions <= 6)
+              if (ss->inCheck && ss->doubleExtensions <= 4)
                       extension = 2;
               else
                       extension = 1;
