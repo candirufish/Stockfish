@@ -542,7 +542,7 @@ namespace {
     // Dive into quiescence search when the depth reaches zero
     if (depth <= 0)
     {
-        if (!ss->inCheck)
+        if (!(ss->inCheck && PvNode))
             return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
         else
             depth = 1;
