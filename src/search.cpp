@@ -538,9 +538,15 @@ namespace {
             return alpha;
     }
 
+    ss->inCheck        = pos.checkers();
     // Dive into quiescence search when the depth reaches zero
     if (depth <= 0)
-        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
+    {
+        if (!ss->inCheck)
+            return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
+        else
+            depth = 1;
+    }
 
     assert(-VALUE_INFINITE <= alpha && alpha < beta && beta <= VALUE_INFINITE);
     assert(PvNode || (alpha == beta - 1));
@@ -564,7 +570,6 @@ namespace {
     // Step 1. Initialize node
     Thread* thisThread = pos.this_thread();
     thisThread->depth  = depth;
-    ss->inCheck        = pos.checkers();
     priorCapture       = pos.captured_piece();
     Color us           = pos.side_to_move();
     moveCount          = captureCount = quietCount = ss->moveCount = 0;
