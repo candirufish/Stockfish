@@ -1165,7 +1165,10 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
-              r -= 1 + bool((ss+1)->distanceFromPv <= 4) + 15 / (3 + depth);
+              r -= 1 + 15 / (3 + depth);
+
+          if ((ss+1)->distanceFromPv <= 4)
+              r -= complexity / 625 + abs(ss->staticEval - bestValue) / 250;
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
