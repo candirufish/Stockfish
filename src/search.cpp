@@ -902,8 +902,7 @@ namespace {
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
-        && !ttMove
-        && !(ss-2)->s11qs)
+        && !ttMove)
         depth -= 3;
 
     ss->s11qs = false;
@@ -999,6 +998,7 @@ moves_loop: // When in check, search starts here
 
       // Step 14. Pruning at shallow depth (~98 Elo). Depth conditions are important for mate finding.
       if (  !rootNode
+          && !(ss-2)->s11qs
           && pos.non_pawn_material(us)
           && bestValue > VALUE_TB_LOSS_IN_MAX_PLY)
       {
