@@ -570,6 +570,7 @@ namespace {
     moveCount          = captureCount = quietCount = ss->moveCount = 0;
     bestValue          = -VALUE_INFINITE;
     maxValue           = VALUE_INFINITE;
+    ss->distanceFromPv = (PvNode ? 0 : ss->distanceFromPv);
 
     // Check for the available remaining time
     if (thisThread == Threads.main())
@@ -1130,6 +1131,7 @@ moves_loop: // When in check, search starts here
       pos.do_move(move, st, givesCheck);
 
       bool doDeeperSearch = false;
+      (ss+1)->distanceFromPv = ss->distanceFromPv + moveCount - 1;
 
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1181,7 +1183,7 @@ moves_loop: // When in check, search starts here
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
-          Depth d = std::clamp(newDepth - r, PvNode && moveCount <= 4  ? 2 : 1, newDepth + 1);
+          Depth d = std::clamp(newDepth - r, (ss+1)->distanceFromPv <= 4  ? 2 : 1, newDepth + 1);
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
