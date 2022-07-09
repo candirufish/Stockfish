@@ -780,6 +780,7 @@ namespace {
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
     if (   !PvNode
+        && !(ss-2)->s11qs
         && depth <= 7
         && eval < alpha - 348 - 258 * depth * depth)
     {
@@ -998,7 +999,6 @@ moves_loop: // When in check, search starts here
 
       // Step 14. Pruning at shallow depth (~98 Elo). Depth conditions are important for mate finding.
       if (  !rootNode
-          && !((ss-2)->s11qs && complexity > 1000)
           && pos.non_pawn_material(us)
           && bestValue > VALUE_TB_LOSS_IN_MAX_PLY)
       {
