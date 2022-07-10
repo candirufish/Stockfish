@@ -1166,7 +1166,7 @@ moves_loop: // When in check, search starts here
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
           {
-              r -= 1 + 18 / (3 + depth);
+              r -= 1 + 15 / (3 + depth);
 
               r -= (ss->complexity / 586) - ((ss-1)->complexity / 672) + ((ss-2)->complexity / 599) - ((ss-3)->complexity / 601);
           }
