@@ -1166,9 +1166,9 @@ moves_loop: // When in check, search starts here
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
           {
-              r -= 1 + 15 / (3 + depth);
+              r -= 1 + 18 / (3 + depth);
 
-              r -= std::clamp((ss->complexity / 509) - ((ss-1)->complexity / 679) + ((ss-2)->complexity / 583) - ((ss-3)->complexity / 664), 0, 2);
+              r -= std::clamp((ss->complexity / 586) - ((ss-1)->complexity / 672) + ((ss-2)->complexity / 599) - ((ss-3)->complexity / 601), 0, 2);
           }
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
