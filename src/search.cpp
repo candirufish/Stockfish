@@ -1042,9 +1042,10 @@ moves_loop: // When in check, search starts here
 
               // Continuation history based pruning (~2 Elo)
               if (   lmrDepth < 5
-                  && history < -3875 * (depth - 1))
+                  && history < -3875 * (depth - 1)
+                  && !(ss-2)->s11qs)
               {
-                  if (lmrDepth < 2 || !(ss-2)->s11qs)
+                  if (lmrDepth < 2)
                       continue;
 
                   ss->doubleExtensions = (ss-1)->doubleExtensions;
