@@ -1044,7 +1044,7 @@ moves_loop: // When in check, search starts here
               if (   lmrDepth < 5
                   && history < -3875 * (depth - 1))
               {
-                  if (lmrDepth < 2 || (ss-2)->s11qs)
+                  if (lmrDepth < 2 || !(ss-2)->s11qs)
                       continue;
 
                   ss->doubleExtensions = (ss-1)->doubleExtensions;
