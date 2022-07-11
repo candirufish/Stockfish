@@ -731,6 +731,7 @@ namespace {
         improving = false;
         improvement = 0;
         complexity = 0;
+        ss->cutoffCnt = 0;
         goto moves_loop;
     }
     else if (ss->ttHit)
