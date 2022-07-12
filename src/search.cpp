@@ -731,7 +731,6 @@ namespace {
         improving = false;
         improvement = 0;
         complexity = 0;
-        ss->cutoffCnt = 0;
         goto moves_loop;
     }
     else if (ss->ttHit)
@@ -930,8 +929,10 @@ moves_loop: // When in check, search starts here
         && abs(ttValue) <= VALUE_KNOWN_WIN
         && abs(beta) <= VALUE_KNOWN_WIN
        )
+       {
+		 ss->cutoffCnt = 0;
         return probCutBeta;
-
+	   }
 
     const PieceToHistory* contHist[] = { (ss-1)->continuationHistory, (ss-2)->continuationHistory,
                                           nullptr                   , (ss-4)->continuationHistory,
