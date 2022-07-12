@@ -930,9 +930,9 @@ moves_loop: // When in check, search starts here
         && abs(beta) <= VALUE_KNOWN_WIN
        )
        {
-		 ss->cutoffCnt = 0;
+        ss->cutoffCnt++;
         return probCutBeta;
-	   }
+       }
 
     const PieceToHistory* contHist[] = { (ss-1)->continuationHistory, (ss-2)->continuationHistory,
                                           nullptr                   , (ss-4)->continuationHistory,
