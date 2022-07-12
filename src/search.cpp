@@ -929,10 +929,11 @@ moves_loop: // When in check, search starts here
         && abs(ttValue) <= VALUE_KNOWN_WIN
         && abs(beta) <= VALUE_KNOWN_WIN
        )
-       {
-		 ss->cutoffCnt = 0;
+	   {
         return probCutBeta;
 	   }
+	   else if (ss->inCheck)
+		   ss->cutoffCnt = 0;
 
     const PieceToHistory* contHist[] = { (ss-1)->continuationHistory, (ss-2)->continuationHistory,
                                           nullptr                   , (ss-4)->continuationHistory,
