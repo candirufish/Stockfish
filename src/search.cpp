@@ -728,6 +728,7 @@ namespace {
     {
         // Skip early pruning when in check
         ss->staticEval = eval = VALUE_NONE;
+        ss->statScore = 0;
         improving = false;
         improvement = 0;
         complexity = 0;
