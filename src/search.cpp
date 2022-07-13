@@ -58,6 +58,11 @@ using namespace Search;
 
 namespace {
 
+   int S20D = 1, CPX1 = 650, CPXMULT = 1;
+   TUNE(SetRange(1, 2048),CPX1);
+   TUNE(SetRange(1, 6),CPXMULT);
+   TUNE(SetRange(0, 6),S20D);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1293,7 +1298,7 @@ moves_loop: // When in check, search starts here
                       && depth < 7
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
-                     depth -= 1;
+                     depth -= S20D + (complexity <= CPX1) * CPXMULT;
 
                   assert(depth > 0);
               }
