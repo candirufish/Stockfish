@@ -921,6 +921,7 @@ moves_loop: // When in check, search starts here
     probCutBeta = beta + 481;
     if (   ss->inCheck
         && !PvNode
+        && cutNode
         && depth >= 2
         && ttCapture
         && (tte->bound() & BOUND_LOWER)
