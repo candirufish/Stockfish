@@ -1160,7 +1160,7 @@ moves_loop: // When in check, search starts here
               r += std::clamp(!ss->ttPv - ss->ttPv 
                 + !capture - capture 
                 + (move != ss->killers[0]) - (move == ss->killers[0])
-                - bool(depth <= 6), 0, 3);
+                - bool(depth <= 6), 1, 2);
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
