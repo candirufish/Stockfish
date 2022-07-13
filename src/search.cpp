@@ -930,7 +930,9 @@ moves_loop: // When in check, search starts here
         && abs(beta) <= VALUE_KNOWN_WIN
        )
        {
-        ss->cutoffCnt++;
+        if (cutNode)
+            ss->cutoffCnt++;
+
         return probCutBeta;
        }
 
