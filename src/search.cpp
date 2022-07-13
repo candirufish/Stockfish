@@ -934,7 +934,7 @@ moves_loop: // When in check, search starts here
         return probCutBeta;
        }
        else if (ss->inCheck)
-        ss->cutoffCnt = 0;
+        ss->cutoffCnt--;
 
     const PieceToHistory* contHist[] = { (ss-1)->continuationHistory, (ss-2)->continuationHistory,
                                           nullptr                   , (ss-4)->continuationHistory,
