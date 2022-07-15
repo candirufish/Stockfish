@@ -1156,7 +1156,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0] && !(type_of(move) == PROMOTION && promotion_type(move) == QUEEN))
+          if (cutNode && move != ss->killers[0] && !(type_of(move) == PROMOTION && givesCheck))
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
