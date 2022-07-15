@@ -1159,8 +1159,7 @@ moves_loop: // When in check, search starts here
           if (cutNode)
               r += std::clamp(!ss->ttPv - ss->ttPv 
                 + !capture - capture 
-                + (move != ss->killers[0]) - (move == ss->killers[0])
-                + ss->inCheck * 2, 1, 3);
+                + (move != ss->killers[0]) - (move == ss->killers[0]), 1, ss->inCheck ? 3 : 2);
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
