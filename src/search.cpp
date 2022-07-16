@@ -1164,8 +1164,7 @@ moves_loop: // When in check, search starts here
                 - (type_of(move) == PROMOTION && promotion_type(move) == QUEEN)
                 - (move == ss->killers[1])
                 - ss->inCheck
-                - ss->ttHit
-                - bool(depth <= 6), 1, 3);
+                - ss->ttHit, 1, 3);
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
