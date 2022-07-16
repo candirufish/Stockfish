@@ -1174,7 +1174,7 @@ moves_loop: // When in check, search starts here
           if ((ss+1)->cutoffCnt > 3 && !PvNode)
               r++;
 
-          if (lowCpx && !PvNode && ss->staticEval < -400 && !ss->inCheck  && !(capture || givesCheck))
+          if (lowCpx && !PvNode && pos.rule50_count() > 80)
               r++;
 
           ss->statScore =  thisThread->mainHistory[us][from_to(move)]
