@@ -1160,7 +1160,13 @@ moves_loop: // When in check, search starts here
               r += std::clamp(!ss->ttPv - ss->ttPv 
                 + !capture - capture 
                 + (move != ss->killers[0]) - (move == ss->killers[0])
-                + ((ss-1)->currentMove == MOVE_NULL), 1, 3);
+                + ((ss+1)->cutoffCnt > 5)
+                - (type_of(move) == PROMOTION && promotion_type(move) == QUEEN)
+                - (move == ss->killers[1])
+                + (pos.rule50_count() >= 80)
+                - (pos.rule50_count() <= 3)
+                - ss->inCheck
+                - bool(depth <= 6), 1, 3);
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
