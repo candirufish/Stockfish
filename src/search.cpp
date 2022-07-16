@@ -1168,7 +1168,7 @@ moves_loop: // When in check, search starts here
           {
               r -= 1 + 15 / (3 + depth);
 
-            if (thisThread->id() % 2 == 1)
+            if ((thisThread->id() & 7) == 7)
               r--;
           }
 
