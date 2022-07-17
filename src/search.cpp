@@ -1340,7 +1340,8 @@ moves_loop: // When in check, search starts here
         bestValue = excludedMove ? alpha :
                     ss->inCheck  ? mated_in(ss->ply)
                                  : VALUE_DRAW;
-        ss->cutoffCnt = 0;
+        if (bestValue == alpha)
+             ss->cutoffCnt = 0;
      }
 
     // If there is a move which produces search value greater than alpha we update stats of searched moves
