@@ -1163,8 +1163,7 @@ moves_loop: // When in check, search starts here
                 + ((ss+1)->cutoffCnt > 5)
                 - (type_of(move) == PROMOTION && promotion_type(move) == QUEEN)
                 - (move == ss->killers[1])
-                - ss->inCheck
-                - ss->ttHit, 1, 3);
+                - ss->inCheck, 1, 3);
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
