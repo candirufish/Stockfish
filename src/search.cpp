@@ -1336,7 +1336,7 @@ moves_loop: // When in check, search starts here
     assert(moveCount || !ss->inCheck || excludedMove || !MoveList<LEGAL>(pos).size());
 
     if (!moveCount)
-        bestValue = excludedMove ? alpha - 100 * bool((ss+1)->cutoffCnt > 5):
+        bestValue = excludedMove ? alpha - 200 * bool((ss+1)->cutoffCnt > 3):
                     ss->inCheck  ? mated_in(ss->ply)
                                  : VALUE_DRAW;
 
