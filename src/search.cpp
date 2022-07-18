@@ -58,6 +58,14 @@ using namespace Search;
 
 namespace {
 
+   int cpx_margin[7] = { 722, 722, 722, 722, 722, 722, 722 };
+   int cpx_mult[7] = { 0, 0, 0, 1, 1 ,1, 1 };
+   int s20const[7] = { 0, 0, 0, 1, 1 ,1, 1 };
+
+   TUNE(SetRange(1, 4096), cpx_margin);
+   TUNE(SetRange(0, 6), cpx_mult);
+   TUNE(SetRange(0, 6), s20const);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1289,11 +1297,10 @@ moves_loop: // When in check, search starts here
                   alpha = value;
 
                   // Reduce other moves if we have found at least one score improvement
-                  if (   depth > 2
-                      && depth < 7
+                  if (   depth < 7
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
-                     depth -= 1;
+                     depth -= s20const[depth] + (complexity <= cpx_margin[depth]) * cpx_mult[depth];
 
                   assert(depth > 0);
               }
