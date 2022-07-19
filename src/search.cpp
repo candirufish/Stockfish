@@ -1168,8 +1168,8 @@ moves_loop: // When in check, search starts here
           {
               r -= 1 + 15 / (3 + depth);
 
-            if ((thisThread->id() & 7) == 7)
-              r--;
+            if (thisThread->id() % 2 == 1)
+              r -= complexity / 625 + abs(ss->staticEval - bestValue) / 250;
           }
 
           // Increase reduction if next ply has a lot of fail high else reset count to 0
