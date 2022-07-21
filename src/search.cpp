@@ -58,13 +58,9 @@ using namespace Search;
 
 namespace {
 
-   int cpx_margin[7] = { 722, 722, 722, 722, 722, 722, 722 };
-   int cpx_mult[7] = { 0, 0, 0, 1, 1 ,1, 1 };
-   int s20const[7] = { 0, 0, 0, 1, 1 ,1, 1 };
-
-   TUNE(SetRange(1, 4096), cpx_margin);
-   TUNE(SetRange(0, 6), cpx_mult);
-   TUNE(SetRange(0, 6), s20const);
+   int cpx_margin[7] = { 2847, 476, 887, 924, 1976, 1805, 1501 };
+   int cpx_mult[7] = { 0, 0, 1, 0, 1 ,1, 3 };
+   int s20const[7] = { 0, 0, 0, 0, 1 ,1, 2 };
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
