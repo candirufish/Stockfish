@@ -58,9 +58,9 @@ using namespace Search;
 
 namespace {
 
-   int cpx_margin[7] = { 2798, 6, 894, 1117, 1190, 2758, 903};
-   int cpx_mult[7] = { 0, 0, 0, 0, 1 ,0, 2 };
-   int s20const[7] = { 0, 0, 0, 1, 1 ,1, 1 };
+   int cpx_margin[7] = { 2513, 1172, 629, 8, 583, 3290, 167};
+   int cpx_mult[7] = { 0, 0, 1, 1, 1 ,2, 1 };
+   int s20const[7] = { 0, 0, 0, 1, 3 ,1, 1 };
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
@@ -1160,7 +1160,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && move != ss->killers[0])
+          if (cutNode)
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
