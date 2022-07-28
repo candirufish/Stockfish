@@ -608,7 +608,7 @@ namespace {
 
     (ss+1)->ttPv         = false;
     (ss+1)->excludedMove = bestMove = MOVE_NONE;
-    (ss+2)->killers[0]   = (ss+2)->killers[1] = MOVE_NONE;
+    (ss+2)->killers[0]   = (ss+2)->killers[1] = (ss + 2)->killers[2] = MOVE_NONE;
     (ss+2)->cutoffCnt    = 0;
     ss->doubleExtensions = (ss-1)->doubleExtensions;
     Square prevSq        = to_sq((ss-1)->currentMove);
@@ -1156,7 +1156,7 @@ moves_loop: // When in check, search starts here
               r--;
 
           // Increase reduction for cut nodes (~3 Elo)
-          if (cutNode && !(ss->ttPv && move == ss->killers[1]))
+          if (cutNode && move != ss->killers[2])
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
@@ -1739,10 +1739,12 @@ moves_loop: // When in check, search starts here
 
     // Update killers
     if (ss->killers[0] != move)
-    {
-        ss->killers[1] = ss->killers[0];
-        ss->killers[0] = move;
-    }
+     {
+         ss->killers[1] = ss->killers[0];
+         ss->killers[0] = move;
+     }
+    else
+         ss->killers[2] = move;
 
     Color us = pos.side_to_move();
     Thread* thisThread = pos.this_thread();
