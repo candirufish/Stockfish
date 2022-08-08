@@ -559,7 +559,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, didLMR, priorCapture, singularQuietLMR;
-    bool capture, doFullDepthSearch, moveCountPruning, ttCapture;
+    bool capture, doFullDepthSearch, moveCountPruning, ttCapture, ttGivesCheck;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
 
@@ -916,7 +916,7 @@ namespace {
         depth--;
 
 moves_loop: // When in check, search starts here
-
+    ttGivesCheck = false;
     // Step 12. A small Probcut idea, when we are in check (~0 Elo)
     probCutBeta = beta + 481;
     if (   ss->inCheck
@@ -1123,6 +1123,9 @@ moves_loop: // When in check, search starts here
       prefetch(TT.first_entry(pos.key_after(move)));
 
       // Update the current move (this must be done after singular extension search)
+      if (move == ttMove && givesCheck)
+          ttGivesCheck = true;
+
       ss->currentMove = move;
       ss->continuationHistory = &thisThread->continuationHistory[ss->inCheck]
                                                                 [capture]
@@ -1161,7 +1164,7 @@ moves_loop: // When in check, search starts here
               r += 2;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
-          if (ttCapture)
+          if (ttCapture || ttGivesCheck)
               r++;
 
           // Decrease reduction for PvNodes based on depth
