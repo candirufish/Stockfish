@@ -63,7 +63,7 @@ namespace {
 
   // Futility margin
   Value futility_margin(Depth d, bool improving) {
-    return Value(155 * (d - improving));
+    return Value(149 * (d - improving));
   }
 
   // Reductions lookup table, initialized at startup
@@ -71,7 +71,7 @@ namespace {
 
   Depth reduction(bool i, Depth d, int mn, Value delta, Value rootDelta) {
     int r = Reductions[d] * Reductions[mn];
-    return (r + 1582 - int(delta) * 1024 / int(rootDelta)) / 1024 + (!i && r > 917);
+    return (r + 1480 - int(delta) * 1024 / int(rootDelta)) / 1024 + (!i && r > 874);
   }
 
   constexpr int futility_move_count(bool improving, Depth depth) {
@@ -81,7 +81,7 @@ namespace {
 
   // History and stats update bonus, based on depth
   int stat_bonus(Depth d) {
-    return std::min((8 * d + 286) * d - 278 , 1678);
+    return std::min((12 * d + 250) * d - 338 , 1870);
   }
 
   // Add a small random component to draw evaluations to avoid 3-fold blindness
@@ -158,7 +158,7 @@ namespace {
 void Search::init() {
 
   for (int i = 1; i < MAX_MOVES; ++i)
-      Reductions[i] = int((20.21 + std::log(Threads.size()) / 2) * std::log(i));
+      Reductions[i] = int((20.71 + std::log(Threads.size()) / 2) * std::log(i));
 }
 
 
@@ -307,10 +307,10 @@ void Thread::search() {
 
   multiPV = std::min(multiPV, rootMoves.size());
 
-  complexityAverage.set(173, 1);
+  complexityAverage.set(156, 1);
 
   trend         = SCORE_ZERO;
-  optimism[ us] = Value(40);
+  optimism[ us] = Value(38);
   optimism[~us] = -optimism[us];
 
   int searchAgainCounter = 0;
@@ -353,16 +353,16 @@ void Thread::search() {
           if (rootDepth >= 4)
           {
               Value prev = rootMoves[pvIdx].averageScore;
-              delta = Value(13) + int(prev) * prev / 18145;
+              delta = Value(13) + int(prev) * prev / 17490;
               alpha = std::max(prev - delta,-VALUE_INFINITE);
               beta  = std::min(prev + delta, VALUE_INFINITE);
 
               // Adjust trend and optimism based on root move's previousScore
-              int tr = sigmoid(prev, 2, 7, 90, 117, 1);
+              int tr = sigmoid(prev, 2, 10, 88, 119, 1);
               trend = (us == WHITE ?  make_score(tr, tr / 2)
                                    : -make_score(tr, tr / 2));
 
-              int opt = sigmoid(prev, 10, 17, 109, 14399, 158);
+              int opt = sigmoid(prev, 7, 20, 153, 18056, 176);
               optimism[ us] = Value(opt);
               optimism[~us] = -optimism[us];
           }
@@ -465,16 +465,16 @@ void Thread::search() {
           && !Threads.stop
           && !mainThread->stopOnPonderhit)
       {
-          double fallingEval = (73 + 12 * (mainThread->bestPreviousAverageScore - bestValue)
-                                    +  6 * (mainThread->iterValue[iterIdx] - bestValue)) / (704.5);
+          double fallingEval = (77 + 12 * (mainThread->bestPreviousAverageScore - bestValue)
+                                    +  6 * (mainThread->iterValue[iterIdx] - bestValue)) / (684.9);
           fallingEval = std::clamp(fallingEval, 0.5, 1.5);
 
           // If the bestMove is stable over several iterations, reduce time accordingly
-          timeReduction = lastBestMoveDepth + 10 < completedDepth ? 1.82 : 0.78;
-          double reduction = (1.79 + mainThread->previousTimeReduction) / (2.07 * timeReduction);
+          timeReduction = lastBestMoveDepth + 10 < completedDepth ? 1.44 : 0.69;
+          double reduction = (1.46 + mainThread->previousTimeReduction) / (2.19 * timeReduction);
           double bestMoveInstability = 1 + 1.7 * totBestMoveChanges / Threads.size();
           int complexity = mainThread->complexityAverage.value();
-          double complexPosition = std::min(1.0 + (complexity - 254) / (1663.8), 1.5);
+          double complexPosition = std::min(1.0 + (complexity - 247) / (1820.4), 1.5);
 
           double totalTime = Time.optimum() * fallingEval * reduction * bestMoveInstability * complexPosition;
 
@@ -495,7 +495,7 @@ void Thread::search() {
           }
           else if (   Threads.increaseDepth
                    && !mainThread->ponder
-                   && Time.elapsed() > totalTime * 0.39)
+                   && Time.elapsed() > totalTime * 0.54)
                    Threads.increaseDepth = false;
           else
                    Threads.increaseDepth = true;
@@ -765,7 +765,7 @@ namespace {
     // Use static evaluation difference to improve quiet move ordering (~3 Elo)
     if (is_ok((ss-1)->currentMove) && !(ss-1)->inCheck && !priorCapture)
     {
-        int bonus = std::clamp(-15 * int((ss-1)->staticEval + ss->staticEval), -1901, 1901);
+        int bonus = std::clamp(-16 * int((ss-1)->staticEval + ss->staticEval), -2142, 2142);
         thisThread->mainHistory[~us][from_to((ss-1)->currentMove)] << bonus;
     }
 
@@ -775,7 +775,7 @@ namespace {
     // margin and the improving flag are used in various pruning heuristics.
     improvement =   (ss-2)->staticEval != VALUE_NONE ? ss->staticEval - (ss-2)->staticEval
                   : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
-                  :                                    171;
+                  :                                    185;
     improving = improvement > 0;
 
     // Step 7. Razoring.
@@ -783,7 +783,7 @@ namespace {
     // return a fail low.
     if (   !PvNode
         && depth <= 7
-        && eval < alpha - 370 - 252 * depth * depth)
+        && eval < alpha - 334 - 260 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
@@ -793,19 +793,19 @@ namespace {
     // Step 8. Futility pruning: child node (~25 Elo).
     // The depth condition is important for mate finding.
     if (   !ss->ttPv
-        &&  depth < 8
-        &&  eval - futility_margin(depth, improving) - (ss-1)->statScore / 277 >= beta
+        &&  depth < 7
+        &&  eval - futility_margin(depth, improving) - (ss-1)->statScore / 273 >= beta
         &&  eval >= beta
-        &&  eval < 28182) // larger than VALUE_KNOWN_WIN, but smaller than TB wins.
+        &&  eval < 24632) // larger than VALUE_KNOWN_WIN, but smaller than TB wins.
         return eval;
 
     // Step 9. Null move search with verification search (~22 Elo)
     if (   !PvNode
         && (ss-1)->currentMove != MOVE_NULL
-        && (ss-1)->statScore < 13243
+        && (ss-1)->statScore < 16096
         &&  eval >= beta
         &&  eval >= ss->staticEval
-        &&  ss->staticEval >= beta - 16 * depth - improvement / 14 +  203 + complexity / 26
+        &&  ss->staticEval >= beta - 19 * depth - improvement / 14 +  251 + complexity / 26
         && !excludedMove
         &&  pos.non_pawn_material(us)
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
@@ -813,7 +813,7 @@ namespace {
         assert(eval - beta >= 0);
 
         // Null move dynamic reduction based on depth, eval and complexity of position
-        Depth R = std::min(int(eval - beta) / 161, 5) + depth / 3 + 4 - (complexity > 634);
+        Depth R = std::min(int(eval - beta) / 161, 6) + depth / 3 + 4 - (complexity > 864);
 
         ss->currentMove = MOVE_NULL;
         ss->continuationHistory = &thisThread->continuationHistory[0][0][NO_PIECE][0];
@@ -849,7 +849,7 @@ namespace {
         }
     }
 
-    probCutBeta = beta + 210 - 48 * improving;
+    probCutBeta = beta + 182 - 51 * improving;
 
     // Step 10. ProbCut (~4 Elo)
     // If we have a good enough capture and a reduced search returns a value
@@ -888,14 +888,14 @@ namespace {
 
                 // If the qsearch held, perform the regular search
                 if (value >= probCutBeta)
-                    value = -search<NonPV>(pos, ss+1, -probCutBeta, -probCutBeta+1, depth - 5, !cutNode);
+                    value = -search<NonPV>(pos, ss+1, -probCutBeta, -probCutBeta+1, depth - 4, !cutNode);
 
                 pos.undo_move(move);
 
                 if (value >= probCutBeta)
                 {
                     // Save ProbCut data into transposition table
-                    tte->save(posKey, value_to_tt(value, ss->ply), ss->ttPv, BOUND_LOWER, depth - 3, move, ss->staticEval);
+                    tte->save(posKey, value_to_tt(value, ss->ply), ss->ttPv, BOUND_LOWER, depth - 2, move, ss->staticEval);
                     return value;
                 }
             }
@@ -905,7 +905,7 @@ namespace {
     // Use qsearch if depth is equal or below zero (~4 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 4;
+        depth -= 3;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
@@ -913,18 +913,18 @@ namespace {
     if (    cutNode
         &&  depth >= 9
         && !ttMove)
-        depth -= 3;
+        depth -= 2;
 
 moves_loop: // When in check, search starts here
 
     // Step 12. A small Probcut idea, when we are in check (~0 Elo)
-    probCutBeta = beta + 537;
+    probCutBeta = beta + 418;
     if (   ss->inCheck
         && !PvNode
         && depth >= 2
         && ttCapture
         && (tte->bound() & BOUND_LOWER)
-        && tte->depth() >= depth - 3
+        && tte->depth() >= depth - 4
         && ttValue >= probCutBeta
         && abs(ttValue) <= VALUE_KNOWN_WIN
         && abs(beta) <= VALUE_KNOWN_WIN
@@ -1012,9 +1012,9 @@ moves_loop: // When in check, search starts here
               if (   !pos.empty(to_sq(move))
                   && !givesCheck
                   && !PvNode
-                  && lmrDepth < 5
+                  && lmrDepth < 6
                   && !ss->inCheck
-                  && ss->staticEval + 260 + 179 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
+                  && ss->staticEval + 230 + 209 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
                    + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 6 < alpha)
                   continue;
 
@@ -1037,12 +1037,12 @@ moves_loop: // When in check, search starts here
 
               // Futility pruning: parent node (~9 Elo)
               if (   !ss->inCheck
-                  && lmrDepth < 14
-                  && ss->staticEval + 130 + 117 * lmrDepth + history / 62 <= alpha)
+                  && lmrDepth < 11
+                  && ss->staticEval + 109 + 125 * lmrDepth + history / 54 <= alpha)
                   continue;
 
               // Prune moves with negative SEE (~3 Elo)
-              if (!pos.see_ge(move, Value(-23 * lmrDepth * lmrDepth - 22 * lmrDepth)))
+              if (!pos.see_ge(move, Value(-26 * lmrDepth * lmrDepth - 16 * lmrDepth)))
                   continue;
           }
       }
@@ -1057,7 +1057,7 @@ moves_loop: // When in check, search starts here
           // a reduced search on all the other moves but the ttMove and if the
           // result is lower than ttValue minus a margin, then we will extend the ttMove.
           if (   !rootNode
-              &&  depth >= 5 - (thisThread->previousDepth > 26) + 3 * (PvNode && tte->is_pv())
+              &&  depth >= 4 - (thisThread->previousDepth > 28) + 2 * (PvNode && tte->is_pv())
               &&  move == ttMove
               && !excludedMove // Avoid recursive singular search
            /* &&  ttValue != VALUE_NONE Already implicit in the next condition */
@@ -1079,7 +1079,7 @@ moves_loop: // When in check, search starts here
 				  
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 27
+                      && value < singularBeta - 29
                       && ss->doubleExtensions <= 9)
                       extension = 2;
               }
@@ -1103,15 +1103,15 @@ moves_loop: // When in check, search starts here
 
           // Check extensions (~1 Elo)
           else if (   givesCheck
-                   && depth > 9
-                   && abs(ss->staticEval) > 68)
+                   && depth > 7
+                   && abs(ss->staticEval) > 74)
               extension = 1;
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
                    && move == ttMove
                    && move == ss->killers[0]
-                   && (*contHist[0])[movedPiece][to_sq(move)] >= 5058)
+                   && (*contHist[0])[movedPiece][to_sq(move)] >= 5191)
               extension = 1;
       }
 
@@ -1153,7 +1153,7 @@ moves_loop: // When in check, search starts here
               r -= 2;
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
-          if ((ss-1)->moveCount > 7)
+          if ((ss-1)->moveCount > 8)
               r -= 1;
 
           // Increase reduction for cut nodes (~3 Elo)
@@ -1166,7 +1166,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
-              r -= 1 + 12 / (3 + depth);
+              r -= 1 + 13 / (3 + depth);
 
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
           if (singularQuietLMR)
@@ -1180,10 +1180,10 @@ moves_loop: // When in check, search starts here
                          + (*contHist[0])[movedPiece][to_sq(move)]
                          + (*contHist[1])[movedPiece][to_sq(move)]
                          + (*contHist[3])[movedPiece][to_sq(move)]
-                         - 3519;
+                         - 4917;
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
-          r -= ss->statScore / 14044;
+          r -= ss->statScore / 15876;
 
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
@@ -1194,7 +1194,7 @@ moves_loop: // When in check, search starts here
 
           // If the son is reduced and fails high it will be re-searched at full depth
           doFullDepthSearch = value > alpha && d < newDepth;
-          doDeeperSearch = value > (alpha + 57 + 10 * (newDepth - d));
+          doDeeperSearch = value > (alpha + 73 + 12 * (newDepth - d));
           didLMR = true;
       }
       else
@@ -1294,7 +1294,7 @@ moves_loop: // When in check, search starts here
                   alpha = value;
 
                   // Reduce other moves if we have found at least one score improvement
-                  if (   depth > 2
+                  if (   depth > 1
                       && depth < 7
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
@@ -1358,7 +1358,7 @@ moves_loop: // When in check, search starts here
         //or fail low was really bad
         bool extraBonus =    PvNode
                           || cutNode
-                          || bestValue < alpha - 64 * depth;
+                          || bestValue < alpha - 56 * depth;
 
         update_continuation_histories(ss-1, pos.piece_on(prevSq), prevSq, stat_bonus(depth) * (1 + extraBonus));
     }
@@ -1369,7 +1369,7 @@ moves_loop: // When in check, search starts here
     // If no good move is found and the previous position was ttPv, then the previous
     // opponent move is probably good and the new position is added to the search tree.
     if (bestValue <= alpha)
-        ss->ttPv = ss->ttPv || ((ss-1)->ttPv && depth > 2);
+        ss->ttPv = ss->ttPv || ((ss-1)->ttPv && depth > 3);
 
     // Write gathered information in transposition table
     if (!excludedMove && !(rootNode && thisThread->pvIdx))
@@ -1485,7 +1485,7 @@ moves_loop: // When in check, search starts here
         if (PvNode && bestValue > alpha)
             alpha = bestValue;
 
-        futilityBase = bestValue + 125;
+        futilityBase = bestValue + 126;
     }
 
     const PieceToHistory* contHist[] = { (ss-1)->continuationHistory, (ss-2)->continuationHistory,
@@ -1689,7 +1689,7 @@ moves_loop: // When in check, search starts here
 
     if (!pos.capture(bestMove))
     {
-        int bonus2 = bestValue > beta + 119 ? bonus1               // larger bonus
+        int bonus2 = bestValue > beta + 152 ? bonus1               // larger bonus
                                                     : stat_bonus(depth);   // smaller bonus
 
         // Increase stats for the best move in case it was a quiet move
