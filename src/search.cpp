@@ -560,7 +560,7 @@ namespace {
     bool givesCheck, improving, priorCapture, singularQuietLMR;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
-    int moveCount, captureCount, quietCount, improvement, complexity;
+    int moveCount, captureCount, quietCount, improvement, complexity, movesSearch;
 
     // Step 1. Initialize node
     Thread* thisThread = pos.this_thread();
@@ -939,6 +939,7 @@ moves_loop: // When in check, search starts here
 
     value = bestValue;
     moveCountPruning = singularQuietLMR = false;
+    movesSearch = 0;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1110,6 +1111,7 @@ moves_loop: // When in check, search starts here
       // Add extension to new depth
       newDepth += extension;
       ss->doubleExtensions = (ss-1)->doubleExtensions + (extension == 2);
+      movesSearch++;
 
       // Speculative prefetch as early as possible
       prefetch(TT.first_entry(pos.key_after(move)));
@@ -1128,8 +1130,9 @@ moves_loop: // When in check, search starts here
       // We use various heuristics for the sons of a node after the first son has
       // been searched. In general we would like to reduce them, but there are many
       // cases where we extend a son if it has good chances to be "interesting".
-      if (    depth >= 2
+      if (    depth >= 3
           &&  moveCount > 1 + (PvNode && ss->ply <= 1)
+          && (!PvNode || movesSearch > 2 || !capture)
           && (   !ss->ttPv
               || !capture
               || (cutNode && (ss-1)->moveCount > 1)))
