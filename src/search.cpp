@@ -1158,7 +1158,7 @@ moves_loop: // When in check, search starts here
              {
               r -= 1 + 11 / (3 + depth);
 
-              r -= (complexity > 625);
+              r -= (complexity > 1024);
              }
 
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
