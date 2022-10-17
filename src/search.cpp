@@ -1094,7 +1094,7 @@ moves_loop: // When in check, search starts here
 
           else if (  rootNode
                    && capture
-                   && complexity > 1000)
+                   && complexity > 625)
               extension = 1;
 
           // Check extensions (~1 Elo)
