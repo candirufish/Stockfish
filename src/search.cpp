@@ -1291,7 +1291,7 @@ moves_loop: // When in check, search starts here
               }
               else
               {
-                  ss->cutoffCnt++;
+                  ss->cutoffCnt += bestValue >= VALUE_TB_WIN_IN_MAX_PLY ? 2 : 1;
                   assert(value >= beta); // Fail high
                   break;
               }
