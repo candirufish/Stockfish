@@ -58,6 +58,12 @@ using namespace Search;
 
 namespace {
 
+
+   int pvlmr[19] = { 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1};
+   int pvconst = 1;
+   TUNE(SetRange(0, 8), pvconst);
+   TUNE(SetRange(0, 8), pvlmr);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1155,7 +1161,7 @@ moves_loop: // When in check, search starts here
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
-              r -= 1 + 11 / (3 + depth);
+              r -= depth <= 19 ? pvlmr[depth] : pvconst;
 
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
           if (singularQuietLMR)
