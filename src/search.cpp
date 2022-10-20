@@ -58,6 +58,43 @@ using namespace Search;
 
 namespace {
 
+   int lfllmr[19] = { 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+   int mvlmr[19] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+   int cnlmr[19] = { 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+   int ttclmr[19] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+   int pvlmr[19] = { 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1};
+   int sqlmr[19] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+   int threatlmr[19] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+   int ccntlmr[19] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+   int statlmr[19] = { 0, 0, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628, 13628};
+   
+   int lflconst = 2;
+   int mvconst = 1;
+   int cnconst = 2;
+   int ttcconst = 1;
+   int pvconst = 1;
+   int sqconst = 1;
+   int threatconst = 1;
+   int ccntconst = 1;
+   int statconst = 13628;
+   
+   int mvcntlmr[19] = { 0, 0, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
+   int cutcntlmr[19] = { 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+   int statscorelmr[19] = { 0, 0, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433, 4433};
+   
+   int mvcntconst = 7;
+   int cutcntconst = 3;
+   int statscoreconst = 4433;
+   
+   TUNE(SetRange(0, 4), lfllmr, mvlmr, cnlmr, ttclmr, pvlmr, sqlmr, threatlmr, ccntlmr);
+   TUNE(SetRange(0, 4), lflconst, mvconst, cnconst, ttcconst, pvconst, sqconst, threatconst, ccntconst);
+   
+   TUNE(SetRange(0, 32), mvcntlmr, mvcntconst);
+   TUNE(SetRange(0, 16), cutcntlmr, cutcntconst);
+   TUNE(SetRange(-16384, 16384), statscorelmr, statscoreconst);
+   
+   TUNE(SetRange(1, 65536), statlmr, statconst);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1139,45 +1176,44 @@ moves_loop: // When in check, search starts here
           // and node is not likely to fail low. (~3 Elo)
           if (   ss->ttPv
               && !likelyFailLow)
-              r -= 2;
+              r -= depth <= 19 ? lfllmr[depth] : lflconst;
 
           // Decrease reduction if opponent's move count is high (~1 Elo)
-          if ((ss-1)->moveCount > 7)
-              r--;
+          if ((ss-1)->moveCount > (depth <= 19 ? mvcntlmr[depth] : mvcntconst))
+              r -= depth <= 19 ? mvlmr[depth] : mvconst;
 
           // Increase reduction for cut nodes (~3 Elo)
           if (cutNode)
-              r += 2;
+              r += depth <= 19 ? cnlmr[depth] : cnconst;
 
           // Increase reduction if ttMove is a capture (~3 Elo)
           if (ttCapture)
-              r++;
+              r += depth <= 19 ? ttclmr[depth] : ttcconst;
 
           // Decrease reduction for PvNodes based on depth
           if (PvNode)
-              r -= 1 + 11 / (3 + depth);
+              r -= depth <= 19 ? pvlmr[depth] : pvconst;
 
           // Decrease reduction if ttMove has been singularly extended (~1 Elo)
           if (singularQuietLMR)
-              r--;
+              r -= depth <= 19 ? sqlmr[depth] : sqconst;
 
           // Dicrease reduction if we move a threatened piece (~1 Elo)
-          if (   depth > 9
-              && (mp.threatenedPieces & from_sq(move)))
-              r--;
+          if ((mp.threatenedPieces & from_sq(move)))
+              r -= depth <= 19 ? threatlmr[depth] : threatconst;
 
           // Increase reduction if next ply has a lot of fail high
-          if ((ss+1)->cutoffCnt > 3 && !PvNode)
-              r++;
+          if ((ss+1)->cutoffCnt > (depth <= 19 ? cutcntlmr[depth] : cutcntconst) && !PvNode)
+              r += depth <= 19 ? ccntlmr[depth] : ccntconst;
 
           ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                          + (*contHist[0])[movedPiece][to_sq(move)]
                          + (*contHist[1])[movedPiece][to_sq(move)]
                          + (*contHist[3])[movedPiece][to_sq(move)]
-                         - 4433;
+                         - (depth <= 19 ?  statscorelmr[depth] : statscoreconst);
 
           // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
-          r -= ss->statScore / 13628;
+          r -= ss->statScore / (depth <= 19 ? statlmr[depth] : statconst);
 
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
