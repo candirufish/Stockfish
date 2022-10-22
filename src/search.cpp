@@ -1290,8 +1290,7 @@ moves_loop: // When in check, search starts here
                       && alpha > -VALUE_KNOWN_WIN)
                      depth -= s20const[depth] + (complexity <= cpx_margin[depth]) * cpx_mult[depth];
 
-                  if (depth <= 0)
-                      return qsearch<PV>(pos, ss, alpha, beta);
+                  depth = std::max(depth, 1);
 
                   assert(depth > 0);
               }
