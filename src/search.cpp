@@ -1281,14 +1281,12 @@ moves_loop: // When in check, search starts here
                   alpha = value;
 
                   // Reduce other moves if we have found at least one score improvement
-                  if (   depth > 1
-                      && depth < 6
+                  if (   depth < 6
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
-                     depth -= ss->capture && !(ss-1)->capture ? 2 : 1;
+                      depth -= ss->capture && (ss-1)->capture ? 2 : 1;
 
-                  if (depth <= 0)
-                      return qsearch<PV>(pos, ss, alpha, beta);
+                  depth = std::max(depth, 1);
 
                   assert(depth > 0);
               }
