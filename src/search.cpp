@@ -1281,7 +1281,8 @@ moves_loop: // When in check, search starts here
                   alpha = value;
 
                   // Reduce other moves if we have found at least one score improvement
-                  if (  depth < 6
+                  if (   depth > 1
+                      && depth < 6
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
                      depth -= capture ? 3 : 1;
