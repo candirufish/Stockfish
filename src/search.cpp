@@ -59,7 +59,6 @@ using namespace Search;
 namespace {
 
    int cpx_margin[7] = { 3214, 1230, 428, 563, 946, 3501, 217};
-   int s20const[7] = { 0, 0, 0, 0, 1 ,2, 2 };
 
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
@@ -1287,7 +1286,7 @@ moves_loop: // When in check, search starts here
                   if (   depth < 7
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
-                     depth -= s20const[depth] + (complexity <= cpx_margin[depth]);
+                     depth -= 1 + (complexity <= cpx_margin[depth]);
 
                   if (depth <= 0)
                       return qsearch<PV>(pos, ss, alpha, beta);
