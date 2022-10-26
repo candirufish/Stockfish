@@ -1100,6 +1100,7 @@ moves_loop: // When in check, search starts here
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
+                   && !(ss-1)->capture
                    && move == ttMove
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5177)
@@ -1281,12 +1282,11 @@ moves_loop: // When in check, search starts here
                   alpha = value;
 
                   // Reduce other moves if we have found at least one score improvement
-                  if (   depth < 6
+                  if (   depth > 1
+                      && depth < 6
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
-                      depth -= ss->capture && !(ss-1)->capture ? 2 : 1;
-
-                  depth = std::max(depth, 1);
+                      depth -= 1;
 
                   assert(depth > 0);
               }
