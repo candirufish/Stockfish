@@ -1100,7 +1100,7 @@ moves_loop: // When in check, search starts here
 
           // Quiet ttMove extensions (~0 Elo)
           else if (   PvNode
-                   && !(ss-1)->capture
+                   && !((ss-1)->capture && (ss-2)->capture)
                    && move == ttMove
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5177)
