@@ -900,7 +900,7 @@ namespace {
         depth -= 3;
 
     if (    PvNode
-        &&  ss->ply > 2
+        &&  ss->ply > 3
         &&  ttMove)
         depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
 
