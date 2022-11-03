@@ -902,7 +902,7 @@ namespace {
     if (    PvNode
         &&  ss->ply > 2
         &&  ttMove)
-        depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
+        depth -= std::clamp((depth - tte->depth()) / 4, 0, 2);
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
