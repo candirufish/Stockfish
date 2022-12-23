@@ -1166,11 +1166,17 @@ moves_loop: // When in check, search starts here
       // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
       r -= ss->statScore / (13000 + 4152 * (depth > 7 && depth < 19));
 
+      bool plyMc =       (ss->ply & 1)
+                              && (   (ss-1)->moveCount > 1
+                                  || (ss-3)->moveCount > 1
+                                  || (ss-5)->moveCount > 1);
+
+
       // Step 17. Late moves reduction / extension (LMR, ~98 Elo)
       // We use various heuristics for the sons of a node after the first son has
       // been searched. In general we would like to reduce them, but there are many
       // cases where we extend a son if it has good chances to be "interesting".
-      if (    depth >= 1 + ((PvNode || givesCheck || cutNode) && moveCount <= 4)
+      if (    depth >= 2 - (plyMc && !PvNode)
           &&  moveCount > 1 + (PvNode && ss->ply <= 1)
           && (   !ss->ttPv
               || !capture
