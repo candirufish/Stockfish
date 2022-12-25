@@ -1102,7 +1102,7 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5177)
             {
               extension = 1;
-              depth += depth < 12;
+              depth++;
             }
       }
 
