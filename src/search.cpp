@@ -1157,6 +1157,9 @@ moves_loop: // When in check, search starts here
       if ((ss+1)->cutoffCnt > 3)
           r++;
 
+      if ((ss-1)->manyDeep)
+          r++;
+
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
                      + (*contHist[1])[movedPiece][to_sq(move)]
@@ -1193,6 +1196,7 @@ moves_loop: // When in check, search starts here
               const bool doShallowerSearch = value < bestValue + newDepth;
 
               ss->doubleExtensions = ss->doubleExtensions + doEvenDeeperSearch;
+              ss->manyDeep = doDeeperSearch && doEvenDeeperSearch;
 
               newDepth += doDeeperSearch - doShallowerSearch + doEvenDeeperSearch;
 
