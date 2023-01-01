@@ -787,6 +787,7 @@ namespace {
 
     // Step 9. Null move search with verification search (~35 Elo)
     if (   !PvNode
+        && !(ss-1)->qsPv
         && (ss-1)->currentMove != MOVE_NULL
         && (ss-1)->statScore < 17139
         &&  eval >= beta
@@ -893,8 +894,12 @@ namespace {
         && !ttMove)
         depth -= 3;
 
+    ss->qsPv = false;
     if (depth <= 0)
+    {
+        ss->qsPv = true;
         return qsearch<PV>(pos, ss, alpha, beta);
+    }
 
     if (    cutNode
         &&  depth >= 9
