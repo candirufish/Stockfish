@@ -787,7 +787,6 @@ namespace {
 
     // Step 9. Null move search with verification search (~35 Elo)
     if (   !PvNode
-        && !(ss-1)->qsPv
         && (ss-1)->currentMove != MOVE_NULL
         && (ss-1)->statScore < 17139
         &&  eval >= beta
@@ -1170,6 +1169,9 @@ moves_loop: // When in check, search starts here
 
       // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
       r -= ss->statScore / (13000 + 4152 * (depth > 7 && depth < 19));
+
+      if ((ss-1)->qsPv)
+          r--;
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
