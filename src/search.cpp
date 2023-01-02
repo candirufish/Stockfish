@@ -893,6 +893,10 @@ namespace {
         && !ttMove)
         depth -= 3;
 
+    if (    PvNode
+        &&  ttCapture)
+        depth--;
+
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
