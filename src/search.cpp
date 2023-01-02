@@ -894,6 +894,7 @@ namespace {
         depth -= 3;
 
     if (    PvNode
+        &&  ss->ply > 2
         &&  ttCapture)
         depth--;
 
