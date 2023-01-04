@@ -893,8 +893,12 @@ namespace {
         && !ttMove)
         depth -= 3;
 
+    ss->qsPv = false;
     if (depth <= 0)
+    {
+        ss->qsPv = true;
         return qsearch<PV>(pos, ss, alpha, beta);
+    }
 
     if (    cutNode
         &&  depth >= 9
@@ -1170,7 +1174,7 @@ moves_loop: // When in check, search starts here
       // We use various heuristics for the sons of a node after the first son has
       // been searched. In general we would like to reduce them, but there are many
       // cases where we extend a son if it has good chances to be "interesting".
-      if (    depth >= 2
+      if (    depth >= 2 + (ss-1)->qsPv
           &&  moveCount > 1 + (PvNode && ss->ply <= 1)
           && (   !ss->ttPv
               || !capture
