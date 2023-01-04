@@ -895,7 +895,6 @@ namespace {
 
     if (    PvNode
         &&  !rootNode
-        &&  !ttCapture
         &&  ttMove)
         depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
 
