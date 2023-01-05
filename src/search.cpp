@@ -552,7 +552,7 @@ namespace {
     TTEntry* tte;
     Key posKey;
     Move ttMove, move, excludedMove, bestMove;
-    Depth extension, newDepth;
+    Depth newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, priorCapture, singularQuietLMR;
     bool capture, moveCountPruning, ttCapture;
@@ -973,7 +973,7 @@ moves_loop: // When in check, search starts here
       if (PvNode)
           (ss+1)->pv = nullptr;
 
-      extension = 0;
+      ss->extension = 0;
       capture = pos.capture(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
@@ -1062,7 +1062,7 @@ moves_loop: // When in check, search starts here
 
               if (value < singularBeta)
               {
-                  extension = 1;
+                  ss->extension = 1;
                   singularQuietLMR = !ttCapture;
 
                   // Avoid search explosion by limiting the number of double extensions
@@ -1070,7 +1070,7 @@ moves_loop: // When in check, search starts here
                       && value < singularBeta - 25
                       && ss->doubleExtensions <= 10)
                   {
-                      extension = 2;
+                      ss->extension = 2;
                       depth += depth < 12;
                   }
               }
@@ -1085,30 +1085,30 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
-                  extension = -2;
+                  ss->extension = -2;
 
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
               else if (ttValue <= alpha && ttValue <= value)
-                  extension = -1;
+                  ss->extension = -1;
           }
 
           // Check extensions (~1 Elo)
           else if (   givesCheck
                    && depth > 9
                    && abs(ss->staticEval) > 78)
-              extension = 1;
+              ss->extension = 1;
 
           // Quiet ttMove extensions (~1 Elo)
           else if (   PvNode
                    && move == ttMove
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5600)
-              extension = 1;
+              ss->extension = 1;
       }
 
       // Add extension to new depth
-      newDepth += extension;
-      ss->doubleExtensions = (ss-1)->doubleExtensions + (extension == 2);
+      newDepth += ss->extension;
+      ss->doubleExtensions = (ss-1)->doubleExtensions + (ss->extension == 2);
 
       // Speculative prefetch as early as possible
       prefetch(TT.first_entry(pos.key_after(move)));
@@ -1125,6 +1125,7 @@ moves_loop: // When in check, search starts here
 
       Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
+      
       // Decrease reduction if position is or has been on the PV
       // and node is not likely to fail low. (~3 Elo)
       if (   ss->ttPv
@@ -1168,6 +1169,9 @@ moves_loop: // When in check, search starts here
 
       // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
       r -= ss->statScore / (12800 + 4410 * (depth > 7 && depth < 19));
+
+      if (ss->extension && (ss-1)->extension && (ss-2)->extension)
+          r--;
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
