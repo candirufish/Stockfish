@@ -772,11 +772,20 @@ namespace {
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
-    if (eval < alpha - 394 - 255 * depth * depth + 64 * bool(pos.rule50_count() > 21))
+    if (eval < alpha - 394 - 255 * depth * depth)
     {
+        if (pos.rule50_count() < 3)
+        {
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
+        if (value < alpha)
+            return value;
+        }
+        else
+        {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
+        }
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
