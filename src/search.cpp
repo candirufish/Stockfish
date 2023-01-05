@@ -893,8 +893,9 @@ namespace {
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~9 Elo)
     if (    PvNode
+        && pos.rule50_count() != 0
         && !ttMove)
-        depth -= 3 - bool(pos.rule50_count() == 0);
+        depth -= 3;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
