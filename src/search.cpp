@@ -990,7 +990,7 @@ moves_loop: // When in check, search starts here
           && bestValue > VALUE_TB_LOSS_IN_MAX_PLY)
       {
           // Skip quiet moves if movecount exceeds our FutilityMoveCount threshold (~8 Elo)
-          ss->mcp = moveCountPruning = moveCount >= futility_move_count(improving, depth);
+          ss->mcp = moveCountPruning = !(PvNode && (ss-1)->mcp) && moveCount >= futility_move_count(improving, depth);
 
           // Reduced depth of the next LMR search
           int lmrDepth = std::max(newDepth - reduction(improving, depth, moveCount, delta, thisThread->rootDelta), 0);
@@ -1175,7 +1175,7 @@ moves_loop: // When in check, search starts here
       // been searched. In general we would like to reduce them, but there are many
       // cases where we extend a son if it has good chances to be "interesting".
       if (    depth >= 2
-          &&  moveCount > 1 + (PvNode && ss->ply <= 1) + (PvNode && (ss-1)->mcp)
+          &&  moveCount > 1 + (PvNode && ss->ply <= 1)
           && (   !ss->ttPv
               || !capture
               || (cutNode && (ss-1)->moveCount > 1)))
