@@ -772,7 +772,7 @@ namespace {
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
-    if (eval < alpha - 394 - 255 * depth * depth)
+    if (!(ss-1)->goodMove && eval < alpha - 394 - 255 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
@@ -1169,9 +1169,6 @@ moves_loop: // When in check, search starts here
 
       // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
       r -= ss->statScore / (12800 + 4410 * (depth > 7 && depth < 19));
-
-      if ((ss-1)->goodMove) 
-          r--;
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
