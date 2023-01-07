@@ -1310,7 +1310,7 @@ moves_loop: // When in check, search starts here
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
 					  {
-                      ss->goodMove = true;
+                      ss->goodMove = capture;
                       depth -= 1;
 					  }
                   assert(depth > 0);
