@@ -1216,7 +1216,7 @@ moves_loop: // When in check, search starts here
       else if (!PvNode || moveCount > 1)
       {
                if (cutNode)
-                    r++;
+                    r += 2;
                value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4), !cutNode);
       }
 
