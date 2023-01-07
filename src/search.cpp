@@ -555,7 +555,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, priorCapture, singularQuietLMR;
-    bool capture, moveCountPruning, ttCapture;
+    bool capture, moveCountPruning, ttCapture, pvExact;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
 
@@ -626,6 +626,7 @@ namespace {
     ttMove =  rootNode ? thisThread->rootMoves[thisThread->pvIdx].pv[0]
             : ss->ttHit    ? tte->move() : MOVE_NONE;
     ttCapture = ttMove && pos.capture(ttMove);
+    pvExact = PvNode && ss->ttHit && tte->bound() == BOUND_EXACT;
     if (!excludedMove)
         ss->ttPv = PvNode || (ss->ttHit && tte->is_pv());
 
@@ -1145,7 +1146,7 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction for PvNodes based on depth
       if (PvNode)
-          r -= 1 + 11 / (3 + depth);
+          r -= pvExact + 1 + 11 / (3 + depth);
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
