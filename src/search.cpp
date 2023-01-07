@@ -772,7 +772,7 @@ namespace {
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
-    if (!(ss-1)->extension && !(ss-2)->extension && eval < alpha - 394 - 255 * depth * depth)
+    if (eval < alpha - 394 - 255 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
@@ -893,6 +893,8 @@ namespace {
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~9 Elo)
     if (    PvNode
+        && !(ss-1)->extension 
+		&& !(ss-2)->extension
         && !ttMove)
         depth -= 3;
 
