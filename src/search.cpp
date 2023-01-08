@@ -777,8 +777,10 @@ namespace {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
 		{
-			ss->cutoffCnt--;
-            return value;
+			 if (value < alpha - 256)
+			       ss->cutoffCnt = 0;
+
+             return value;
 		}
     }
 
