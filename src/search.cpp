@@ -1160,7 +1160,7 @@ moves_loop: // When in check, search starts here
       if ((ss+1)->cutoffCnt > 3)
           r++;
 
-      if ((ss+1)->cutoffCnt < 3 && improving)
+      if ((ss+1)->cutoffCnt < 1 && improving)
           r--;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
