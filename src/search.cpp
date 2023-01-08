@@ -897,7 +897,6 @@ namespace {
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~9 Elo)
     if (    PvNode
-        && !failRazor
         && !ttMove)
         depth -= 3;
 
@@ -1173,6 +1172,9 @@ moves_loop: // When in check, search starts here
 
       // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
       r -= ss->statScore / (12800 + 4410 * (depth > 7 && depth < 19));
+
+      if (failRazor)
+          r++;
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
