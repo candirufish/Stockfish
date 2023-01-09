@@ -897,6 +897,7 @@ namespace {
         depth -= 3;
 
     if (    PvNode
+        &&  depth <= 3
         &&  ss->ttHit
         &&  ttMove)
         depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
