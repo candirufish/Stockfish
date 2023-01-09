@@ -1067,6 +1067,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
+                      && pos.rule50_count() < 80
                       && value < singularBeta - 25
                       && ss->doubleExtensions <= 10)
                   {
@@ -1094,7 +1095,6 @@ moves_loop: // When in check, search starts here
 
           // Check extensions (~1 Elo)
           else if (   givesCheck
-                   && pos.rule50_count() < 80
                    && depth > 9
                    && abs(ss->staticEval) > 78)
               extension = 1;
