@@ -773,7 +773,7 @@ namespace {
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
     if (eval < alpha - 394 - 255 * depth * depth
-       && abs(ss->staticEval - bestValue) < 384)
+       && !(PvNode && abs(ss->staticEval - bestValue) > 256))
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
