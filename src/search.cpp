@@ -1220,7 +1220,7 @@ moves_loop: // When in check, search starts here
 			   {
 				if (cutNode)
                          r += 2;
-                if ((ss+1)->cutoffCnt > 3 && cutNode)
+                if ((ss+1)->cutoffCnt > 3 && !cutNode && !PvNode)
                          r++;
 			   }
                value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4), !cutNode);
