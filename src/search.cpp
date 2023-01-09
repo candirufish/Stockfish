@@ -1092,6 +1092,12 @@ moves_loop: // When in check, search starts here
                   extension = -1;
           }
 
+          // Capture extensions for PvNodes and cutNodes
+          else if (   (PvNode || cutNode)
+               && capture
+               && moveCount != 1)
+          extension = 1;
+
           // Check extensions (~1 Elo)
           else if (   givesCheck
                    && depth > 9
