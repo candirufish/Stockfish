@@ -554,7 +554,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, evalUp;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -724,6 +724,7 @@ namespace {
         // Skip early pruning when in check
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
+        evalUp = false;
         improvement = 0;
         complexity = 0;
         goto moves_loop;
@@ -767,7 +768,26 @@ namespace {
     improvement =   (ss-2)->staticEval != VALUE_NONE ? ss->staticEval - (ss-2)->staticEval
                   : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
                   :                                    172;
-    improving = improvement > 0;
+
+    evalUp = false;
+    if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE && (ss-6)->staticEval != VALUE_NONE)
+    {
+    // weights for each value, in hundredths
+    int weights[] = {100, 80, 60, 40};
+    int sum = 0;  // sum of values
+    int totalWeight = 0;  // sum of weights
+
+    for (int i = 0; i < 4; i++)
+     {
+       sum += (ss-i*2)->staticEval * weights[i];
+       totalWeight += weights[i];
+     }
+     int avg = sum / totalWeight;  // weighted average
+     if (abs(avg - (ss)->staticEval) > 10)
+         evalUp = true;
+    }
+
+    improving = improvement > 0 || evalUp;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
