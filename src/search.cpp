@@ -772,7 +772,7 @@ namespace {
     evalUp = false;
     if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE && (ss-6)->staticEval != VALUE_NONE)
     {
-    int threshold = 32;
+    int threshold = 64;
     int values[] = {ss->staticEval, (ss-2)->staticEval, (ss-4)->staticEval, (ss-6)->staticEval};
     std::sort(values, values + 4);
     int median = values[1];
