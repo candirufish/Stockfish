@@ -783,7 +783,7 @@ namespace {
        totalWeight += weights[i];
      }
      int avg = sum / totalWeight;  // weighted average
-     if (abs(avg - (ss)->staticEval) > 10)
+     if (avg > (ss)->staticEval + 10)
          evalUp = true;
     }
 
