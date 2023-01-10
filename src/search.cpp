@@ -772,7 +772,7 @@ namespace {
     if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
     {
     int data[3][2] = {{1, (ss)->staticEval}, {2, (ss-2)->staticEval}, {3, (ss-4)->staticEval}};
-    int weights[3] = {3, 2, 1};
+    int weights[3] = {2, 1, 1};
 
     // Calculate the sum of the weights, the weighted sum of the x values,
     // the weighted sum of the y values, the weighted sum of the squares of the x values,
