@@ -554,7 +554,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, evalUp;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -767,7 +767,31 @@ namespace {
     improvement =   (ss-2)->staticEval != VALUE_NONE ? ss->staticEval - (ss-2)->staticEval
                   : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
                   :                                    172;
-    improving = improvement > 0;
+
+    evalUp = false;
+    if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
+    {
+    int data[3][2] = {{1, (ss)->staticEval}, {2, (ss-2)->staticEval}, {3, (ss-4)->staticEval}};
+    int weights[3] = {3, 2, 1};
+
+    // Calculate the sum of the weights, the weighted sum of the x values,
+    // the weighted sum of the y values, the weighted sum of the squares of the x values,
+    // and the weighted sum of the products of x and y
+    int sum_w = 0, sum_wx = 0, sum_wy = 0, sum_wxx = 0, sum_wxy = 0;
+    for (int i = 0; i < 3; i++) {
+      sum_w += weights[i];
+      sum_wx += weights[i] * data[i][0];
+      sum_wy += weights[i] * data[i][1];
+      sum_wxx += weights[i] * data[i][0] * data[i][0];
+      sum_wxy += weights[i] * data[i][0] * data[i][1];
+        }
+
+      // Calculate the slope of the line
+      int slope = (sum_w * sum_wxy - sum_wx * sum_wy) / (sum_w * sum_wxx - sum_wx * sum_wx);
+      evalUp = (slope > 0);
+    }
+
+    improving = improvement > 0 || evalUp;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
