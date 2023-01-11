@@ -772,11 +772,17 @@ namespace {
     evalUp = false;
     if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
     {
-    int threshold = 512;
-    if (ss->staticEval > 0 && ((ss->staticEval - ((ss-2)->staticEval + (ss-4)->staticEval) / 2) > threshold))
+    int threshold = 128;
+    int scale = 1000;
+
+    int mean = ((ss-2)->staticEval + (ss-4)->staticEval) / 2;
+    int variance = (pow((ss-2)->staticEval - mean, 2) + pow((ss-4)->staticEval - mean, 2))/2;
+    int stdDev = sqrt(variance) * scale;
+
+    if ((ss->staticEval) * scale - mean * scale > threshold * stdDev )
         evalUp = true;
     }
-    improving = improvement > 0;
+    improving = improvement > 0 || evalUp;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
@@ -1168,9 +1174,6 @@ moves_loop: // When in check, search starts here
       // Increase reduction if next ply has a lot of fail high
       if ((ss+1)->cutoffCnt > 3)
           r++;
-
-      if (evalUp)
-          r--;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
