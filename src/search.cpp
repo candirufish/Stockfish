@@ -776,7 +776,7 @@ namespace {
     if (ss->staticEval > 0 && ((ss->staticEval - ((ss-2)->staticEval + (ss-4)->staticEval) / 2) > threshold))
         evalUp = true;
     }
-    improving = improvement > 0 || evalUp;
+    improving = improvement > 0;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
@@ -1168,6 +1168,9 @@ moves_loop: // When in check, search starts here
       // Increase reduction if next ply has a lot of fail high
       if ((ss+1)->cutoffCnt > 3)
           r++;
+
+      if (evalUp)
+          r--;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
