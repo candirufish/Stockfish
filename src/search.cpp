@@ -772,7 +772,7 @@ namespace {
     evalUp = false;
     if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
     {
-    int threshold = 128;
+    int threshold = 512;
     int average = ((ss-2)->staticEval + (ss-4)->staticEval) / 2;
 
     if (ss->staticEval > average && abs(ss->staticEval - average) > threshold)
