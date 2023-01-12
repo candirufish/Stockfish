@@ -772,7 +772,7 @@ namespace {
     evalUp = false;
     if (bestValue != VALUE_NONE && (ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
     {
-    int threshold = 128;
+    int threshold = 64;
     if (ss->staticEval > 0 && ((ss->staticEval - (bestValue + (ss-2)->staticEval + (ss-4)->staticEval) / 3) > threshold))
         evalUp = true;
     }
