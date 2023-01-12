@@ -1221,7 +1221,7 @@ moves_loop: // When in check, search starts here
                      if (cutNode)
                          r += 2;
 
-                     if (ss->inCheck && type_of(movedPiece) == KING && !capture)
+                     if (!PvNode && !improving && !capture)
                          r++;
                    }
 
