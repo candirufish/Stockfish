@@ -772,7 +772,7 @@ namespace {
     evalUp = false;
     if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
     {
-    int threshold = 1024;
+    int threshold = 512;
     if (ss->staticEval > 0 && ((ss->staticEval - ((ss-2)->staticEval + (ss-4)->staticEval) / 2) > threshold))
         evalUp = true;
     }
@@ -1154,7 +1154,7 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction for PvNodes based on depth
       if (PvNode)
-          r -= 1 + 11 / (3 + depth);
+          r -= evalUp + 1 + 11 / (3 + depth);
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
@@ -1168,9 +1168,6 @@ moves_loop: // When in check, search starts here
       // Increase reduction if next ply has a lot of fail high
       if ((ss+1)->cutoffCnt > 3)
           r++;
-
-      if (evalUp)
-          r--;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
