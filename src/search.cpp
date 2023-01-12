@@ -1219,8 +1219,7 @@ moves_loop: // When in check, search starts here
                if (!ttMove && cutNode)
                          r += 2;
 
-               if (   ss->ttPv
-                  && !likelyFailLow)
+               if ((ss-1)->moveCount > 7)
                          r--;
 
 
