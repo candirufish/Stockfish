@@ -773,7 +773,9 @@ namespace {
     if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
     {
     int threshold = 32;
-    if (ss->staticEval > 0 && ((ss->staticEval - ((ss-2)->staticEval + (ss-4)->staticEval) / 2) > threshold))
+    int average = ((ss-2)->staticEval + (ss-4)->staticEval) / 2;
+
+    if (ss->staticEval > average && abs(ss->staticEval - average) > threshold)
         evalUp = true;
     }
     improving = improvement > 0 || evalUp;
