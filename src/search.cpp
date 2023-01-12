@@ -1221,7 +1221,7 @@ moves_loop: // When in check, search starts here
                      if (cutNode)
                          r += 2;
 
-                     if ((ss-1)->statScore >= 0 && ss->statScore < 0)
+                     if ((ss-1)->statScore >= 1024 && ss->statScore < -1024)
                          r++;
                    }
 
