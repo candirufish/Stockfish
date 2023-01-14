@@ -1162,7 +1162,7 @@ moves_loop: // When in check, search starts here
           r++;
 
       if (!ss->inCheck 
-      && (ss->cplxTrack - 512) > (ss-2)->cplxTrack
+      && (ss->cplxTrack - 128) > (ss-2)->cplxTrack
       && type_of(ttMove) == PROMOTION 
       && promotion_type(ttMove) == QUEEN)
           r--;
