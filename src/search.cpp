@@ -1122,6 +1122,7 @@ moves_loop: // When in check, search starts here
 
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
+      ss->cplxTrack = complexity;
 
       Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
@@ -1159,6 +1160,23 @@ moves_loop: // When in check, search starts here
       // Increase reduction if next ply has a lot of fail high
       if ((ss+1)->cutoffCnt > 3)
           r++;
+
+      if (!ss->inCheck)
+      {
+       int cplxTrack_values[8]; // array to store the cplxtrack values
+       double sum = 0, average; // double variables to store the sum and average
+       for (int i = 0; i < 8; i++) {
+        cplxTrack_values[i] = (ss - i)->cplxTrack;
+         }
+
+       for (int i = 0; i < 8; i++) {
+        sum += cplxTrack_values[i]; // calculate the sum of the cplxtrack values
+         }
+
+        average = sum / 8; // calculate the average
+        if (abs(ss->cplxTrack - average) > 128)
+            r--;
+      }
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
