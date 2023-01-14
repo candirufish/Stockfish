@@ -1091,6 +1091,13 @@ moves_loop: // When in check, search starts here
               else if (ttValue <= alpha && ttValue <= value)
                   extension = -1;
           }
+          // Capture extensions for PvNodes and cutNodes
+          else if (   (PvNode || cutNode)
+               && capture
+               && type_of(pos.piece_on(to_sq(ttMove))) != PAWN
+               && moveCount != 1)
+          extension = 1;
+
 
           // Check extensions (~1 Elo)
           else if (   givesCheck
