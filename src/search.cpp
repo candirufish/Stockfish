@@ -1161,7 +1161,7 @@ moves_loop: // When in check, search starts here
       if ((ss+1)->cutoffCnt > 3)
           r++;
 
-      if (!ss->inCheck)
+      if (!ss->inCheck && PvNode)
       {
        int cplxTrack_values[8]; // array to store the cplxtrack values
        double sum = 0, average; // double variables to store the sum and average
