@@ -1148,7 +1148,7 @@ moves_loop: // When in check, search starts here
        r -= (depth > 9 && (mp.threatenedPieces & from_sq(move)));
 
       // Increase reduction if next ply has a lot of fail high
-       r += (ss + 1)->cutoffCnt > 3;
+       r += (((ss + 1)->cutoffCnt & 0x80000000) >> 31) & 1;
 
        ss->statScore = (2 * thisThread->mainHistory[us][from_to(move)])
                 + (contHist[0]->operator[](movedPiece)[to_sq(move)])
@@ -1158,7 +1158,7 @@ moves_loop: // When in check, search starts here
 
 
       // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
-      r -= ss->statScore / ((depth > 7 && depth < 19) ? (12800 + 4410) : 12800);
+      r -= ss->statScore / (12800 + 4410 * ((depth - 8) >> 31 & 1));
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
