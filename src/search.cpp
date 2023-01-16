@@ -1094,8 +1094,8 @@ moves_loop: // When in check, search starts here
           // Capture extensions for PvNodes and cutNodes
           else if (   (PvNode || cutNode)
                && capture
-               && type_of(pos.piece_on(to_sq(move))) == QUEEN
-               && moveCount != 1)
+               && moveCount != 1
+               && (to_sq(move) & (Rank2BB | Rank7BB)))
           extension = 1;
 
           // Check extensions (~1 Elo)
