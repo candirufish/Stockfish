@@ -1206,7 +1206,7 @@ moves_loop: // When in check, search starts here
                                         : -stat_bonus(newDepth);
 
               if (capture)
-                  bonus /= type_of(pos.piece_on(to_sq(move))) == QUEEN ? 2 : 6;
+                  bonus /= to_sq(move) & (Rank2BB | Rank7BB) ? 2 : 6;
 
               update_continuation_histories(ss, movedPiece, to_sq(move), bonus);
           }
