@@ -898,7 +898,7 @@ namespace {
 
     if (    PvNode
         &&  ttMove
-        && pos.count<ALL_PIECES>() > 7)
+        && pos.count<ALL_PIECES>() < 7)
         depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
 
     if (depth <= 0)
