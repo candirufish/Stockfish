@@ -777,7 +777,7 @@ namespace {
     if (average < 0 && ss->staticEval > 0 && abs(ss->staticEval - average) > threshold)
         evalUp = true;
     }
-    improving = improvement > 0;
+    improving = improvement > 0 || evalUp;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
