@@ -554,7 +554,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR, evalDown;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, evalUp;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -724,7 +724,7 @@ namespace {
         // Skip early pruning when in check
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
-        evalDown = false;
+        evalUp = false;
         improvement = 0;
         complexity = 0;
         goto moves_loop;
@@ -768,14 +768,14 @@ namespace {
     improvement =   (ss-2)->staticEval != VALUE_NONE ? ss->staticEval - (ss-2)->staticEval
                   : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
                   :                                    172;
-    evalDown = false;
+    evalUp = false;
     if ((ss-2)->staticEval != VALUE_NONE && (ss-4)->staticEval != VALUE_NONE)
     {
     int threshold = 32;
     int average = ((ss-2)->staticEval + (ss-4)->staticEval) / 2;
 
-    if (ss->staticEval < average && abs(ss->staticEval - average) > threshold)
-        evalDown = true;
+    if (average < 0 && ss->staticEval > 0 && abs(ss->staticEval - average) > threshold)
+        evalUp = true;
     }
     improving = improvement > 0;
 
@@ -1168,9 +1168,6 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction if next ply has a lot of fail high
       if ((ss+1)->cutoffCnt > 3)
-          r++;
-
-      if (evalDown && !improving)
           r++;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
