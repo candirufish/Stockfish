@@ -567,6 +567,7 @@ namespace {
     moveCount          = captureCount = quietCount = ss->moveCount = 0;
     bestValue          = -VALUE_INFINITE;
     maxValue           = VALUE_INFINITE;
+    ss->distanceFromPv = (PvNode ? 0 : ss->distanceFromPv);
 
     // Check for the available remaining time
     if (thisThread == Threads.main())
@@ -1122,6 +1123,7 @@ moves_loop: // When in check, search starts here
 
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
+      (ss+1)->distanceFromPv = ss->distanceFromPv + moveCount - 1;
 
       Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
@@ -1146,6 +1148,9 @@ moves_loop: // When in check, search starts here
       // Decrease reduction for PvNodes based on depth
       if (PvNode)
           r -= 1 + 11 / (3 + depth);
+
+      if ((ss+1)->distanceFromPv > 2)
+          r--;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
