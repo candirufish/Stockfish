@@ -1149,7 +1149,7 @@ moves_loop: // When in check, search starts here
       if (PvNode)
           r -= 1 + 11 / (3 + depth);
 
-      if ((ss+1)->distanceFromPv > 2)
+      if ((ss+1)->distanceFromPv < 3)
           r--;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
