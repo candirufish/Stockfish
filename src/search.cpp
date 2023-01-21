@@ -603,7 +603,7 @@ namespace {
 
     (ss+1)->ttPv         = false;
     (ss+1)->excludedMove = bestMove = MOVE_NONE;
-    (ss+2)->killers[0]   = (ss+2)->killers[1] = MOVE_NONE;
+    (ss+2)->killers[0]   = (ss+2)->killers[1] = (ss + 2)->killers[2] = MOVE_NONE;
     (ss+2)->cutoffCnt    = 0;
     ss->doubleExtensions = (ss-1)->doubleExtensions;
     Square prevSq        = to_sq((ss-1)->currentMove);
@@ -1146,6 +1146,9 @@ moves_loop: // When in check, search starts here
       // Decrease reduction for PvNodes based on depth
       if (PvNode)
           r -= 1 + 11 / (3 + depth);
+
+      if (moveCount > 2 && move != ss->killers[2] && PvNode)
+          r--;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
@@ -1747,10 +1750,12 @@ moves_loop: // When in check, search starts here
 
     // Update killers
     if (ss->killers[0] != move)
-    {
-        ss->killers[1] = ss->killers[0];
-        ss->killers[0] = move;
-    }
+     {
+         ss->killers[1] = ss->killers[0];
+         ss->killers[0] = move;
+     }
+    else
+         ss->killers[2] = move;
 
     Color us = pos.side_to_move();
     Thread* thisThread = pos.this_thread();
