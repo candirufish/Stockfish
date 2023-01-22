@@ -1018,7 +1018,7 @@ moves_loop: // When in check, search starts here
 
               int fprMargin = 0;
               if (!ss->inCheck)
-                  fprMargin = !(ss-1)->inCheck ? (ss->staticEval * 2 - (ss-1)->staticEval) / 3 : ss->staticEval;
+                  fprMargin = !(ss-1)->inCheck ? (ss->staticEval * 3 - (ss-1)->staticEval) / 4 : ss->staticEval;
 
               // Continuation history based pruning (~2 Elo)
               if (   lmrDepth < 5
