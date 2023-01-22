@@ -1123,7 +1123,7 @@ moves_loop: // When in check, search starts here
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
 
-      Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta) - bool(ss->doubleExtensions);
+      Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
       // Decrease reduction if position is or has been on the PV
       // and node is not likely to fail low. (~3 Elo)
@@ -1148,7 +1148,7 @@ moves_loop: // When in check, search starts here
           r -= 1 + 11 / (3 + depth);
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
-      if (singularQuietLMR)
+      if (singularQuietLMR && !ss->doubleExtensions)
           r--;
 
       // Decrease reduction if we move a threatened piece (~1 Elo)
