@@ -1134,7 +1134,7 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction if opponent's move count is high (~1 Elo)
       if ((ss-1)->moveCount > 7)
-          r -=  PvNode && (ss-1)->mcp ? 2 : 1;
+          r--;
 
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
@@ -1219,6 +1219,9 @@ moves_loop: // When in check, search starts here
                // Increase reduction for cut nodes and not ttMove (~1 Elo)
                if (!ttMove && cutNode)
                          r += 2;
+
+               if (PvNode && (ss-1)->mcp)
+                         r--;
 
                value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4), !cutNode);
       }
