@@ -1153,7 +1153,7 @@ moves_loop: // When in check, search starts here
       if (PvNode)
           r -= 1 + 11 / (3 + depth);
 
-      if (moveCount > 2 && !playStrongMove && PvNode && depth <= 6)
+      if (moveCount > 2 && !playStrongMove && PvNode && depth <= 9)
           r--;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
