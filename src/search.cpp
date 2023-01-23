@@ -1109,7 +1109,7 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5600)
               extension = 1;
       }
-      if (move == ttMove || move == ss->killers[0] || move == ss->killers[1])
+      if (move == ttMove || move == ss->killers[0])
            playStrongMove = true;
 
       // Add extension to new depth
@@ -1153,7 +1153,7 @@ moves_loop: // When in check, search starts here
       if (PvNode)
           r -= 1 + 11 / (3 + depth);
 
-      if (moveCount > 2 && !playStrongMove && PvNode && depth <= 9)
+      if (moveCount > 2 && !playStrongMove && PvNode)
           r--;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
