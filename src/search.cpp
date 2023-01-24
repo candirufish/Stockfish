@@ -1020,7 +1020,7 @@ moves_loop: // When in check, search starts here
                             + (*contHist[3])[movedPiece][to_sq(move)];
 
               int cpxBonus = 0;
-              if (complexity > 8)
+              if (complexity > 1024)
                   cpxBonus = complexity / 32;
 
 
