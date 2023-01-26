@@ -901,7 +901,7 @@ namespace {
 
     if (rootNode
        && thisThread->failedHighCnt >= 2)
-        depth--;
+        depth -= 3;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
