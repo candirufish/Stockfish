@@ -1114,7 +1114,7 @@ moves_loop: // When in check, search starts here
               extension = 1;
 
           if (   PvNode
-              && !rootNode
+              && moveCount != 1
               && depth > 4
               && pos.rule50_count() == 0
               && pos.non_pawn_material() % RookValueEg == 0)
