@@ -899,6 +899,9 @@ namespace {
         && !ttMove)
         depth -= 3;
 
+    if (rootNode)
+        depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
+
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
