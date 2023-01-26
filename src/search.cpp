@@ -900,6 +900,7 @@ namespace {
         depth -= 3;
 
     if (rootNode
+       && depth <= 3
        && thisThread->failedHighCnt >= 2)
         depth--;
 
