@@ -1100,9 +1100,11 @@ moves_loop: // When in check, search starts here
                   extension = -1;
           }
 
-          else if (   PvNode 
-               && capture
+          // Capture extensions for PvNodes and cutNodes
+          else if (   (PvNode || cutNode)
                && !rootNode
+               && capture
+               && type_of(pos.piece_on(to_sq(move))) == QUEEN
                && moveCount != 1)
           extension = 1;
 
