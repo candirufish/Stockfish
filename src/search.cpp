@@ -1104,7 +1104,7 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 9
                    && abs(ss->staticEval) > 78)
-              extension = 1 + ((capture || type_of(move) == PROMOTION) && !rootNode && ss->staticEval > 103);
+              extension = 1 + ((capture || type_of(move) == PROMOTION) && PvNode && !rootNode && ss->staticEval > 103);
 
           // Quiet ttMove extensions (~1 Elo)
           else if (   PvNode
