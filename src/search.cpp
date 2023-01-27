@@ -1100,6 +1100,12 @@ moves_loop: // When in check, search starts here
                   extension = -1;
           }
 
+          else if (   PvNode 
+               && capture
+               && !rootNode
+               && moveCount != 1)
+          extension = 1;
+
           // Check extensions (~1 Elo)
           else if (   givesCheck
                    && depth > 9
