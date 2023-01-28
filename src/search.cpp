@@ -1157,7 +1157,7 @@ moves_loop: // When in check, search starts here
           r -= 1 + 11 / (3 + depth);
 
           if (ttMove)
-             r += std::clamp((depth - tte->depth()) / 4, 0, 1);
+             r += std::clamp((depth - tte->depth()) / 4, 0, 3);
 	  }
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
