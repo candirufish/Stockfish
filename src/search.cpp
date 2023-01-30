@@ -1094,9 +1094,6 @@ moves_loop: // When in check, search starts here
               // If the eval of ttMove is less than alpha and value, we reduce it (negative extension)
               else if (ttValue <= alpha && ttValue <= value)
                   extension = -1;
-
-              else if (ss->inCheck && type_of(movedPiece) == KING && !capture)
-                  extension = -1;
           }
 
           // Check extensions (~1 Elo)
@@ -1165,6 +1162,9 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction if next ply has a lot of fail high
       if ((ss+1)->cutoffCnt > 3)
+          r++;
+
+      if (rootNode && ss->inCheck && type_of(movedPiece) == KING && !capture)
           r++;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
