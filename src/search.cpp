@@ -1164,9 +1164,6 @@ moves_loop: // When in check, search starts here
       if ((ss+1)->cutoffCnt > 3)
           r++;
 
-      if (rootNode && ss->inCheck && type_of(movedPiece) == KING && !capture)
-          r++;
-
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
                      + (*contHist[1])[movedPiece][to_sq(move)]
@@ -1189,7 +1186,8 @@ moves_loop: // When in check, search starts here
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
-          Depth d = std::clamp(newDepth - r, 1, newDepth + 1);
+          bool kinginc = ss->inCheck && type_of(movedPiece) == KING && !capture;
+          Depth d = std::clamp(newDepth - r, 1, newDepth + !kinginc);
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
