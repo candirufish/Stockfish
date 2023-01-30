@@ -1095,7 +1095,7 @@ moves_loop: // When in check, search starts here
               else if (ttValue <= alpha && ttValue <= value)
                   extension = -1;
 
-              else if (value > singularBeta + 25 && singularBeta < beta)
+              else if (value > singularBeta + 25 && singularBeta < beta && ttValue <= value)
                   extension = -1;
           }
 
