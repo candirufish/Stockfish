@@ -1153,9 +1153,8 @@ moves_loop: // When in check, search starts here
           r -= 1 + 11 / (3 + depth);
 
         if (  !rootNode
-              && depth > 4
-              && pos.rule50_count() == 0
-              && pos.non_pawn_material() % RookValueEg == 0)
+              && capture
+              && moveCount != 1)
                 r--;
 	  }
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
