@@ -1165,7 +1165,7 @@ moves_loop: // When in check, search starts here
           r++;
 
       // Decrease reduction if move is a killer and we have a good history
-      if (move == ss->killers[0]
+      if ((move == ss->killers[0] || move == countermove)
           && (*contHist[0])[movedPiece][to_sq(move)] >= 3600)
           r--;
 
