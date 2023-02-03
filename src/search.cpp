@@ -1096,7 +1096,7 @@ moves_loop: // When in check, search starts here
                   extension = -1;
 
               else if (value > singularBeta + 64 && singularBeta < beta)
-                  extension = -1;
+                  extension = -2;
           }
 
           // Check extensions (~1 Elo)
