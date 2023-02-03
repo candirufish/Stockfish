@@ -1129,6 +1129,8 @@ moves_loop: // When in check, search starts here
 
       Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
 
+      bool killerLmr = move == ss->killers[0] && (*contHist[0])[movedPiece][to_sq(move)] >= 3600;
+
       // Decrease reduction if position is or has been on the PV
       // and node is not likely to fail low. (~3 Elo)
       if (   ss->ttPv
@@ -1140,7 +1142,7 @@ moves_loop: // When in check, search starts here
           r--;
 
       // Increase reduction for cut nodes (~3 Elo)
-      if (cutNode)
+      if (cutNode && !killerLmr)
           r += 2;
 
       // Increase reduction if ttMove is a capture (~3 Elo)
@@ -1165,8 +1167,7 @@ moves_loop: // When in check, search starts here
           r++;
 
       // Decrease reduction if move is a killer and we have a good history
-      if (move == ss->killers[0]
-          && (*contHist[0])[movedPiece][to_sq(move)] >= 3600)
+      if (killerLmr)
           r--;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
