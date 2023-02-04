@@ -1032,7 +1032,7 @@ moves_loop: // When in check, search starts here
               lmrDepth += history / 7208;
               lmrDepth = std::max(lmrDepth, -2);
               int cpxEv = 0;
-              cpxEv = ss->staticEval > 0 ? (ss->staticEval + complexity) / 2 : ss->staticEval;
+              cpxEv = ss->staticEval > 0 && complexity > 1024 ? (ss->staticEval + complexity) / 2 : ss->staticEval;
 
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
