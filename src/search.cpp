@@ -1319,10 +1319,10 @@ moves_loop: // When in check, search starts here
 
                   // Reduce other moves if we have found at least one score improvement
                   if (   depth > 1
-                      && depth < 6
+                      && ((depth >= 6 && ss->capture && (ss-1)->capture) || depth < 6)
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
-                      depth -= ss->capture && (ss-1)->capture ? 2 : 1;
+                      depth -= 1;
 
                   assert(depth > 0);
               }
