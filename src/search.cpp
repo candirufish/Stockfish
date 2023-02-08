@@ -1319,8 +1319,7 @@ moves_loop: // When in check, search starts here
 
                   // Reduce other moves if we have found at least one score improvement
                   if (   depth > 1
-                      && depth < 6
-                      && !ss->inCheck
+                      && ((depth >= 6 && thisThread->complexityAverage.value() > 128 && complexity > 1024) || depth < 6)
                       && beta  <  VALUE_KNOWN_WIN
                       && alpha > -VALUE_KNOWN_WIN)
                       depth -= 1;
