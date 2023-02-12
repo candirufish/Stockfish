@@ -1115,7 +1115,7 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5600)
               extension = 1;
 
-         else if (ss->inCheck)
+         else if (ss->inCheck && !rootNode)
               extension = 1;
       }
 
