@@ -58,6 +58,11 @@ using namespace Search;
 
 namespace {
 
+  int ExtMarginA[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int ExtMarginB[20] = {25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25};
+  TUNE(SetRange(-256, 256), ExtMarginA);
+  TUNE(SetRange(0, 256), ExtMarginB);
+  
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1070,14 +1075,16 @@ moves_loop: // When in check, search starts here
               value = search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
               ss->excludedMove = MOVE_NONE;
 
-              if (value < singularBeta)
+              int sbMargin = singularBeta + (depth <= 19 ? ExtMarginA[depth] : ExtMarginA[20]);
+
+              if (value < sbMargin)
               {
                   extension = 1;
                   singularQuietLMR = !ttCapture;
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 25
+                      && value < sbMargin - (depth <= 19 ? ExtMarginB[depth] : ExtMarginB[20])
                       && ss->doubleExtensions <= 10)
                   {
                       extension = 2;
