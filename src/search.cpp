@@ -1444,7 +1444,7 @@ moves_loop: // When in check, search starts here
     // Check if we have an upcoming move which draws by repetition, or
     // if the opponent had an alternative move earlier to this position.
     if (   pos.rule50_count() >= 3
-        && !PvNode
+        && PvNode
         && alpha < VALUE_DRAW
         && pos.has_game_cycle(ss->ply))
     {
