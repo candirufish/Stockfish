@@ -58,6 +58,21 @@ using namespace Search;
 
 namespace {
 
+  int ExtMarginA[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int ExtMarginB[20] = {25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25};
+  int DblExtLim[20] = {10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10};
+  int ExtDepthExtra[20] = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
+  
+  int ExtConstA = 0;
+  int ExtConstB = 25;
+  int dblExtConst = 10;
+  int ExtraDConst = 100;
+  
+  TUNE(SetRange(-128, 128), ExtMarginA, ExtConstA);
+  TUNE(SetRange(0, 128), ExtMarginB, ExtConstB);
+  TUNE(SetRange(0, 16), DblExtLim, dblExtConst);
+  TUNE(SetRange(0, 100), ExtDepthExtra, ExtraDConst);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1072,18 +1087,20 @@ moves_loop: // When in check, search starts here
               value = search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
               ss->excludedMove = MOVE_NONE;
 
-              if (value < singularBeta)
+              int sbMargin = singularBeta + (depth <= 19 ? ExtMarginA[depth] : ExtConstA);
+
+              if (value < sbMargin)
               {
                   extension = 1;
                   singularQuietLMR = !ttCapture;
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 25
-                      && ss->doubleExtensions <= 10)
+                      && value < sbMargin - (depth <= 19 ? ExtMarginB[depth] : ExtConstB)
+                      && ss->doubleExtensions <= (depth <= 19 ? DblExtLim[depth] : dblExtConst))
                   {
                       extension = 2;
-                      depth += depth < 12;
+                      depth += (depth <= 19 ? ExtDepthExtra[depth] : ExtraDConst) / 100;
                   }
               }
 
