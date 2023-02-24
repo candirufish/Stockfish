@@ -58,6 +58,50 @@ using namespace Search;
 
 namespace {
 
+int WEIGHT_cutNode = 1000;
+int WEIGHT_Not_cutNode = 0;
+int WEIGHT_PvNode = 0;
+int WEIGHT_Not_PvNode = 0;
+int WEIGHT_rootNode = 0;
+int WEIGHT_Not_rootNode = 0;
+int WEIGHT_ss_ttPv = 0;
+int WEIGHT_Not_ss_ttPv = 0;
+int WEIGHT_ttMove = 0;
+int WEIGHT_Not_ttMove = 1000;
+int WEIGHT_capture = 0;
+int WEIGHT_Not_capture = 0;
+int WEIGHT_givesCheck = 0;
+int WEIGHT_Not_givesCheck = 0;
+int WEIGHT_improving = 0;
+int WEIGHT_Not_improving = 0;
+int WEIGHT_inCheck = 0;
+int WEIGHT_Not_inCheck = 0;
+int WEIGHT_likelyFailLow = 0;
+int WEIGHT_Not_likelyFailLow = 0;
+int WEIGHT_priorCapture = 0;
+int WEIGHT_Not_priorCapture = 0;
+int WEIGHT_singularQuietLMR = 0;
+int WEIGHT_Not_singularQuietLMR = 0;
+int WEIGHT_moveCountPruning = 0;
+int WEIGHT_Not_moveCountPruning = 0;
+int WEIGHT_ttCapture = 0;
+int WEIGHT_Not_ttCapture = 0;
+int WEIGHT_k0 = 0;
+int WEIGHT_Not_k0 = 0;
+int WEIGHT_k1 = 0;
+int WEIGHT_Not_k1 = 0;
+int WEIGHT_countermove = 0;
+int WEIGHT_Not_countermove = 0;
+int WEIGHT_cutoffCnt = 0;
+int WEIGHT_Not_cutoffCnt = 0;
+int WEIGHT_ss1moveCount = 0;
+int WEIGHT_Not_ss1moveCount = 0;
+
+TUNE(SetRange(-8000, 8000), WEIGHT_cutNode, WEIGHT_Not_cutNode, WEIGHT_PvNode, WEIGHT_Not_PvNode, WEIGHT_rootNode, WEIGHT_Not_rootNode, WEIGHT_ss_ttPv, WEIGHT_Not_ss_ttPv,
+ WEIGHT_ttMove, WEIGHT_Not_ttMove, WEIGHT_capture, WEIGHT_Not_capture, WEIGHT_givesCheck, WEIGHT_Not_givesCheck, WEIGHT_improving, WEIGHT_Not_improving, WEIGHT_inCheck, WEIGHT_Not_inCheck,
+ WEIGHT_likelyFailLow, WEIGHT_Not_likelyFailLow, WEIGHT_priorCapture, WEIGHT_Not_priorCapture, WEIGHT_singularQuietLMR, WEIGHT_Not_singularQuietLMR, WEIGHT_moveCountPruning, WEIGHT_Not_moveCountPruning,
+ WEIGHT_ttCapture, WEIGHT_Not_ttCapture, WEIGHT_k0, WEIGHT_Not_k0, WEIGHT_k1, WEIGHT_Not_k1, WEIGHT_countermove, WEIGHT_Not_countermove, WEIGHT_cutoffCnt, WEIGHT_Not_cutoffCnt, WEIGHT_ss1moveCount, WEIGHT_Not_ss1moveCount);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1227,9 +1271,31 @@ moves_loop: // When in check, search starts here
       // Step 18. Full depth search when LMR is skipped. If expected reduction is high, reduce its depth by 1.
       else if (!PvNode || moveCount > 1)
       {
+               int totalWeight = 0;
+               int r_change = 0;
                // Increase reduction for cut nodes and not ttMove (~1 Elo)
-               if (!ttMove && cutNode)
-                         r += 2;
+               totalWeight += cutNode ? WEIGHT_cutNode : WEIGHT_Not_cutNode;
+               totalWeight += PvNode ? WEIGHT_PvNode : WEIGHT_Not_PvNode;
+               totalWeight += rootNode ? WEIGHT_rootNode : WEIGHT_Not_rootNode;
+               totalWeight += ss->ttPv ? WEIGHT_ss_ttPv : WEIGHT_Not_ss_ttPv;
+               totalWeight += ttMove ? WEIGHT_ttMove : WEIGHT_Not_ttMove;
+               totalWeight += capture ? WEIGHT_capture : WEIGHT_Not_capture;
+               totalWeight += givesCheck ? WEIGHT_givesCheck : WEIGHT_Not_givesCheck;
+               totalWeight += improving ? WEIGHT_improving : WEIGHT_Not_improving;
+               totalWeight += ss->inCheck ? WEIGHT_inCheck : WEIGHT_Not_inCheck;
+               totalWeight += likelyFailLow ? WEIGHT_likelyFailLow : WEIGHT_Not_likelyFailLow;
+               totalWeight += priorCapture ? WEIGHT_priorCapture : WEIGHT_Not_priorCapture;
+               totalWeight += singularQuietLMR ? WEIGHT_singularQuietLMR : WEIGHT_Not_singularQuietLMR;
+               totalWeight += moveCountPruning ? WEIGHT_moveCountPruning : WEIGHT_Not_moveCountPruning;
+               totalWeight += ttCapture ? WEIGHT_ttCapture : WEIGHT_Not_ttCapture;
+               totalWeight += move == ss->killers[0] ? WEIGHT_k0 : WEIGHT_Not_k0;
+               totalWeight += move == ss->killers[1] ? WEIGHT_k1 : WEIGHT_Not_k1;
+               totalWeight += move == countermove ? WEIGHT_countermove : WEIGHT_Not_countermove;
+               totalWeight += (ss+1)->cutoffCnt > 3 ? WEIGHT_cutoffCnt : WEIGHT_Not_cutoffCnt;
+               totalWeight += (ss-1)->moveCount > 7 ? WEIGHT_ss1moveCount : WEIGHT_Not_ss1moveCount;
+
+               r_change = totalWeight / 1000;
+               r += std::clamp(r_change,-8,8);
 
                value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4), !cutNode);
       }
