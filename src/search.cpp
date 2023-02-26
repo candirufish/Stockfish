@@ -58,6 +58,26 @@ using namespace Search;
 
 namespace {
 
+  int gcEval_promotion = 88;
+  int gcEval_capture = 88;
+  int gcEval_castling = 88;
+  int gcEval_queen = 88;
+  int gcEval_knight = 88;
+  int gcEval_bishop = 88;
+  int gcEval_pawn = 88;
+  int gcEval_else = 88;
+  int gcDepth_promotion = 10;
+  int gcDepth_capture = 10;
+  int gcDepth_castling = 10;
+  int gcDepth_queen = 10;
+  int gcDepth_knight = 10;
+  int gcDepth_bishop = 10;
+  int gcDepth_pawn = 10;
+  int gcDepth_else = 10;
+
+  TUNE(SetRange(0, 256), gcEval_promotion, gcEval_capture, gcEval_castling, gcEval_queen, gcEval_knight, gcEval_bishop, gcEval_pawn, gcEval_else);
+  TUNE(SetRange(0, 32), gcDepth_promotion, gcDepth_capture, gcDepth_castling, gcDepth_queen, gcDepth_knight, gcDepth_bishop, gcDepth_pawn, gcDepth_else);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1050,6 +1070,18 @@ moves_loop: // When in check, search starts here
       // We take care to not overdo to avoid search getting stuck.
       if (ss->ply < thisThread->rootDepth * 2)
       {
+          int gcEval = 0;
+          int gcDepth = 0;
+
+          gcEval = type_of(move) == PROMOTION ? (gcDepth = gcDepth_promotion, gcEval_promotion)
+                   : capture ? (gcDepth = gcDepth_capture, gcEval_capture)
+                   : type_of(move) == CASTLING ? (gcDepth = gcDepth_castling,  gcEval_castling)
+                   : type_of(movedPiece) == QUEEN ? (gcDepth = gcDepth_queen, gcEval_queen)
+                   : type_of(movedPiece) == KNIGHT ? (gcDepth = gcDepth_knight, gcEval_knight)
+                   : type_of(movedPiece) == BISHOP ? (gcDepth = gcDepth_bishop, gcEval_bishop)
+                   : type_of(movedPiece) == PAWN ? (gcDepth = gcDepth_pawn, gcEval_pawn)
+                   : (gcDepth = gcDepth_else, gcEval_else);
+
           // Singular extension search (~94 Elo). If all moves but one fail low on a
           // search of (alpha-s, beta-s), and just one fails high on (alpha, beta),
           // then that move is singular and should be extended. To verify this we do
@@ -1106,8 +1138,8 @@ moves_loop: // When in check, search starts here
 
           // Check extensions (~1 Elo)
           else if (   givesCheck
-                   && depth > 10
-                   && abs(ss->staticEval) > 88)
+                   && depth > gcDepth
+                   && abs(ss->staticEval) > gcEval)
               extension = 1;
 
           // Quiet ttMove extensions (~1 Elo)
