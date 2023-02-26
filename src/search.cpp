@@ -58,6 +58,13 @@ using namespace Search;
 
 namespace {
 
+  int ExtMarginA[20] = {-12,4,1,-6,-6,13,-2,4,-2,14,1,9,5,6,18,22,10,12,11,10};
+  int ExtMarginB[20] = {28,29,29,21,26,18,17,28,27,28,23,29,27,29,25,35,24,35,22,31};
+  int DblExtLim[20] = {9,11,11,9,11,9,10,10,10,10,10,12,10,10,10,9,9,10,9,11};
+  int ExtConstA = 3;
+  int ExtConstB = 25;
+  int dblExtConst = 9;
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1072,15 +1079,17 @@ moves_loop: // When in check, search starts here
               value = search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
               ss->excludedMove = MOVE_NONE;
 
-              if (value < singularBeta)
+              int sbMargin = singularBeta + (depth <= 19 ? ExtMarginA[depth] : ExtConstA);
+
+              if (value < sbMargin)
               {
                   extension = 1;
                   singularQuietLMR = !ttCapture;
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 25
-                      && ss->doubleExtensions <= 10)
+                      && value < sbMargin - (depth <= 19 ? ExtMarginB[depth] : ExtConstB)
+                      && ss->doubleExtensions <= (depth <= 19 ? DblExtLim[depth] : dblExtConst))
                   {
                       extension = 2;
                       depth += depth < 13;
