@@ -1234,9 +1234,32 @@ moves_loop: // When in check, search starts here
       // Step 18. Full depth search when LMR is skipped. If expected reduction is high, reduce its depth by 1.
       else if (!PvNode || moveCount > 1)
       {
-          // Increase reduction for cut nodes and not ttMove (~1 Elo)
-          if (!ttMove && cutNode)
-              r += 2;
+               int totalWeight = 0;
+               int r_change = 0;
+               // Increase reduction for cut nodes and not ttMove (~1 Elo)
+
+               totalWeight += cutNode ? 44 : -132;
+               totalWeight += PvNode ? 37 : -322;
+               totalWeight += rootNode ? -84 : -1042;
+               totalWeight += ss->ttPv ? -214 : -230;
+               totalWeight += ttMove ? -852 : 852;
+               totalWeight += capture ? -205 : -43;
+               totalWeight += givesCheck ? -328 : 307;
+               totalWeight += improving ? -18 : -991;
+               totalWeight += ss->inCheck ? 2 : 19;
+               totalWeight += likelyFailLow ? 546 : -1389;
+               totalWeight += priorCapture ? -601 : -423;
+               totalWeight += singularQuietLMR ? -353 : -710;
+               totalWeight += moveCountPruning ? -1343 : -1690;
+               totalWeight += ttCapture ? 198 : 331;
+               totalWeight += move == ss->killers[0] ? -76 : -722;
+               totalWeight += move == ss->killers[1] ? -39 : -866;
+               totalWeight += move == countermove ? 819 : -435;
+               totalWeight += (ss+1)->cutoffCnt > 3 ? 519 : -411;
+               totalWeight += (ss-1)->moveCount > 7 ? -275 : -696;
+
+               r_change = totalWeight / 1000;
+               r += std::clamp(r_change,-8,8);
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4), !cutNode);
       }
