@@ -746,7 +746,7 @@ namespace {
         else // Fall back to (semi)classical complexity for TT hits, the NNUE complexity is lost
         {
             complexity = abs(ss->staticEval - pos.psq_eg_stm());
-            if (PvNode)
+            if (PvNode || (pos.count<ALL_PIECES>() > 16 && (ss-1)->inCheck))
                Eval::NNUE::hint_common_parent_position(pos);
         }
 
