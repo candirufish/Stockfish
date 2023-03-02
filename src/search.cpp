@@ -554,7 +554,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, gcExt;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -988,6 +988,7 @@ moves_loop: // When in check, search starts here
       capture = pos.capture(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+      gcExt = false;
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1115,7 +1116,7 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 10
                    && abs(ss->staticEval) > 88)
-              extension = 1;
+              extension = 1, gcExt = true;
 
           // Quiet ttMove extensions (~1 Elo)
           else if (   PvNode
@@ -1141,6 +1142,8 @@ moves_loop: // When in check, search starts here
 
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
+      if (gcExt)
+          Eval::NNUE::hint_common_parent_position(pos);
 
       // Decrease reduction if position is or has been on the PV
       // and node is not likely to fail low. (~3 Elo)
