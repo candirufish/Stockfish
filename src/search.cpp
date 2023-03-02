@@ -1142,7 +1142,7 @@ moves_loop: // When in check, search starts here
 
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
-      if (gcExt)
+      if (extension == 1 && !gcExt)
           Eval::NNUE::hint_common_parent_position(pos);
 
       // Decrease reduction if position is or has been on the PV
