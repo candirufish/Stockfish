@@ -1060,14 +1060,14 @@ moves_loop: // When in check, search starts here
           int gcEval = 0;
           int gcDepth = 0;
 
-          gcEval = type_of(move) == PROMOTION ? (gcDepth = 11, 73)
-                   : capture ? (gcDepth = 11, 96)
-                   : type_of(move) == CASTLING ? (gcDepth = 9,  98)
-                   : type_of(movedPiece) == QUEEN ? (gcDepth = 9, 82)
-                   : type_of(movedPiece) == KNIGHT ? (gcDepth = 10, 92)
-                   : type_of(movedPiece) == BISHOP ? (gcDepth = 8, 82)
-                   : type_of(movedPiece) == PAWN ? (gcDepth = 10, 90)
-                   : (gcDepth = 9, 85);
+          gcEval = type_of(move) == PROMOTION ? (gcDepth = 11, 69)
+                   : capture ? (gcDepth = 12, 84)
+                   : type_of(move) == CASTLING ? (gcDepth = 9,  91)
+                   : type_of(movedPiece) == QUEEN ? (gcDepth = 9, 87)
+                   : type_of(movedPiece) == KNIGHT ? (gcDepth = 10, 89)
+                   : type_of(movedPiece) == BISHOP ? (gcDepth = 7, 73)
+                   : type_of(movedPiece) == PAWN ? (gcDepth = 10, 95)
+                   : (gcDepth = 9, 78);
 
           // Singular extension search (~94 Elo). If all moves but one fail low on a
           // search of (alpha-s, beta-s), and just one fails high on (alpha, beta),
