@@ -1109,6 +1109,9 @@ moves_loop: // When in check, search starts here
               // If the eval of ttMove is less than value, we reduce it (negative extension)
               else if (ttValue <= value)
                   extension = -1;
+
+              else if (value > singularBeta && PvNode)
+                  extension = std::clamp((depth - tte->depth()) / 4, 0, 2) > 0 ? 0 : -2;
           }
 
           // Check extensions (~1 Elo)
