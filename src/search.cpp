@@ -1079,6 +1079,7 @@ moves_loop: // When in check, search starts here
               value = search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
               ss->excludedMove = MOVE_NONE;
 
+              int negExt = std::clamp((depth - tte->depth()) / 4, 1, 2);
               if (value < singularBeta)
               {
                   extension = 1;
@@ -1104,11 +1105,11 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
-                  extension = -2;
+                  extension = -(negExt);
 
               // If the eval of ttMove is less than value, we reduce it (negative extension)
               else if (ttValue <= value)
-                  extension = -1;
+                  extension = -(negExt);
           }
 
           // Check extensions (~1 Elo)
