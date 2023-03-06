@@ -1111,7 +1111,7 @@ moves_loop: // When in check, search starts here
                   extension = -1;
 
               else if (value > singularBeta && PvNode)
-                  extension = std::clamp((depth - tte->depth()) / 4, 0, 2) > 0 ? 0 : -2;
+                  extension = std::clamp((depth - tte->depth()) / 4, 0, 1) > 0 ? 0 : -1;
           }
 
           // Check extensions (~1 Elo)
