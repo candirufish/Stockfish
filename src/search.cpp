@@ -1127,6 +1127,7 @@ moves_loop: // When in check, search starts here
               extension = 1;
 
           else if (   !PvNode
+                   && ss->ttPv
                    && depth > 6
                    && tte->depth() >= depth + 3)
               extension = 1;
