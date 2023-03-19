@@ -1167,8 +1167,8 @@ moves_loop: // When in check, search starts here
       if (PvNode)
           r -= 1 + 12 / (3 + depth);
 
-      if (PvNode && !ttMove && ss->ttHit && tte->depth() >= depth - 2)
-          r++;
+      if (PvNode && !ttMove && ss->ttHit && tte->depth() >= depth - 3)
+          r += 2;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
