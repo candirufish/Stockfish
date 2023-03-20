@@ -1085,7 +1085,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 25
+                      && (value < singularBeta - 25 || (ss-1)->r > 4)
                       && ss->doubleExtensions <= 10)
                   {
                       extension = 2;
@@ -1243,7 +1243,7 @@ moves_loop: // When in check, search starts here
           if (!ttMove && cutNode)
               r += 2;
 
-          value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4) + ((ss-1)->r > 4), !cutNode);
+          value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4), !cutNode);
       }
 
       // For PV nodes only, do a full PV search on the first move or after a fail
