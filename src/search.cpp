@@ -1105,7 +1105,7 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2 - !PvNode;
 
-              else if (cutNode && ss->ttPv)
+              else if (cutNode && !capture)
                   extension = -2;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension)
