@@ -59,6 +59,44 @@ using namespace Search;
 
 namespace {
 
+  int btMg_qpromotion = 25;
+  int btMg_promotion = 25;
+  int btMg_gccapture = 25;
+  int btMg_npcapture = 25;
+  int btMg_capture = 25;
+  int btMg_gc = 25;
+  int btMg_incheck = 25;
+  int btMg_r50 = 25;
+  int btMg_else = 25; 
+  int dbLim_qpromotion = 10;
+  int dbLim_promotion = 10;
+  int dbLim_gccapture = 10;
+  int dbLim_npcapture = 10;
+  int dbLim_capture = 10;
+  int dbLim_gc = 10;
+  int dbLim_incheck = 10;
+  int dbLim_r50 = 10;
+  int dbLim_else = 10;
+  int btMg2_castling = 25;
+  int btMg2_queen = 25;
+  int btMg2_rook = 25;
+  int btMg2_knight = 25;
+  int btMg2_bishop = 25;
+  int btMg2_pawn = 25;
+  int btMg2_else = 25;
+  int dbLim2_castling = 10;
+  int dbLim2_queen = 10;
+  int dbLim2_rook = 10;
+  int dbLim2_knight = 10;
+  int dbLim2_bishop = 10;
+  int dbLim2_pawn = 10;
+  int dbLim2_else = 10;
+  
+  TUNE(SetRange(-128, 128), btMg_qpromotion, btMg_promotion, btMg_gccapture, btMg_npcapture, btMg_capture, btMg_gc, btMg_incheck, btMg_r50, btMg_else);
+  TUNE(SetRange(-32, 32), dbLim_qpromotion, dbLim_promotion, dbLim_gccapture, dbLim_npcapture, dbLim_capture, dbLim_gc, dbLim_incheck, dbLim_r50, dbLim_else);
+  TUNE(SetRange(-128, 128), btMg2_castling, btMg2_queen, btMg2_rook, btMg2_knight, btMg2_bishop, btMg2_pawn, btMg2_else);
+  TUNE(SetRange(-32, 32), dbLim2_castling, dbLim2_queen, dbLim2_rook, dbLim2_knight, dbLim2_bishop, dbLim2_pawn, dbLim2_else);
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1057,6 +1095,34 @@ moves_loop: // When in check, search starts here
       // We take care to not overdo to avoid search getting stuck.
       if (ss->ply < thisThread->rootDepth * 2)
       {
+          int btMg = 0;
+          int btMg2 = 0;
+          int dbLim = 0;
+          int dbLim2 = 0;
+          int btMgF = 0;
+          int dbLimF = 0;
+
+          btMg =     type_of(move) == PROMOTION && promotion_type(move) == QUEEN ? (dbLim = dbLim_qpromotion, btMg_qpromotion)
+                   : type_of(move) == PROMOTION && promotion_type(move) != QUEEN ? (dbLim = dbLim_promotion, btMg_promotion)
+                   : capture && givesCheck ? (dbLim = dbLim_gccapture, btMg_gccapture)
+                   : capture && type_of(pos.piece_on(to_sq(move))) != PAWN ? (dbLim = dbLim_npcapture, btMg_npcapture)
+                   : capture ? (dbLim = dbLim_capture, btMg_capture)
+                   : givesCheck ? (dbLim = dbLim_gc, btMg_gc)
+                   : ss->inCheck ? (dbLim = dbLim_incheck, btMg_incheck)
+                   : pos.rule50_count() > 80 ? (dbLim = dbLim_r50, btMg_r50)
+                   : (dbLim = dbLim_else, btMg_else);
+
+          btMg2 =  type_of(move) == CASTLING ? (dbLim2 = dbLim2_castling, btMg2_castling)
+                   : type_of(movedPiece) == QUEEN ? (dbLim2 = dbLim2_queen, btMg2_queen)
+                   : type_of(movedPiece) == ROOK ? (dbLim2 = dbLim2_rook, btMg2_rook)
+                   : type_of(movedPiece) == KNIGHT ? (dbLim2 = dbLim2_knight, btMg2_knight)
+                   : type_of(movedPiece) == BISHOP ? (dbLim2 = dbLim2_bishop, btMg2_bishop)
+                   : type_of(movedPiece) == PAWN ? (dbLim2 = dbLim2_pawn, btMg2_pawn)
+                   : (dbLim = dbLim2_else, btMg2_else);
+
+          btMgF = std::clamp(((btMg + btMg2)) / 2, 0, 128);
+          dbLimF = std::clamp(((dbLim + dbLim2)) / 2, 0, 32);
+
           // Singular extension search (~94 Elo). If all moves but one fail low on a
           // search of (alpha-s, beta-s), and just one fails high on (alpha, beta),
           // then that move is singular and should be extended. To verify this we do
@@ -1085,8 +1151,8 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 25
-                      && ss->doubleExtensions <= 10)
+                      && value < singularBeta - btMgF
+                      && ss->doubleExtensions <= dbLimF)
                   {
                       extension = 2;
                       depth += depth < 13;
