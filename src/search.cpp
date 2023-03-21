@@ -1118,7 +1118,7 @@ moves_loop: // When in check, search starts here
                    : type_of(movedPiece) == KNIGHT ? (dbLim2 = dbLim2_knight, btMg2_knight)
                    : type_of(movedPiece) == BISHOP ? (dbLim2 = dbLim2_bishop, btMg2_bishop)
                    : type_of(movedPiece) == PAWN ? (dbLim2 = dbLim2_pawn, btMg2_pawn)
-                   : (dbLim = dbLim2_else, btMg2_else);
+                   : (dbLim2 = dbLim2_else, btMg2_else);
 
           btMgF = std::clamp(((btMg + btMg2)) / 2, 0, 128);
           dbLimF = std::clamp(((dbLim + dbLim2)) / 2, 0, 32);
