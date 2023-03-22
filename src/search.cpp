@@ -1204,7 +1204,7 @@ moves_loop: // When in check, search starts here
               || !capture
               || (cutNode && (ss-1)->moveCount > 1)))
       {
-          int deeper = (r < -1) && moveCount <= 4 ? 2 : 1;
+          int deeper = (r < -1) && moveCount <= 4 && (ss-1)->moveCount > 7 ? 2 : 1;
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
