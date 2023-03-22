@@ -1113,7 +1113,7 @@ moves_loop: // When in check, search starts here
               else if (ttValue <= alpha)
                   extension = -1;
 
-              else if (abs(ss->staticEval) > VALUE_KNOWN_WIN)
+              else if (abs(ss->staticEval) > VALUE_KNOWN_WIN && abs((ss-2)->staticEval) > VALUE_KNOWN_WIN)
                   extension = -1;
           }
 
