@@ -1165,8 +1165,11 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction for PvNodes based on depth
       if (PvNode)
+      {
           r -= 1 + 12 / (3 + depth);
 
+          r -= complexity / 625 + abs(ss->staticEval - bestValue) / 250;
+       }
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
           r--;
@@ -1193,8 +1196,6 @@ moves_loop: // When in check, search starts here
 
       // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
       r -= ss->statScore / (11791 + 3992 * (depth > 6 && depth < 19));
-
-      r -= complexity / 625 + abs(ss->staticEval - bestValue) / 250;
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
