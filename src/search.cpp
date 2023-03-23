@@ -1039,7 +1039,7 @@ moves_loop: // When in check, search starts here
 
               lmrDepth += history / 7278;
               lmrDepth = std::max(lmrDepth, -2);
-              int SeAvg = (ss->staticEval + (ss-2)->staticEval) / 2;
+              int SeAvg = ((ss->staticEval * 2) + (ss-2)->staticEval) / 3;
 
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
