@@ -1162,7 +1162,7 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
-          r += 2 + almostFutPruned;
+          r += 2;
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
@@ -1212,7 +1212,7 @@ moves_loop: // When in check, search starts here
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
-          Depth d = std::clamp(newDepth - r, 1, newDepth + 1);
+          Depth d = std::clamp(newDepth - r, 1, newDepth + !almostFutPruned);
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
