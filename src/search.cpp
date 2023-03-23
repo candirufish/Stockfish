@@ -1103,7 +1103,7 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension)
               else if (ttValue >= beta)
-                  extension = -2 - !PvNode - (VALUE_KNOWN_WIN < abs(ss->staticEval));
+                  extension = -2 - !PvNode;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension)
               else if (ttValue <= value)
@@ -1111,7 +1111,7 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is less than alpha, we reduce it (negative extension)
               else if (ttValue <= alpha)
-                  extension = -1;
+                  extension = -1 - (VALUE_KNOWN_WIN < abs(ss->staticEval));
           }
 
           // Check extensions (~1 Elo)
