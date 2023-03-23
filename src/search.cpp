@@ -1046,7 +1046,7 @@ moves_loop: // When in check, search starts here
               {
                   if (ss->staticEval + 103 + 138 * lmrDepth <= alpha)
                       continue;
-                  else if (ss->staticEval + 103 + 138 * lmrDepth <= alpha + 16)
+                  else if ((ss-2)->staticEval + 103 + 138 * lmrDepth <= alpha)
                       almostFutPruned = true;
               }
 
