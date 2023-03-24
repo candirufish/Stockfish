@@ -1168,7 +1168,7 @@ moves_loop: // When in check, search starts here
       if (ttCapture)
           r++;
 
-      if (almostFutPruned && moveCountPruning)
+      if (!PvNode && almostFutPruned && moveCountPruning)
           r++;
 
       // Decrease reduction for PvNodes based on depth
