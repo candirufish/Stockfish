@@ -1057,6 +1057,34 @@ moves_loop: // When in check, search starts here
       // We take care to not overdo to avoid search getting stuck.
       if (ss->ply < thisThread->rootDepth * 2)
       {
+          int btMg = 0;
+          int btMg2 = 0;
+          int dbLim = 0;
+          int dbLim2 = 0;
+          int btMgF = 0;
+          int dbLimF = 0;
+
+          btMg =     type_of(move) == PROMOTION && promotion_type(move) == QUEEN ? (dbLim = 11, 35)
+                   : type_of(move) == PROMOTION && promotion_type(move) != QUEEN ? (dbLim = 8, 12)
+                   : capture && givesCheck ? (dbLim = 7, 36)
+                   : capture && type_of(pos.piece_on(to_sq(move))) != PAWN ? (dbLim = 10, 18)
+                   : capture ? (dbLim = 13, 24)
+                   : givesCheck ? (dbLim = 9, 26)
+                   : ss->inCheck ? (dbLim = 7, 28)
+                   : pos.rule50_count() > 80 ? (dbLim = 10, 32)
+                   : (dbLim = 13, 35);
+
+          btMg2 =  type_of(move) == CASTLING ? (dbLim2 = 8, 34)
+                   : type_of(movedPiece) == QUEEN ? (dbLim2 = 11, 9)
+                   : type_of(movedPiece) == ROOK ? (dbLim2 = 10, 31)
+                   : type_of(movedPiece) == KNIGHT ? (dbLim2 = 9, 12)
+                   : type_of(movedPiece) == BISHOP ? (dbLim2 = 12, 25)
+                   : type_of(movedPiece) == PAWN ? (dbLim2 = 10, 31)
+                   : (dbLim2 = 10, 20);
+
+          btMgF = std::clamp(((btMg + btMg2)) / 2, 0, 128);
+          dbLimF = std::clamp(((dbLim + dbLim2)) / 2, 0, 32);
+
           // Singular extension search (~94 Elo). If all moves but one fail low on a
           // search of (alpha-s, beta-s), and just one fails high on (alpha, beta),
           // then that move is singular and should be extended. To verify this we do
@@ -1085,8 +1113,8 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 25
-                      && ss->doubleExtensions <= 10)
+                      && value < singularBeta - btMgF
+                      && ss->doubleExtensions <= dbLimF)
                   {
                       extension = 2;
                       depth += depth < 13;
