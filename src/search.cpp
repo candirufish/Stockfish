@@ -59,6 +59,151 @@ using namespace Search;
 
 namespace {
 
+   int PRN1_cpx8 = 6;
+   int PRN1_cpx16 = 6;
+   int PRN1_cpx32 = 6;
+   int PRN1_cpx64 = 6;
+   int PRN1_cpx128 = 6;
+   int PRN1_cpx256 = 6;
+   int PRN1_cpx512 = 6;
+   int PRN1_cpx1024 = 6;
+   int PRN1_cpxF = 6;
+   int PRN2_cpx8 = 182;
+   int PRN2_cpx16 = 182;
+   int PRN2_cpx32 = 182;
+   int PRN2_cpx64 = 182;
+   int PRN2_cpx128 = 182;
+   int PRN2_cpx256 = 182;
+   int PRN2_cpx512 = 182;
+   int PRN2_cpx1024 = 182;
+   int PRN2_cpxF = 182;
+   int PRN3_cpx8 = 230;
+   int PRN3_cpx16 = 230;
+   int PRN3_cpx32 = 230;
+   int PRN3_cpx64 = 230;
+   int PRN3_cpx128 = 230;
+   int PRN3_cpx256 = 230;
+   int PRN3_cpx512 = 230;
+   int PRN3_cpx1024 = 230;
+   int PRN3_cpxF = 230;
+   int PRN4_cpx8 = 7;
+   int PRN4_cpx16 = 7;
+   int PRN4_cpx32 = 7;
+   int PRN4_cpx64 = 7;
+   int PRN4_cpx128 = 7;
+   int PRN4_cpx256 = 7;
+   int PRN4_cpx512 = 7;
+   int PRN4_cpx1024 = 7;
+   int PRN4_cpxF = 7;
+   int PRN5_cpx8 = 206;
+   int PRN5_cpx16 = 206;
+   int PRN5_cpx32 = 206;
+   int PRN5_cpx64 = 206;
+   int PRN5_cpx128 = 206;
+   int PRN5_cpx256 = 206;
+   int PRN5_cpx512 = 206;
+   int PRN5_cpx1024 = 206;
+   int PRN5_cpxF = 206;
+   int PRN6_cpx8 = 5;
+   int PRN6_cpx16 = 5;
+   int PRN6_cpx32 = 5;
+   int PRN6_cpx64 = 5;
+   int PRN6_cpx128 = 5;
+   int PRN6_cpx256 = 5;
+   int PRN6_cpx512 = 5;
+   int PRN6_cpx1024 = 5;
+   int PRN6_cpxF = 5;
+   int PRN7_cpx8 = 4405;
+   int PRN7_cpx16 = 4405;
+   int PRN7_cpx32 = 4405;
+   int PRN7_cpx64 = 4405;
+   int PRN7_cpx128 = 4405;
+   int PRN7_cpx256 = 4405;
+   int PRN7_cpx512 = 4405;
+   int PRN7_cpx1024 = 4405;
+   int PRN7_cpxF = 4405;
+   int PRN8_cpx8 = 7278;
+   int PRN8_cpx16 = 7278;
+   int PRN8_cpx32 = 7278;
+   int PRN8_cpx64 = 7278;
+   int PRN8_cpx128 = 7278;
+   int PRN8_cpx256 = 7278;
+   int PRN8_cpx512 = 7278;
+   int PRN8_cpx1024 = 7278;
+   int PRN8_cpxF = 7278;
+   int PRN9_cpx8 = 2;
+   int PRN9_cpx16 = 2;
+   int PRN9_cpx32 = 2;
+   int PRN9_cpx64 = 2;
+   int PRN9_cpx128 = 2;
+   int PRN9_cpx256 = 2;
+   int PRN9_cpx512 = 2;
+   int PRN9_cpx1024 = 2;
+   int PRN9_cpxF = 2;
+   int PRN10_cpx8 = 13;
+   int PRN10_cpx16 = 13;
+   int PRN10_cpx32 = 13;
+   int PRN10_cpx64 = 13;
+   int PRN10_cpx128 = 13;
+   int PRN10_cpx256 = 13;
+   int PRN10_cpx512 = 13;
+   int PRN10_cpx1024 = 13;
+   int PRN10_cpxF = 13;
+   int PRN11_cpx8 = 103;
+   int PRN11_cpx16 = 103;
+   int PRN11_cpx32 = 103;
+   int PRN11_cpx64 = 103;
+   int PRN11_cpx128 = 103;
+   int PRN11_cpx256 = 103;
+   int PRN11_cpx512 = 103;
+   int PRN11_cpx1024 = 103;
+   int PRN11_cpxF = 103;
+   int PRN12_cpx8 = 138;
+   int PRN12_cpx16 = 138;
+   int PRN12_cpx32 = 138;
+   int PRN12_cpx64 = 138;
+   int PRN12_cpx128 = 138;
+   int PRN12_cpx256 = 138;
+   int PRN12_cpx512 = 138;
+   int PRN12_cpx1024 = 138;
+   int PRN12_cpxF = 138;
+   int PRN13_cpx8 = 24;
+   int PRN13_cpx16 = 24;
+   int PRN13_cpx32 = 24;
+   int PRN13_cpx64 = 24;
+   int PRN13_cpx128 = 24;
+   int PRN13_cpx256 = 24;
+   int PRN13_cpx512 = 24;
+   int PRN13_cpx1024 = 24;
+   int PRN13_cpxF = 24;
+   int PRN14_cpx8 = 15;
+   int PRN14_cpx16 = 15;
+   int PRN14_cpx32 = 15;
+   int PRN14_cpx64 = 15;
+   int PRN14_cpx128 = 15;
+   int PRN14_cpx256 = 15;
+   int PRN14_cpx512 = 15;
+   int PRN14_cpx1024 = 15;
+   int PRN14_cpxF = 15;
+
+
+   auto f1 = [](int m){return Range(0, 2 * m);};
+   TUNE(SetRange(f1), PRN1_cpx8, PRN1_cpx16, PRN1_cpx32, PRN1_cpx64, PRN1_cpx128, PRN1_cpx256, PRN1_cpx512, PRN1_cpx1024, PRN1_cpxF);
+   TUNE(SetRange(f1), PRN2_cpx8, PRN2_cpx16, PRN2_cpx32, PRN2_cpx64, PRN2_cpx128, PRN2_cpx256, PRN2_cpx512, PRN2_cpx1024, PRN2_cpxF);
+   TUNE(SetRange(f1), PRN3_cpx8, PRN3_cpx16, PRN3_cpx32, PRN3_cpx64, PRN3_cpx128, PRN3_cpx256, PRN3_cpx512, PRN3_cpx1024, PRN3_cpxF);
+   TUNE(SetRange(f1), PRN4_cpx8, PRN4_cpx16, PRN4_cpx32, PRN4_cpx64, PRN4_cpx128, PRN4_cpx256, PRN4_cpx512, PRN4_cpx1024, PRN4_cpxF);
+   TUNE(SetRange(f1), PRN5_cpx8, PRN5_cpx16, PRN5_cpx32, PRN5_cpx64, PRN5_cpx128, PRN5_cpx256, PRN5_cpx512, PRN5_cpx1024, PRN5_cpxF);
+   TUNE(SetRange(f1), PRN6_cpx8, PRN6_cpx16, PRN6_cpx32, PRN6_cpx64, PRN6_cpx128, PRN6_cpx256, PRN6_cpx512, PRN6_cpx1024, PRN6_cpxF);
+   TUNE(SetRange(f1), PRN7_cpx8, PRN7_cpx16, PRN7_cpx32, PRN7_cpx64, PRN7_cpx128, PRN7_cpx256, PRN7_cpx512, PRN7_cpx1024, PRN7_cpxF);
+   TUNE(SetRange(f1), PRN8_cpx8, PRN8_cpx16, PRN8_cpx32, PRN8_cpx64, PRN8_cpx128, PRN8_cpx256, PRN8_cpx512, PRN8_cpx1024, PRN8_cpxF);
+   TUNE(SetRange(f1), PRN9_cpx8, PRN9_cpx16, PRN9_cpx32, PRN9_cpx64, PRN9_cpx128, PRN9_cpx256, PRN9_cpx512, PRN9_cpx1024, PRN9_cpxF);
+   TUNE(SetRange(f1), PRN10_cpx8, PRN10_cpx16, PRN10_cpx32, PRN10_cpx64, PRN10_cpx128, PRN10_cpx256, PRN10_cpx512, PRN10_cpx1024, PRN10_cpxF);
+   TUNE(SetRange(f1), PRN11_cpx8, PRN11_cpx16, PRN11_cpx32, PRN11_cpx64, PRN11_cpx128, PRN11_cpx256, PRN11_cpx512, PRN11_cpx1024, PRN11_cpxF);
+   TUNE(SetRange(f1), PRN12_cpx8, PRN12_cpx16, PRN12_cpx32, PRN12_cpx64, PRN12_cpx128, PRN12_cpx256, PRN12_cpx512, PRN12_cpx1024, PRN12_cpxF);
+   TUNE(SetRange(f1), PRN13_cpx8, PRN13_cpx16, PRN13_cpx32, PRN13_cpx64, PRN13_cpx128, PRN13_cpx256, PRN13_cpx512, PRN13_cpx1024, PRN13_cpxF);
+   TUNE(SetRange(f1), PRN14_cpx8, PRN14_cpx16, PRN14_cpx32, PRN14_cpx64, PRN14_cpx128, PRN14_cpx256, PRN14_cpx512, PRN14_cpx1024, PRN14_cpxF);
+
+
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -997,6 +1142,18 @@ moves_loop: // When in check, search starts here
           // Skip quiet moves if movecount exceeds our FutilityMoveCount threshold (~8 Elo)
           moveCountPruning = moveCount >= futility_move_count(improving, depth);
 
+          int PRN1 = 0, PRN2 = 0, PRN3 = 0, PRN4 = 0, PRN5 = 0, PRN6 = 0, PRN7 = 0, PRN8 = 0, PRN9 = 0, PRN10 = 0, PRN11 = 0, PRN12 = 0, PRN13 = 0, PRN14 = 0;
+
+          PRN1 =  complexity <= 8 ? (PRN2 = PRN2_cpx8, PRN3 = PRN3_cpx8, PRN4 = PRN4_cpx8, PRN5 = PRN5_cpx8, PRN6 = PRN6_cpx8, PRN7 = PRN7_cpx8, PRN8 = PRN8_cpx8, PRN9 = PRN9_cpx8, PRN10 = PRN10_cpx8, PRN11 = PRN11_cpx8, PRN12 = PRN12_cpx8, PRN13 = PRN13_cpx8, PRN14 = PRN14_cpx8, PRN1_cpx8)
+                : complexity <= 16 ? (PRN2 = PRN2_cpx16, PRN3 = PRN3_cpx16, PRN4 = PRN4_cpx16, PRN5 = PRN5_cpx16, PRN6 = PRN6_cpx16, PRN7 = PRN7_cpx16, PRN8 = PRN8_cpx16, PRN9 = PRN9_cpx16, PRN10 = PRN10_cpx16, PRN11 = PRN11_cpx16, PRN12 = PRN12_cpx16, PRN13 = PRN13_cpx16, PRN14 = PRN14_cpx16, PRN1_cpx16)
+                : complexity <= 32 ? (PRN2 = PRN2_cpx32, PRN3 = PRN3_cpx32, PRN4 = PRN4_cpx32, PRN5 = PRN5_cpx32, PRN6 = PRN6_cpx32, PRN7 = PRN7_cpx32, PRN8 = PRN8_cpx32, PRN9 = PRN9_cpx32, PRN10 = PRN10_cpx32, PRN11 = PRN11_cpx32, PRN12 = PRN12_cpx32, PRN13 = PRN13_cpx32, PRN14 = PRN14_cpx32, PRN1_cpx32)
+                : complexity <= 64 ? (PRN2 = PRN2_cpx64, PRN3 = PRN3_cpx64, PRN4 = PRN4_cpx64, PRN5 = PRN5_cpx64, PRN6 = PRN6_cpx64, PRN7 = PRN7_cpx64, PRN8 = PRN8_cpx64, PRN9 = PRN9_cpx64, PRN10 = PRN10_cpx64, PRN11 = PRN11_cpx64, PRN12 = PRN12_cpx64, PRN13 = PRN13_cpx64, PRN14 = PRN14_cpx64, PRN1_cpx64)
+                : complexity <= 128 ? (PRN2 = PRN2_cpx128, PRN3 = PRN3_cpx128, PRN4 = PRN4_cpx128, PRN5 = PRN5_cpx128, PRN6 = PRN6_cpx128, PRN7 = PRN7_cpx128, PRN8 = PRN8_cpx128, PRN9 = PRN9_cpx128, PRN10 = PRN10_cpx128, PRN11 = PRN11_cpx128, PRN12 = PRN12_cpx128, PRN13 = PRN13_cpx128, PRN14 = PRN14_cpx128, PRN1_cpx128)
+                : complexity <= 256 ? (PRN2 = PRN2_cpx256, PRN3 = PRN3_cpx256, PRN4 = PRN4_cpx256, PRN5 = PRN5_cpx256, PRN6 = PRN6_cpx256, PRN7 = PRN7_cpx256, PRN8 = PRN8_cpx256, PRN9 = PRN9_cpx256, PRN10 = PRN10_cpx256, PRN11 = PRN11_cpx256, PRN12 = PRN12_cpx256, PRN13 = PRN13_cpx256, PRN14 = PRN14_cpx256, PRN1_cpx256)
+                : complexity <= 512 ? (PRN2 = PRN2_cpx512, PRN3 = PRN3_cpx512, PRN4 = PRN4_cpx512, PRN5 = PRN5_cpx512, PRN6 = PRN6_cpx512, PRN7 = PRN7_cpx512, PRN8 = PRN8_cpx512, PRN9 = PRN9_cpx512, PRN10 = PRN10_cpx512, PRN11 = PRN11_cpx512, PRN12 = PRN12_cpx512, PRN13 = PRN13_cpx512, PRN14 = PRN14_cpx512, PRN1_cpx512)
+                : complexity <= 1024 ? (PRN2 = PRN2_cpx1024, PRN3 = PRN3_cpx1024, PRN4 = PRN4_cpx1024, PRN5 = PRN5_cpx1024, PRN6 = PRN6_cpx1024, PRN7 = PRN7_cpx1024, PRN8 = PRN8_cpx1024, PRN9 = PRN9_cpx1024, PRN10 = PRN10_cpx1024, PRN11 = PRN11_cpx1024, PRN12 = PRN12_cpx1024, PRN13 = PRN13_cpx1024, PRN14 = PRN14_cpx1024, PRN1_cpx1024)
+                : (PRN2 = PRN2_cpxF, PRN3 = PRN3_cpxF, PRN4 = PRN4_cpxF, PRN5 = PRN5_cpxF, PRN6 = PRN6_cpxF, PRN7 = PRN7_cpxF, PRN8 = PRN8_cpxF, PRN9 = PRN9_cpxF, PRN10 = PRN10_cpxF, PRN11 = PRN11_cpxF, PRN12 = PRN12_cpxF, PRN13 = PRN13_cpxF, PRN14 = PRN14_cpxF, PRN1_cpxF);
+
           // Reduced depth of the next LMR search
           int lmrDepth = std::max(newDepth - r, 0);
 
@@ -1006,15 +1163,15 @@ moves_loop: // When in check, search starts here
               // Futility pruning for captures (~2 Elo)
               if (   !givesCheck
                   && !PvNode
-                  && lmrDepth < 6
+                  && lmrDepth < PRN1
                   && !ss->inCheck
-                  && ss->staticEval + 182 + 230 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
-                   + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 7 < alpha)
+                  && ss->staticEval + PRN2 + PRN3 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
+                   + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / PRN4 < alpha)
                   continue;
 
               Bitboard occupied;
               // SEE based pruning (~11 Elo)
-              if (!pos.see_ge(move, occupied, Value(-206) * depth))
+              if (!pos.see_ge(move, occupied, Value(-PRN5) * depth))
               {
                   if (depth < 2 - capture)
                       continue;
@@ -1041,26 +1198,26 @@ moves_loop: // When in check, search starts here
                             + (*contHist[3])[movedPiece][to_sq(move)];
 
               // Continuation history based pruning (~2 Elo)
-              if (   lmrDepth < 5
-                  && history < -4405 * (depth - 1))
+              if (   lmrDepth < PRN6
+                  && history < -PRN7 * (depth - 1))
                   continue;
 
               history += 2 * thisThread->mainHistory[us][from_to(move)];
 
-              lmrDepth += history / 7278;
-              lmrDepth = std::max(lmrDepth, -2);
+              lmrDepth += history / PRN8;
+              lmrDepth = std::max(lmrDepth, -PRN9);
 
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
-                  && lmrDepth < 13
-                  && ss->staticEval + 103 + 138 * lmrDepth <= alpha)
+                  && lmrDepth < PRN10
+                  && ss->staticEval + PRN11 + PRN12 * lmrDepth <= alpha)
                   continue;
 
               lmrDepth = std::max(lmrDepth, 0);
 
               Bitboard occupied;
               // Prune moves with negative SEE (~4 Elo)
-              if (!pos.see_ge(move, occupied, Value(-24 * lmrDepth * lmrDepth - 15 * lmrDepth)))
+              if (!pos.see_ge(move, occupied, Value(-PRN13 * lmrDepth * lmrDepth - PRN14 * lmrDepth)))
                   continue;
           }
       }
