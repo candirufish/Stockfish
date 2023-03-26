@@ -1182,7 +1182,7 @@ moves_loop: // When in check, search starts here
           r++;
 
       if (failRazor)
-          r++;
+          r--;
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
