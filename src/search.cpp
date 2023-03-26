@@ -784,7 +784,7 @@ namespace {
         if (value < alpha)
             return value;
 
-        else if (value < alpha + 8)
+        else if (value < alpha + 16)
             failRazor = true;
 
     }
@@ -908,18 +908,18 @@ namespace {
         && !ttMove)
         depth -= 3;
 
+    if (    failRazor
+        &&  !ttMove)
+        depth--;
+
     if (depth <= 0)
-        return qsearch<PV>(pos, ss, alpha, beta);
+        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
+
 
     if (    cutNode
         &&  depth >= 7
         && !ttMove)
         depth -= 2;
-
-    if (    failRazor
-        &&  depth >= 2
-        && !ttMove)
-        depth--;
 
 moves_loop: // When in check, search starts here
 
