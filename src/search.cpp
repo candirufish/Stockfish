@@ -775,7 +775,7 @@ namespace {
         if (value < alpha)
             return value;
 
-        else if (value < alpha + 16)
+        else
             failRazor = true;
 
     }
