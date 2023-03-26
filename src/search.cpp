@@ -916,6 +916,11 @@ namespace {
         && !ttMove)
         depth -= 2;
 
+     if (failRazor
+        &&  depth >= 2
+        && !ttMove)
+        depth--;
+
 moves_loop: // When in check, search starts here
 
     // Step 12. A small Probcut idea, when we are in check (~4 Elo)
@@ -1180,9 +1185,6 @@ moves_loop: // When in check, search starts here
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
           r++;
-
-      if (failRazor)
-          r--;
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
