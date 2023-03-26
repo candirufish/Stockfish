@@ -555,7 +555,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR, failRazor;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, highDiffRz;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -719,7 +719,7 @@ namespace {
         // Skip early pruning when in check
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
-        failRazor = false;
+        highDiffRz = false;
         improvement = 0;
         complexity = 0;
         goto moves_loop;
@@ -773,7 +773,7 @@ namespace {
                   : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
                   :                                    156;
     improving = improvement > 0;
-    failRazor = false;
+    highDiffRz = false;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
@@ -785,9 +785,7 @@ namespace {
             return value;
 
         int max_raz = std::max(value, alpha);
-        bool almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 3);
-        if (almostRazor)
-            failRazor = true;
+        highDiffRz = (std::abs(value - alpha) * 100 <= max_raz * 50);
 
     }
 
@@ -910,12 +908,8 @@ namespace {
         && !ttMove)
         depth -= 3;
 
-    if (    failRazor
-        &&  !ttMove)
-        depth -= 2;
-
     if (depth <= 0)
-        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
+        return qsearch<PV>(pos, ss, alpha, beta);
 
 
     if (    cutNode
@@ -1191,6 +1185,9 @@ moves_loop: // When in check, search starts here
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
           r -= 1 + 12 / (3 + depth);
+
+      if (highDiffRz)
+          r--;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
