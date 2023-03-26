@@ -784,7 +784,9 @@ namespace {
         if (value < alpha)
             return value;
 
-        else if (value < alpha + 8)
+        int max_raz = std::max(value, alpha);
+        bool almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 3);
+        if (almostRazor)
             failRazor = true;
 
     }
