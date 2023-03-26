@@ -904,9 +904,12 @@ namespace {
 
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~9 Elo)
-    if (    (PvNode || failRazor)
+    if (    PvNode
         && !ttMove)
         depth -= 3;
+
+    if (failRazor)
+        depth -= 2;
 
     if (depth <= 0)
         return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
