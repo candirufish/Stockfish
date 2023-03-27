@@ -785,7 +785,7 @@ namespace {
             return value;
 
         int max_raz = std::max(value, alpha);
-        almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 5);
+        almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 3);
 
     }
 
@@ -904,13 +904,9 @@ namespace {
 
     // Step 11. If the position is not in TT, decrease depth by 3.
     // Use qsearch if depth is equal or below zero (~9 Elo)
-    if (    PvNode
+    if (    (PvNode || almostRazor)
         && !ttMove)
         depth -= 3;
-
-    if (    almostRazor
-        &&  !ttMove)
-        depth -= 2;
 
     if (depth <= 0)
         return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
