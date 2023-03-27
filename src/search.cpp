@@ -1144,6 +1144,9 @@ moves_loop: // When in check, search starts here
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5705)
               extension = 1;
+
+          else if (highDiffRz)
+              extension = 1;
       }
 
       // Add extension to new depth
@@ -1176,9 +1179,6 @@ moves_loop: // When in check, search starts here
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
           r += 2;
-
-      if (highDiffRz)
-          r--;
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
