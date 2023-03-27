@@ -555,7 +555,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR, failRazor;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, almostRazor;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -719,7 +719,7 @@ namespace {
         // Skip early pruning when in check
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
-        failRazor = false;
+        almostRazor = false;
         improvement = 0;
         complexity = 0;
         goto moves_loop;
@@ -773,7 +773,7 @@ namespace {
                   : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
                   :                                    156;
     improving = improvement > 0;
-    failRazor = false;
+    almostRazor = false;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
@@ -785,9 +785,7 @@ namespace {
             return value;
 
         int max_raz = std::max(value, alpha);
-        bool almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 3);
-        if (almostRazor)
-            failRazor = true;
+        almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 5);
 
     }
 
@@ -910,7 +908,7 @@ namespace {
         && !ttMove)
         depth -= 3;
 
-    if (    failRazor
+    if (    almostRazor
         &&  !ttMove)
         depth -= 2;
 
