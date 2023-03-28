@@ -782,10 +782,9 @@ namespace {
         if (value < alpha)
             return value;
 
-        int max_raz = std::max(value, alpha);
-        if (std::abs(value - alpha) * 100 <= max_raz * 3)
+        if (value < alpha + 16)
         {
-        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 2, cutNode);
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 3, cutNode);
         if (value < alpha)
             return value;
         }
