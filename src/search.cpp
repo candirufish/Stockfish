@@ -778,13 +778,14 @@ namespace {
     // return a fail low.
     if (eval < alpha - 426 - 252 * depth * depth)
     {
-        value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 3, cutNode);
         if (value < alpha)
             return value;
 
-        if (value < alpha + 16)
+        int max_raz = std::max(value, alpha);
+        if (std::abs(value - alpha) * 100 <= max_raz * 3)
         {
-        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 3, cutNode);
+        value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
         }
