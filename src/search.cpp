@@ -781,6 +781,14 @@ namespace {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
+
+        int max_raz = std::max(value, alpha);
+        if (std::abs(value - alpha) * 100 <= max_raz * 3)
+        {
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 2, cutNode);
+        if (value < alpha)
+            return value;
+        }
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
