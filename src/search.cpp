@@ -1000,6 +1000,18 @@ moves_loop: // When in check, search starts here
           // Skip quiet moves if movecount exceeds our FutilityMoveCount threshold (~8 Elo)
           moveCountPruning = moveCount >= futility_move_count(improving, depth);
 
+          int PRN1 = 0, PRN2 = 0, PRN3 = 0, PRN4 = 0, PRN5 = 0, PRN6 = 0, PRN7 = 0, PRN8 = 0, PRN9 = 0, PRN10 = 0, PRN11 = 0, PRN12 = 0, PRN13 = 0, PRN14 = 0;
+
+          PRN1 =  complexity <= 8 ? (PRN2 = 172, PRN3 = 221, PRN4 = 7, PRN5 = 187, PRN6 = 5, PRN7 = 5123, PRN8 = 7940, PRN9 = 2, PRN10 = 12, PRN11 = 99, PRN12 = 144, PRN13 = 24, PRN14 = 16, 6)
+                : complexity <= 16 ? (PRN2 = 185, PRN3 = 247, PRN4 = 8, PRN5 = 205, PRN6 = 5, PRN7 = 4656, PRN8 = 7353, PRN9 = 2, PRN10 = 13, PRN11 = 108, PRN12 = 138, PRN13 = 28, PRN14 = 12, 6)
+                : complexity <= 32 ? (PRN2 = 200, PRN3 = 250, PRN4 = 7, PRN5 = 251, PRN6 = 4, PRN7 = 4204, PRN8 = 7077, PRN9 = 2, PRN10 = 14, PRN11 = 107, PRN12 = 129, PRN13 = 23, PRN14 = 15, 6)
+                : complexity <= 64 ? (PRN2 = 168, PRN3 = 261, PRN4 = 7, PRN5 = 223, PRN6 = 5, PRN7 = 4575, PRN8 = 7139, PRN9 = 2, PRN10 = 14, PRN11 = 117, PRN12 = 133, PRN13 = 27, PRN14 = 14, 5)
+		        : complexity <= 128 ? (PRN2 = 172, PRN3 = 243, PRN4 = 6, PRN5 = 203, PRN6 = 5, PRN7 = 4982, PRN8 = 7504, PRN9 = 2, PRN10 = 14, PRN11 = 101, PRN12 = 141, PRN13 = 25, PRN14 = 17, 6)
+		        : complexity <= 256 ? (PRN2 = 184, PRN3 = 219, PRN4 = 7, PRN5 = 170, PRN6 = 5, PRN7 = 3961, PRN8 = 7649, PRN9 = 2, PRN10 = 12, PRN11 = 110, PRN12 = 140, PRN13 = 27, PRN14 = 15, 6)
+		        : complexity <= 512 ? (PRN2 = 180, PRN3 = 200, PRN4 = 7, PRN5 = 218, PRN6 = 5, PRN7 = 4157, PRN8 = 7033, PRN9 = 2, PRN10 = 13, PRN11 = 110, PRN12 = 116, PRN13 = 23, PRN14 = 13, 6)
+		        : complexity <= 1024 ? (PRN2 = 163, PRN3 = 233, PRN4 = 8, PRN5 = 195, PRN6 = 5, PRN7 = 4393, PRN8 = 7392, PRN9 = 2, PRN10 = 13, PRN11 = 98, PRN12 = 137, PRN13 = 24, PRN14 = 16, 7)
+		        : (PRN2 = 181, PRN3 = 230, PRN4 = 6, PRN5 = 196, PRN6 = 5, PRN7 = 4954, PRN8 = 7344, PRN9 = 2, PRN10 = 13, PRN11 = 102, PRN12 = 121, PRN13 = 26, PRN14 = 16, 6);
+
           // Reduced depth of the next LMR search
           int lmrDepth = std::max(newDepth - r, 0);
 
@@ -1008,15 +1020,16 @@ moves_loop: // When in check, search starts here
           {
               // Futility pruning for captures (~2 Elo)
               if (   !givesCheck
-                  && lmrDepth < 6
+                  && !PvNode
+                  && lmrDepth < PRN1
                   && !ss->inCheck
-                  && ss->staticEval + 182 + 230 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
-                   + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 7 < alpha)
+                  && ss->staticEval + PRN2 + PRN3 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
+                   + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / PRN4 < alpha)
                   continue;
 
               Bitboard occupied;
               // SEE based pruning (~11 Elo)
-              if (!pos.see_ge(move, occupied, Value(-206) * depth))
+              if (!pos.see_ge(move, occupied, Value(-PRN5) * depth))
               {
                   if (depth < 2 - capture)
                       continue;
@@ -1043,25 +1056,25 @@ moves_loop: // When in check, search starts here
                             + (*contHist[3])[movedPiece][to_sq(move)];
 
               // Continuation history based pruning (~2 Elo)
-              if (   lmrDepth < 5
-                  && history < -4405 * (depth - 1))
+              if (   lmrDepth < PRN6
+                  && history < -PRN7 * (depth - 1))
                   continue;
 
               history += 2 * thisThread->mainHistory[us][from_to(move)];
 
-              lmrDepth += history / 7278;
-              lmrDepth = std::max(lmrDepth, -2);
+              lmrDepth += history / PRN8;
+              lmrDepth = std::max(lmrDepth, -PRN9);
 
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
-                  && lmrDepth < 13
-                  && ss->staticEval + 103 + 138 * lmrDepth <= alpha)
+                  && lmrDepth < PRN10
+                  && ss->staticEval + PRN11 + PRN12 * lmrDepth <= alpha)
                   continue;
 
               lmrDepth = std::max(lmrDepth, 0);
 
               // Prune moves with negative SEE (~4 Elo)
-              if (!pos.see_ge(move, Value(-24 * lmrDepth * lmrDepth - 15 * lmrDepth)))
+              if (!pos.see_ge(move, Value(-PRN13 * lmrDepth * lmrDepth - PRN14 * lmrDepth)))
                   continue;
           }
       }
