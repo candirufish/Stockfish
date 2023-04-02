@@ -1182,7 +1182,7 @@ moves_loop: // When in check, search starts here
 
       if (PvNode
         && ss->ttHit
-        && tte->depth() >= depth
+        && tte->depth() >= depth + 3
         && !ttMove)
           r++;
 
