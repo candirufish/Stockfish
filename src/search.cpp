@@ -913,7 +913,7 @@ namespace {
 
     if (    almostRazor
         &&  !ttMove)
-        depth -= 2;
+        depth -= 3;
 
     if (depth <= 0)
         return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
