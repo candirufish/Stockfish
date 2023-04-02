@@ -1180,6 +1180,12 @@ moves_loop: // When in check, search starts here
       if (PvNode)
           r -= 1 + 12 / (3 + depth);
 
+      if (PvNode
+        && ss->ttHit
+        && tte->depth() >= depth
+        && !ttMove)
+          r++;
+
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
           r--;
