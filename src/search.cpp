@@ -788,7 +788,7 @@ namespace {
             return value;
 
         int max_raz = std::max(value, alpha);
-        almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 5);
+        almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 8);
 
     }
 
