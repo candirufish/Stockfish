@@ -768,14 +768,6 @@ namespace {
         thisThread->mainHistory[~us][from_to((ss-1)->currentMove)] << bonus;
     }
 
-    // Set up the improvement variable, which is the difference between the current
-    // static evaluation and the previous static evaluation at our turn (if we were
-    // in check at our previous move we look at the move prior to it). The improvement
-    // margin and the improving flag are used in various pruning heuristics.
-    improvement =   (ss-2)->staticEval != VALUE_NONE ? ss->staticEval - (ss-2)->staticEval
-                  : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
-                  :                                    156;
-    improving = improvement > 0;
     almostRazor = false;
 
     // Step 7. Razoring (~1 Elo).
@@ -788,9 +780,18 @@ namespace {
             return value;
 
         int max_raz = std::max(value, alpha);
-        almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 5);
+        almostRazor = (std::abs(value - alpha) * 100 <= max_raz * 3);
 
     }
+
+    // Set up the improvement variable, which is the difference between the current
+    // static evaluation and the previous static evaluation at our turn (if we were
+    // in check at our previous move we look at the move prior to it). The improvement
+    // margin and the improving flag are used in various pruning heuristics.
+    improvement =   (ss-2)->staticEval != VALUE_NONE ? ss->staticEval - (ss-2)->staticEval
+                  : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
+                  :                                    156;
+    improving = improvement > 0 && !almostRazor;
 
     // Step 8. Futility pruning: child node (~40 Elo).
     // The depth condition is important for mate finding.
