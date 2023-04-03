@@ -1184,7 +1184,7 @@ moves_loop: // When in check, search starts here
         && ss->ttHit
         && tte->depth() >= depth + 2
         && !ttMove)
-          r++;
+          r += 2;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
