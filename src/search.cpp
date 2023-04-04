@@ -904,7 +904,7 @@ namespace {
     ss->tteD = ss->ttHit && tte->depth() >= depth;
     if (    PvNode
         && !ttMove)
-        depth -= ss->tteD ? (ss-2)->tteD && !(ss-1)->tteD ? 5 : 4 : 2;
+        depth -= 2 + 2 * ss->tteD;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
@@ -1180,6 +1180,12 @@ moves_loop: // When in check, search starts here
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
           r -= 1 + 12 / (3 + depth);
+
+      if (PvNode
+        && ss->tteD
+        && (ss-2)->tteD
+        && !ttMove)
+          r++;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
