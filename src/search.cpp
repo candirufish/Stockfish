@@ -1192,7 +1192,7 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
       if ((ss+1)->cutoffCnt > 3)
-          r += 1 + tteD;
+          r++;
 
       // Decrease reduction if move is a killer and we have a good history (~1 Elo)
       if (move == ss->killers[0]
@@ -1221,7 +1221,7 @@ moves_loop: // When in check, search starts here
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
-          Depth d = std::clamp(newDepth - r, 1, newDepth + 1);
+          Depth d = std::clamp(newDepth - r, 1, newDepth + !tteD);
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
