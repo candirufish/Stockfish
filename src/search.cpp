@@ -950,6 +950,12 @@ moves_loop: // When in check, search starts here
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
 
+    bool tteD =             PvNode
+                         && ss->ttHit
+                         && tte->depth() >= depth + 2
+                         && !ttMove;
+
+
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
     while ((move = mp.next_move(moveCountPruning)) != MOVE_NONE)
@@ -1177,7 +1183,7 @@ moves_loop: // When in check, search starts here
           r++;
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
-      if (PvNode)
+      if (PvNode && !tteD)
           r -= 1 + 12 / (3 + depth);
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
