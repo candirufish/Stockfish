@@ -59,163 +59,6 @@ using namespace Search;
 
 namespace {
 
-int PRN1_rl2 = 6;
-int PRN1_rl4 = 6;
-int PRN1_rl8 = 6;
-int PRN1_rl16 = 6;
-int PRN1_rl24 = 6;
-int PRN1_rl32 = 6;
-int PRN1_rl48 = 6;
-int PRN1_rl64 = 6;
-int PRN1_rl80 = 6;
-int PRN1_rlF = 6;
-int PRN2_rl2 = 182;
-int PRN2_rl4 = 182;
-int PRN2_rl8 = 182;
-int PRN2_rl16 = 182;
-int PRN2_rl24 = 182;
-int PRN2_rl32 = 182;
-int PRN2_rl48 = 182;
-int PRN2_rl64 = 182;
-int PRN2_rl80 = 182;
-int PRN2_rlF = 182;
-int PRN3_rl2 = 230;
-int PRN3_rl4 = 230;
-int PRN3_rl8 = 230;
-int PRN3_rl16 = 230;
-int PRN3_rl24 = 230;
-int PRN3_rl32 = 230;
-int PRN3_rl48 = 230;
-int PRN3_rl64 = 230;
-int PRN3_rl80 = 230;
-int PRN3_rlF = 230;
-int PRN4_rl2 = 7;
-int PRN4_rl4 = 7;
-int PRN4_rl8 = 7;
-int PRN4_rl16 = 7;
-int PRN4_rl24 = 7;
-int PRN4_rl32 = 7;
-int PRN4_rl48 = 7;
-int PRN4_rl64 = 7;
-int PRN4_rl80 = 7;
-int PRN4_rlF = 7;
-int PRN5_rl2 = 206;
-int PRN5_rl4 = 206;
-int PRN5_rl8 = 206;
-int PRN5_rl16 = 206;
-int PRN5_rl24 = 206;
-int PRN5_rl32 = 206;
-int PRN5_rl48 = 206;
-int PRN5_rl64 = 206;
-int PRN5_rl80 = 206;
-int PRN5_rlF = 206;
-int PRN6_rl2 = 5;
-int PRN6_rl4 = 5;
-int PRN6_rl8 = 5;
-int PRN6_rl16 = 5;
-int PRN6_rl24 = 5;
-int PRN6_rl32 = 5;
-int PRN6_rl48 = 5;
-int PRN6_rl64 = 5;
-int PRN6_rl80 = 5;
-int PRN6_rlF = 5;
-int PRN7_rl2 = 4405;
-int PRN7_rl4 = 4405;
-int PRN7_rl8 = 4405;
-int PRN7_rl16 = 4405;
-int PRN7_rl24 = 4405;
-int PRN7_rl32 = 4405;
-int PRN7_rl48 = 4405;
-int PRN7_rl64 = 4405;
-int PRN7_rl80 = 4405;
-int PRN7_rlF = 4405;
-int PRN8_rl2 = 7278;
-int PRN8_rl4 = 7278;
-int PRN8_rl8 = 7278;
-int PRN8_rl16 = 7278;
-int PRN8_rl24 = 7278;
-int PRN8_rl32 = 7278;
-int PRN8_rl48 = 7278;
-int PRN8_rl64 = 7278;
-int PRN8_rl80 = 7278;
-int PRN8_rlF = 7278;
-int PRN9_rl2 = 2;
-int PRN9_rl4 = 2;
-int PRN9_rl8 = 2;
-int PRN9_rl16 = 2;
-int PRN9_rl24 = 2;
-int PRN9_rl32 = 2;
-int PRN9_rl48 = 2;
-int PRN9_rl64 = 2;
-int PRN9_rl80 = 2;
-int PRN9_rlF = 2;
-int PRN10_rl2 = 13;
-int PRN10_rl4 = 13;
-int PRN10_rl8 = 13;
-int PRN10_rl16 = 13;
-int PRN10_rl24 = 13;
-int PRN10_rl32 = 13;
-int PRN10_rl48 = 13;
-int PRN10_rl64 = 13;
-int PRN10_rl80 = 13;
-int PRN10_rlF = 13;
-int PRN11_rl2 = 103;
-int PRN11_rl4 = 103;
-int PRN11_rl8 = 103;
-int PRN11_rl16 = 103;
-int PRN11_rl24 = 103;
-int PRN11_rl32 = 103;
-int PRN11_rl48 = 103;
-int PRN11_rl64 = 103;
-int PRN11_rl80 = 103;
-int PRN11_rlF = 103;
-int PRN12_rl2 = 138;
-int PRN12_rl4 = 138;
-int PRN12_rl8 = 138;
-int PRN12_rl16 = 138;
-int PRN12_rl24 = 138;
-int PRN12_rl32 = 138;
-int PRN12_rl48 = 138;
-int PRN12_rl64 = 138;
-int PRN12_rl80 = 138;
-int PRN12_rlF = 138;
-int PRN13_rl2 = 24;
-int PRN13_rl4 = 24;
-int PRN13_rl8 = 24;
-int PRN13_rl16 = 24;
-int PRN13_rl24 = 24;
-int PRN13_rl32 = 24;
-int PRN13_rl48 = 24;
-int PRN13_rl64 = 24;
-int PRN13_rl80 = 24;
-int PRN13_rlF = 24;
-int PRN14_rl2 = 15;
-int PRN14_rl4 = 15;
-int PRN14_rl8 = 15;
-int PRN14_rl16 = 15;
-int PRN14_rl24 = 15;
-int PRN14_rl32 = 15;
-int PRN14_rl48 = 15;
-int PRN14_rl64 = 15;
-int PRN14_rl80 = 15;
-int PRN14_rlF = 15;
-
-   auto f1 = [](int m){return Range(0, 2 * m);};
-   TUNE(SetRange(f1), PRN1_rl2, PRN1_rl4, PRN1_rl8, PRN1_rl16, PRN1_rl24, PRN1_rl32, PRN1_rl48, PRN1_rl64, PRN1_rl80, PRN1_rlF);
-   TUNE(SetRange(f1), PRN2_rl2, PRN2_rl4, PRN2_rl8, PRN2_rl16, PRN2_rl24, PRN2_rl32, PRN2_rl48, PRN2_rl64, PRN2_rl80, PRN2_rlF);
-   TUNE(SetRange(f1), PRN3_rl2, PRN3_rl4, PRN3_rl8, PRN3_rl16, PRN3_rl24, PRN3_rl32, PRN3_rl48, PRN3_rl64, PRN3_rl80, PRN3_rlF);
-   TUNE(SetRange(f1), PRN4_rl2, PRN4_rl4, PRN4_rl8, PRN4_rl16, PRN4_rl24, PRN4_rl32, PRN4_rl48, PRN4_rl64, PRN4_rl80, PRN4_rlF);
-   TUNE(SetRange(f1), PRN5_rl2, PRN5_rl4, PRN5_rl8, PRN5_rl16, PRN5_rl24, PRN5_rl32, PRN5_rl48, PRN5_rl64, PRN5_rl80, PRN5_rlF);
-   TUNE(SetRange(f1), PRN6_rl2, PRN6_rl4, PRN6_rl8, PRN6_rl16, PRN6_rl24, PRN6_rl32, PRN6_rl48, PRN6_rl64, PRN6_rl80, PRN6_rlF);
-   TUNE(SetRange(f1), PRN7_rl2, PRN7_rl4, PRN7_rl8, PRN7_rl16, PRN7_rl24, PRN7_rl32, PRN7_rl48, PRN7_rl64, PRN7_rl80, PRN7_rlF);
-   TUNE(SetRange(f1), PRN8_rl2, PRN8_rl4, PRN8_rl8, PRN8_rl16, PRN8_rl24, PRN8_rl32, PRN8_rl48, PRN8_rl64, PRN8_rl80, PRN8_rlF);
-   TUNE(SetRange(f1), PRN9_rl2, PRN9_rl4, PRN9_rl8, PRN9_rl16, PRN9_rl24, PRN9_rl32, PRN9_rl48, PRN9_rl64, PRN9_rl80, PRN9_rlF);
-   TUNE(SetRange(f1), PRN10_rl2, PRN10_rl4, PRN10_rl8, PRN10_rl16, PRN10_rl24, PRN10_rl32, PRN10_rl48, PRN10_rl64, PRN10_rl80, PRN10_rlF);
-   TUNE(SetRange(f1), PRN11_rl2, PRN11_rl4, PRN11_rl8, PRN11_rl16, PRN11_rl24, PRN11_rl32, PRN11_rl48, PRN11_rl64, PRN11_rl80, PRN11_rlF);
-   TUNE(SetRange(f1), PRN12_rl2, PRN12_rl4, PRN12_rl8, PRN12_rl16, PRN12_rl24, PRN12_rl32, PRN12_rl48, PRN12_rl64, PRN12_rl80, PRN12_rlF);
-   TUNE(SetRange(f1), PRN13_rl2, PRN13_rl4, PRN13_rl8, PRN13_rl16, PRN13_rl24, PRN13_rl32, PRN13_rl48, PRN13_rl64, PRN13_rl80, PRN13_rlF);
-   TUNE(SetRange(f1), PRN14_rl2, PRN14_rl4, PRN14_rl8, PRN14_rl16, PRN14_rl24, PRN14_rl32, PRN14_rl48, PRN14_rl64, PRN14_rl80, PRN14_rlF);
-
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -1159,16 +1002,16 @@ moves_loop: // When in check, search starts here
 
           int PRN1 = 0, PRN2 = 0, PRN3 = 0, PRN4 = 0, PRN5 = 0, PRN6 = 0, PRN7 = 0, PRN8 = 0, PRN9 = 0, PRN10 = 0, PRN11 = 0, PRN12 = 0, PRN13 = 0, PRN14 = 0;
 
-          PRN1 =  pos.rule50_count() <= 2 ? (PRN2 = PRN2_rl2, PRN3 = PRN3_rl2, PRN4 = PRN4_rl2, PRN5 = PRN5_rl2, PRN6 = PRN6_rl2, PRN7 = PRN7_rl2, PRN8 = PRN8_rl2, PRN9 = PRN9_rl2, PRN10 = PRN10_rl2, PRN11 = PRN11_rl2, PRN12 = PRN12_rl2, PRN13 = PRN13_rl2, PRN14 = PRN14_rl2, PRN1_rl2)
-                : pos.rule50_count() <= 4 ? (PRN2 = PRN2_rl4, PRN3 = PRN3_rl4, PRN4 = PRN4_rl4, PRN5 = PRN5_rl4, PRN6 = PRN6_rl4, PRN7 = PRN7_rl4, PRN8 = PRN8_rl4, PRN9 = PRN9_rl4, PRN10 = PRN10_rl4, PRN11 = PRN11_rl4, PRN12 = PRN12_rl4, PRN13 = PRN13_rl4, PRN14 = PRN14_rl4, PRN1_rl4)
-                : pos.rule50_count() <= 8 ? (PRN2 = PRN2_rl8, PRN3 = PRN3_rl8, PRN4 = PRN4_rl8, PRN5 = PRN5_rl8, PRN6 = PRN6_rl8, PRN7 = PRN7_rl8, PRN8 = PRN8_rl8, PRN9 = PRN9_rl8, PRN10 = PRN10_rl8, PRN11 = PRN11_rl8, PRN12 = PRN12_rl8, PRN13 = PRN13_rl8, PRN14 = PRN14_rl8, PRN1_rl8)
-                : pos.rule50_count() <= 16 ? (PRN2 = PRN2_rl16, PRN3 = PRN3_rl16, PRN4 = PRN4_rl16, PRN5 = PRN5_rl16, PRN6 = PRN6_rl16, PRN7 = PRN7_rl16, PRN8 = PRN8_rl16, PRN9 = PRN9_rl16, PRN10 = PRN10_rl16, PRN11 = PRN11_rl16, PRN12 = PRN12_rl16, PRN13 = PRN13_rl16, PRN14 = PRN14_rl16, PRN1_rl16)
-                : pos.rule50_count() <= 24 ? (PRN2 = PRN2_rl24, PRN3 = PRN3_rl24, PRN4 = PRN4_rl24, PRN5 = PRN5_rl24, PRN6 = PRN6_rl24, PRN7 = PRN7_rl24, PRN8 = PRN8_rl24, PRN9 = PRN9_rl24, PRN10 = PRN10_rl24, PRN11 = PRN11_rl24, PRN12 = PRN12_rl24, PRN13 = PRN13_rl24, PRN14 = PRN14_rl24, PRN1_rl24)
-                : pos.rule50_count() <= 32 ? (PRN2 = PRN2_rl32, PRN3 = PRN3_rl32, PRN4 = PRN4_rl32, PRN5 = PRN5_rl32, PRN6 = PRN6_rl32, PRN7 = PRN7_rl32, PRN8 = PRN8_rl32, PRN9 = PRN9_rl32, PRN10 = PRN10_rl32, PRN11 = PRN11_rl32, PRN12 = PRN12_rl32, PRN13 = PRN13_rl32, PRN14 = PRN14_rl32, PRN1_rl32)
-                : pos.rule50_count() <= 48 ? (PRN2 = PRN2_rl48, PRN3 = PRN3_rl48, PRN4 = PRN4_rl48, PRN5 = PRN5_rl48, PRN6 = PRN6_rl48, PRN7 = PRN7_rl48, PRN8 = PRN8_rl48, PRN9 = PRN9_rl48, PRN10 = PRN10_rl48, PRN11 = PRN11_rl48, PRN12 = PRN12_rl48, PRN13 = PRN13_rl48, PRN14 = PRN14_rl48, PRN1_rl48)
-                : pos.rule50_count() <= 64 ? (PRN2 = PRN2_rl64, PRN3 = PRN3_rl64, PRN4 = PRN4_rl64, PRN5 = PRN5_rl64, PRN6 = PRN6_rl64, PRN7 = PRN7_rl64, PRN8 = PRN8_rl64, PRN9 = PRN9_rl64, PRN10 = PRN10_rl64, PRN11 = PRN11_rl64, PRN12 = PRN12_rl64, PRN13 = PRN13_rl64, PRN14 = PRN14_rl64, PRN1_rl64)
-                : pos.rule50_count() <= 80 ? (PRN2 = PRN2_rl80, PRN3 = PRN3_rl80, PRN4 = PRN4_rl80, PRN5 = PRN5_rl80, PRN6 = PRN6_rl80, PRN7 = PRN7_rl80, PRN8 = PRN8_rl80, PRN9 = PRN9_rl80, PRN10 = PRN10_rl80, PRN11 = PRN11_rl80, PRN12 = PRN12_rl80, PRN13 = PRN13_rl80, PRN14 = PRN14_rl80, PRN1_rl80)
-                : (PRN2 = PRN2_rlF, PRN3 = PRN3_rlF, PRN4 = PRN4_rlF, PRN5 = PRN5_rlF, PRN6 = PRN6_rlF, PRN7 = PRN7_rlF, PRN8 = PRN8_rlF, PRN9 = PRN9_rlF, PRN10 = PRN10_rlF, PRN11 = PRN11_rlF, PRN12 = PRN12_rlF, PRN13 = PRN13_rlF, PRN14 = PRN14_rlF, PRN1_rlF);
+          PRN1 =  pos.rule50_count() <= 2 ? (PRN2 = 171, PRN3 = 238, PRN4 = 8, PRN5 = 201, PRN6 = 5, PRN7 = 4631, PRN8 = 8838, PRN9 = 2, PRN10 = 12, PRN11 = 104, PRN12 = 146, PRN13 = 29, PRN14 = 13, 6)
+                : pos.rule50_count() <= 4 ? (PRN2 = 174, PRN3 = 240, PRN4 = 8, PRN5 = 204, PRN6 = 5, PRN7 = 4961, PRN8 = 6215, PRN9 = 2, PRN10 = 13, PRN11 = 92, PRN12 = 137, PRN13 = 28, PRN14 = 17, 6)
+                : pos.rule50_count() <= 8 ? (PRN2 = 165, PRN3 = 247, PRN4 = 7, PRN5 = 206, PRN6 = 5, PRN7 = 4773, PRN8 = 7091, PRN9 = 2, PRN10 = 11, PRN11 = 102, PRN12 = 118, PRN13 = 20, PRN14 = 16, 6)
+                : pos.rule50_count() <= 16 ? (PRN2 = 173, PRN3 = 233, PRN4 = 7, PRN5 = 211, PRN6 = 4, PRN7 = 4359, PRN8 = 8136, PRN9 = 2, PRN10 = 11, PRN11 = 92, PRN12 = 138, PRN13 = 27, PRN14 = 16, 6)
+                : pos.rule50_count() <= 24 ? (PRN2 = 180, PRN3 = 235, PRN4 = 7, PRN5 = 224, PRN6 = 4, PRN7 = 4003, PRN8 = 6794, PRN9 = 2, PRN10 = 14, PRN11 = 108, PRN12 = 138, PRN13 = 24, PRN14 = 15, 5)
+                : pos.rule50_count() <= 32 ? (PRN2 = 162, PRN3 = 222, PRN4 = 8, PRN5 = 214, PRN6 = 5, PRN7 = 4707, PRN8 = 8268, PRN9 = 2, PRN10 = 13, PRN11 = 109, PRN12 = 131, PRN13 = 24, PRN14 = 16, 6)
+                : pos.rule50_count() <= 48 ? (PRN2 = 165, PRN3 = 225, PRN4 = 7, PRN5 = 208, PRN6 = 5, PRN7 = 4316, PRN8 = 8207, PRN9 = 2, PRN10 = 14, PRN11 = 107, PRN12 = 136, PRN13 = 22, PRN14 = 16, 6)
+                : pos.rule50_count() <= 64 ? (PRN2 = 190, PRN3 = 238, PRN4 = 7, PRN5 = 210, PRN6 = 6, PRN7 = 4116, PRN8 = 7316, PRN9 = 2, PRN10 = 13, PRN11 = 109, PRN12 = 116, PRN13 = 21, PRN14 = 14, 7)
+                : pos.rule50_count() <= 80 ? (PRN2 = 181, PRN3 = 224, PRN4 = 7, PRN5 = 233, PRN6 = 5, PRN7 = 3873, PRN8 = 6733, PRN9 = 2, PRN10 = 13, PRN11 = 102, PRN12 = 131, PRN13 = 23, PRN14 = 14, 6)
+                : (PRN2 = 155, PRN3 = 224, PRN4 = 8, PRN5 = 213, PRN6 = 5, PRN7 = 4082, PRN8 = 7255, PRN9 = 2, PRN10 = 13, PRN11 = 113, PRN12 = 149, PRN13 = 26, PRN14 = 16, 5);
 
           // Reduced depth of the next LMR search
           int lmrDepth = std::max(newDepth - r, 0);
