@@ -903,7 +903,7 @@ namespace {
 
     if (depth <= 0)
     {
-        ss->tteD = true;
+        ss->tteD = ss->ttHit && tte->depth() >= depth;
         return qsearch<PV>(pos, ss, alpha, beta);
     }
 
