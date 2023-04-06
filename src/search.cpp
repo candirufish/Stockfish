@@ -903,8 +903,8 @@ namespace {
 
     if (rootNode
         && tte->depth() >= depth
-        && thisThread->failedHighCnt >= 2)
-        depth -= 3;
+        && thisThread->failedHighCnt >= 1)
+        depth -= std::clamp(thisThread->failedHighCnt, 0, 4);
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
