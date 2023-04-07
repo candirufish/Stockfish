@@ -902,6 +902,7 @@ namespace {
         depth -= 2 + 2 * (ss->ttHit &&  tte->depth() >= depth);
 
     if (rootNode
+        && depth <= 6
         && tte->depth() >= depth
         && thisThread->failedHighCnt >= 2)
         depth -= 3;
