@@ -371,7 +371,7 @@ void Thread::search() {
           // Start with a small aspiration window and, in the case of a fail
           // high/low, re-search with a bigger window until we don't fail
           // high/low anymore.
-          int failedHighCnt = 0;
+          failedHighCnt = 0;
           while (true)
           {
               // Adjust the effective depth searched, but ensuring at least one effective increment for every
@@ -900,6 +900,11 @@ namespace {
     if (    PvNode
         && !ttMove)
         depth -= 2 + 2 * (ss->ttHit &&  tte->depth() >= depth);
+
+    if (rootNode
+        && tte->depth() >= depth
+        && thisThread->failedHighCnt >= 2)
+        depth -= std::clamp(thisThread->failedHighCnt, 2, 4);
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
