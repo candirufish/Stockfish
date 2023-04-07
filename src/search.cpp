@@ -913,7 +913,7 @@ namespace {
 
     betaMargin = beta + 1024 - 256 * improving;
 
-    if (!PvNode && !ss->ttHit && !excludedMove && ss->staticEval >= betaMargin)
+    if (!PvNode && !ss->ttHit && depth <= 6 && !excludedMove && ss->staticEval >= betaMargin)
     {
         value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
         if (value > betaMargin)
