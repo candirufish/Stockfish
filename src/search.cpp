@@ -905,7 +905,7 @@ namespace {
         && depth > 4
         && tte->depth() >= depth
         && thisThread->failedHighCnt >= 2)
-        depth -= 3;
+        depth--;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
