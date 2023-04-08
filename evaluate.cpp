@@ -1,6 +1,6 @@
 /*
   Stockfish, a UCI chess playing engine derived from Glaurung 2.1
-  Copyright (C) 2004-2023 The Stockfish developers (see AUTHORS file)
+  Copyright (C) 2004-2022 The Stockfish developers (see AUTHORS file)
 
   Stockfish is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 #include "timeman.h"
 #include "uci.h"
 #include "incbin/incbin.h"
-#include "nnue/evaluate_nnue.h"
+
 
 // Macro to embed the default efficiently updatable neural network (NNUE) file
 // data in the engine binary (using incbin.h, by Dale Weiler).
@@ -82,18 +82,20 @@ namespace Eval {
         eval_file = EvalFileDefaultName;
 
     #if defined(DEFAULT_NNUE_DIRECTORY)
+    #define stringify2(x) #x
+    #define stringify(x) stringify2(x)
     vector<string> dirs = { "<internal>" , "" , CommandLine::binaryDirectory , stringify(DEFAULT_NNUE_DIRECTORY) };
     #else
     vector<string> dirs = { "<internal>" , "" , CommandLine::binaryDirectory };
     #endif
 
-    for (const string& directory : dirs)
+    for (string directory : dirs)
         if (currentEvalFileName != eval_file)
         {
             if (directory != "<internal>")
             {
                 ifstream stream(directory + eval_file, ios::binary);
-                if (NNUE::load_eval(eval_file, stream))
+                if (load_eval(eval_file, stream))
                     currentEvalFileName = eval_file;
             }
 
@@ -109,7 +111,7 @@ namespace Eval {
                 (void) gEmbeddedNNUEEnd; // Silence warning on unused variable
 
                 istream stream(&buffer);
-                if (NNUE::load_eval(eval_file, stream))
+                if (load_eval(eval_file, stream))
                     currentEvalFileName = eval_file;
             }
         }
@@ -157,24 +159,24 @@ namespace Trace {
 
   Score scores[TERM_NB][COLOR_NB];
 
-  static double to_cp(Value v) { return double(v) / UCI::NormalizeToPawnValue; }
+  double to_cp(Value v) { return double(v) / PawnValueEg; }
 
-  static void add(int idx, Color c, Score s) {
+  void add(int idx, Color c, Score s) {
     scores[idx][c] = s;
   }
 
-  static void add(int idx, Score w, Score b = SCORE_ZERO) {
+  void add(int idx, Score w, Score b = SCORE_ZERO) {
     scores[idx][WHITE] = w;
     scores[idx][BLACK] = b;
   }
 
-  static std::ostream& operator<<(std::ostream& os, Score s) {
+  std::ostream& operator<<(std::ostream& os, Score s) {
     os << std::setw(5) << to_cp(mg_value(s)) << " "
        << std::setw(5) << to_cp(eg_value(s));
     return os;
   }
 
-  static std::ostream& operator<<(std::ostream& os, Term t) {
+  std::ostream& operator<<(std::ostream& os, Term t) {
 
     if (t == MATERIAL || t == IMBALANCE || t == WINNABLE || t == TOTAL)
         os << " ----  ----"    << " | " << " ----  ----";
@@ -190,9 +192,14 @@ using namespace Trace;
 
 namespace {
 
+  int P1=1064; TUNE(SetRange(1000,1130),P1);
+  int P2=106; TUNE(SetRange(-106, 212), P2);
+  int P3=104, P4=131; TUNE(SetRange(50, 200), P3, P4);
+  int P5=269; TUNE(SetRange(100, 400), P5);
+
   // Threshold for lazy and space evaluation
-  constexpr Value LazyThreshold1    =  Value(3622);
-  constexpr Value LazyThreshold2    =  Value(1962);
+  constexpr Value LazyThreshold1    =  Value(3631);
+  constexpr Value LazyThreshold2    =  Value(2084);
   constexpr Value SpaceThreshold    =  Value(11551);
 
   // KingAttackWeights[PieceType] contains king attack weights by piece type
@@ -386,10 +393,10 @@ namespace {
   template<Tracing T> template<Color Us, PieceType Pt>
   Score Evaluation<T>::pieces() {
 
-    constexpr Color Them = ~Us;
-    [[maybe_unused]] constexpr Direction Down = -pawn_push(Us);
-    [[maybe_unused]] constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
-                                                                    : Rank5BB | Rank4BB | Rank3BB);
+    constexpr Color     Them = ~Us;
+    constexpr Direction Down = -pawn_push(Us);
+    constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
+                                                   : Rank5BB | Rank4BB | Rank3BB);
     Bitboard b1 = pos.pieces(Us, Pt);
     Bitboard b, bb;
     Score score = SCORE_ZERO;
@@ -428,7 +435,7 @@ namespace {
         int mob = popcount(b & mobilityArea[Us]);
         mobility[Us] += MobilityBonus[Pt - 2][mob];
 
-        if constexpr (Pt == BISHOP || Pt == KNIGHT)
+        if (Pt == BISHOP || Pt == KNIGHT)
         {
             // Bonus if the piece is on an outpost square or can reach one
             // Bonus for knights (UncontestedOutpost) if few relevant targets
@@ -979,7 +986,7 @@ namespace {
     // Initialize score by reading the incrementally updated scores included in
     // the position object (material + piece square tables) and the material
     // imbalance. Score is computed internally from the white point of view.
-    Score score = pos.psq_score() + me->imbalance();
+    Score score = pos.psq_score() + me->imbalance() + pos.this_thread()->trend;
 
     // Probe the pawn hash table
     pe = Pawns::probe(pos);
@@ -1049,47 +1056,47 @@ make_v:
 Value Eval::evaluate(const Position& pos, int* complexity) {
 
   Value v;
+  Color stm = pos.side_to_move();
   Value psq = pos.psq_eg_stm();
+  // Deciding between classical and NNUE eval (~10 Elo): for high PSQ imbalance we use classical,
+  // but we switch to NNUE during long shuffling or with high material on the board.
+  bool useClassical =    (pos.this_thread()->depth > 9 || pos.count<ALL_PIECES>() > 7)
+                      && abs(psq) * 5 > (856 + pos.non_pawn_material() / 64) * (10 + pos.rule50_count());
 
-  // We use the much less accurate but faster Classical eval when the NNUE
-  // option is set to false. Otherwise we use the NNUE eval unless the
-  // PSQ advantage is decisive. (~4 Elo at STC, 1 Elo at LTC)
-  bool useClassical = !useNNUE || abs(psq) > 2048;
-
-  if (useClassical)
-      v = Evaluation<NO_TRACE>(pos).value();
-  else
+  // Deciding between classical and NNUE eval (~10 Elo): for high PSQ imbalance we use classical,
+  // but we switch to NNUE during long shuffling or with high material on the board.
+  if (!useNNUE || useClassical)
   {
-      int nnueComplexity;
-      int scale = 1001 + 5 * pos.count<PAWN>() + 61 * pos.non_pawn_material() / 4096;
+      v = Evaluation<NO_TRACE>(pos).value();
+      useClassical = abs(v) >= 297;
+  }
 
-      Color stm = pos.side_to_move();
-      Value optimism = pos.this_thread()->optimism[stm];
+  // If result of a classical evaluation is much lower than threshold fall back to NNUE
+  if (useNNUE && !useClassical)
+  {
+       int nnueComplexity;
+       int scale = P1 + P2 * pos.non_pawn_material() / 5120;
+       Value optimism = pos.this_thread()->optimism[stm];
 
-      Value nnue = NNUE::evaluate(pos, true, &nnueComplexity);
+       Value nnue = NNUE::evaluate(pos, true, &nnueComplexity);
+       // Blend nnue complexity with (semi)classical complexity
+       nnueComplexity = (P3 * nnueComplexity + P4 * abs(nnue - psq)) / 256;
+       if (complexity) // Return hybrid NNUE complexity to caller
+           *complexity = nnueComplexity;
 
-      // Blend nnue complexity with (semi)classical complexity
-      nnueComplexity = (  406 * nnueComplexity
-                        + (424 + optimism) * abs(psq - nnue)
-                        ) / 1024;
-
-      // Return hybrid NNUE complexity to caller
-      if (complexity)
-          *complexity = nnueComplexity;
-
-      optimism = optimism * (272 + nnueComplexity) / 256;
-      v = (nnue * scale + optimism * (scale - 748)) / 1024;
+       optimism = optimism * (P5 + nnueComplexity) / 256;
+       v = (nnue * scale + optimism * (scale - 754)) / 1024;
   }
 
   // Damp down the evaluation linearly when shuffling
-  v = v * (200 - pos.rule50_count()) / 214;
+  v = v * (195 - pos.rule50_count()) / 211;
 
   // Guarantee evaluation does not hit the tablebase range
   v = std::clamp(v, VALUE_TB_LOSS_IN_MAX_PLY + 1, VALUE_TB_WIN_IN_MAX_PLY - 1);
 
   // When not using NNUE, return classical complexity to caller
-  if (complexity && useClassical)
-      *complexity = abs(v - psq);
+  if (complexity && (!useNNUE || useClassical))
+       *complexity = abs(v - psq);
 
   return v;
 }
@@ -1112,6 +1119,8 @@ std::string Eval::trace(Position& pos) {
   std::memset(scores, 0, sizeof(scores));
 
   // Reset any global variable used in eval
+  pos.this_thread()->depth           = 0;
+  pos.this_thread()->trend           = SCORE_ZERO;
   pos.this_thread()->bestValue       = VALUE_ZERO;
   pos.this_thread()->optimism[WHITE] = VALUE_ZERO;
   pos.this_thread()->optimism[BLACK] = VALUE_ZERO;

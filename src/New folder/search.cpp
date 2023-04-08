@@ -72,7 +72,7 @@ namespace {
 
   Depth reduction(bool i, Depth d, int mn, Value delta, Value rootDelta) {
     int r = Reductions[d] * Reductions[mn];
-    return (r + 1449 - int(delta) * 937 / int(rootDelta)) / 1024 + (!i && r > 941);
+    return (r + 1449 - int(delta) * 1032 / int(rootDelta)) / 1024 + (!i && r > 941);
   }
 
   constexpr int futility_move_count(bool improving, Depth depth) {
@@ -82,7 +82,7 @@ namespace {
 
   // History and stats update bonus, based on depth
   int stat_bonus(Depth d) {
-    return std::min(341 * d - 470, 1710);
+    return std::min(340 * d - 470, 1855);
   }
 
   // Add a small random component to draw evaluations to avoid 3-fold blindness
@@ -290,15 +290,9 @@ void Thread::search() {
 
   bestValue = delta = alpha = -VALUE_INFINITE;
   beta = VALUE_INFINITE;
-  optimism[WHITE] = optimism[BLACK] = VALUE_ZERO;
 
   if (mainThread)
   {
-
-      int rootComplexity;
-      Eval::evaluate(rootPos, &rootComplexity);
-
-      mainThread->complexity = std::min(1.03 + (rootComplexity - 241) / 1552.0, 1.45);
 
       if (mainThread->bestPreviousScore == VALUE_INFINITE)
           for (int i = 0; i < 4; ++i)
@@ -317,6 +311,10 @@ void Thread::search() {
       multiPV = std::max(multiPV, (size_t)4);
 
   multiPV = std::min(multiPV, rootMoves.size());
+
+  complexityAverage.set(153, 1);
+
+  optimism[us] = optimism[~us] = VALUE_ZERO;
 
   int searchAgainCounter = 0;
 
@@ -475,8 +473,10 @@ void Thread::search() {
           timeReduction = lastBestMoveDepth + 8 < completedDepth ? 1.57 : 0.65;
           double reduction = (1.4 + mainThread->previousTimeReduction) / (2.08 * timeReduction);
           double bestMoveInstability = 1 + 1.8 * totBestMoveChanges / Threads.size();
+          int complexity = mainThread->complexityAverage.value();
+          double complexPosition = std::min(1.03 + (complexity - 241) / 1552.0, 1.45);
 
-          double totalTime = Time.optimum() * fallingEval * reduction * bestMoveInstability * mainThread->complexity;
+          double totalTime = Time.optimum() * fallingEval * reduction * bestMoveInstability * complexPosition;
 
           // Cap used time in case of a single legal move for a better viewer experience in tournaments
           // yielding correct scores and sufficiently fast moves.
@@ -756,6 +756,8 @@ namespace {
         tte->save(posKey, VALUE_NONE, ss->ttPv, BOUND_NONE, DEPTH_NONE, MOVE_NONE, eval);
     }
 
+    thisThread->complexityAverage.update(complexity);
+
     // Use static evaluation difference to improve quiet move ordering (~4 Elo)
     if (is_ok((ss-1)->currentMove) && !(ss-1)->inCheck && !priorCapture)
     {
@@ -775,7 +777,7 @@ namespace {
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
-    if (eval < alpha - 426 - 256 * depth * depth)
+    if (eval < alpha - 426 - 252 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
@@ -797,7 +799,7 @@ namespace {
         && (ss-1)->statScore < 18755
         &&  eval >= beta
         &&  eval >= ss->staticEval
-        &&  ss->staticEval >= beta - 20 * depth - improvement / 13 + 253 + complexity / 25
+        &&  ss->staticEval >= beta - 19 * depth - improvement / 13 + 253 + complexity / 25
         && !excludedMove
         &&  pos.non_pawn_material(us)
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
@@ -805,7 +807,7 @@ namespace {
         assert(eval - beta >= 0);
 
         // Null move dynamic reduction based on depth, eval and complexity of position
-        Depth R = std::min(int(eval - beta) / 172, 6) + depth / 3 + 4 - (complexity > 825);
+        Depth R = std::min(int(eval - beta) / 168, 6) + depth / 3 + 4 - (complexity > 825);
 
         ss->currentMove = MOVE_NULL;
         ss->continuationHistory = &thisThread->continuationHistory[0][0][NO_PIECE][0];
@@ -998,16 +1000,15 @@ moves_loop: // When in check, search starts here
 
           int PRN1 = 0, PRN2 = 0, PRN3 = 0, PRN4 = 0, PRN5 = 0, PRN6 = 0, PRN7 = 0, PRN8 = 0, PRN9 = 0, PRN10 = 0, PRN11 = 0, PRN12 = 0, PRN13 = 0, PRN14 = 0;
 
-          PRN1 =  pos.rule50_count() <= 2 ? (PRN2 = 171, PRN3 = 238, PRN4 = 8, PRN5 = 201, PRN6 = 5, PRN7 = 4631, PRN8 = 8838, PRN9 = 2, PRN10 = 12, PRN11 = 104, PRN12 = 146, PRN13 = 29, PRN14 = 13, 6)
-                : pos.rule50_count() <= 4 ? (PRN2 = 174, PRN3 = 240, PRN4 = 8, PRN5 = 204, PRN6 = 5, PRN7 = 4961, PRN8 = 6215, PRN9 = 2, PRN10 = 13, PRN11 = 92, PRN12 = 137, PRN13 = 28, PRN14 = 17, 6)
-                : pos.rule50_count() <= 8 ? (PRN2 = 165, PRN3 = 247, PRN4 = 7, PRN5 = 206, PRN6 = 5, PRN7 = 4773, PRN8 = 7091, PRN9 = 2, PRN10 = 11, PRN11 = 102, PRN12 = 118, PRN13 = 20, PRN14 = 16, 6)
-                : pos.rule50_count() <= 16 ? (PRN2 = 173, PRN3 = 233, PRN4 = 7, PRN5 = 211, PRN6 = 4, PRN7 = 4359, PRN8 = 8136, PRN9 = 2, PRN10 = 11, PRN11 = 92, PRN12 = 138, PRN13 = 27, PRN14 = 16, 6)
-                : pos.rule50_count() <= 24 ? (PRN2 = 180, PRN3 = 235, PRN4 = 7, PRN5 = 224, PRN6 = 4, PRN7 = 4003, PRN8 = 6794, PRN9 = 2, PRN10 = 14, PRN11 = 108, PRN12 = 138, PRN13 = 24, PRN14 = 15, 5)
-                : pos.rule50_count() <= 32 ? (PRN2 = 162, PRN3 = 222, PRN4 = 8, PRN5 = 214, PRN6 = 5, PRN7 = 4707, PRN8 = 8268, PRN9 = 2, PRN10 = 13, PRN11 = 109, PRN12 = 131, PRN13 = 24, PRN14 = 16, 6)
-                : pos.rule50_count() <= 48 ? (PRN2 = 165, PRN3 = 225, PRN4 = 7, PRN5 = 208, PRN6 = 5, PRN7 = 4316, PRN8 = 8207, PRN9 = 2, PRN10 = 14, PRN11 = 107, PRN12 = 136, PRN13 = 22, PRN14 = 16, 6)
-                : pos.rule50_count() <= 64 ? (PRN2 = 190, PRN3 = 238, PRN4 = 7, PRN5 = 210, PRN6 = 6, PRN7 = 4116, PRN8 = 7316, PRN9 = 2, PRN10 = 13, PRN11 = 109, PRN12 = 116, PRN13 = 21, PRN14 = 14, 7)
-                : pos.rule50_count() <= 80 ? (PRN2 = 181, PRN3 = 224, PRN4 = 7, PRN5 = 233, PRN6 = 5, PRN7 = 3873, PRN8 = 6733, PRN9 = 2, PRN10 = 13, PRN11 = 102, PRN12 = 131, PRN13 = 23, PRN14 = 14, 6)
-                : (PRN2 = 155, PRN3 = 224, PRN4 = 8, PRN5 = 213, PRN6 = 5, PRN7 = 4082, PRN8 = 7255, PRN9 = 2, PRN10 = 13, PRN11 = 113, PRN12 = 149, PRN13 = 26, PRN14 = 16, 5);
+          PRN1 =  complexity <= 8 ? (PRN2 = 172, PRN3 = 222, PRN4 = 7, PRN5 = 186, PRN6 = 5, PRN7 = 5115, PRN8 = 7954, PRN9 = 2, PRN10 = 12, PRN11 = 99, PRN12 = 144, PRN13 = 24, PRN14 = 16, 6)
+                : complexity <= 16 ? (PRN2 = 186, PRN3 = 247, PRN4 = 8, PRN5 = 205, PRN6 = 5, PRN7 = 4661, PRN8 = 7361, PRN9 = 2, PRN10 = 13, PRN11 = 108, PRN12 = 138, PRN13 = 28, PRN14 = 12, 6)
+                : complexity <= 32 ? (PRN2 = 200, PRN3 = 249, PRN4 = 7, PRN5 = 251, PRN6 = 4, PRN7 = 4203, PRN8 = 7074, PRN9 = 2, PRN10 = 14, PRN11 = 107, PRN12 = 129, PRN13 = 23, PRN14 = 15, 6)
+                : complexity <= 64 ? (PRN2 = 168, PRN3 = 262, PRN4 = 7, PRN5 = 223, PRN6 = 5, PRN7 = 4580, PRN8 = 7131, PRN9 = 2, PRN10 = 14, PRN11 = 117, PRN12 = 133, PRN13 = 27, PRN14 = 14, 5)
+		        : complexity <= 128 ? (PRN2 = 172, PRN3 = 244, PRN4 = 6, PRN5 = 203, PRN6 = 5, PRN7 = 4977, PRN8 = 7502, PRN9 = 2, PRN10 = 14, PRN11 = 101, PRN12 = 140, PRN13 = 25, PRN14 = 17, 6)
+		        : complexity <= 256 ? (PRN2 = 183, PRN3 = 219, PRN4 = 7, PRN5 = 169, PRN6 = 5, PRN7 = 3956, PRN8 = 7663, PRN9 = 2, PRN10 = 12, PRN11 = 110, PRN12 = 140, PRN13 = 27, PRN14 = 15, 6)
+		        : complexity <= 512 ? (PRN2 = 180, PRN3 = 199, PRN4 = 7, PRN5 = 218, PRN6 = 5, PRN7 = 4158, PRN8 = 7018, PRN9 = 2, PRN10 = 13, PRN11 = 110, PRN12 = 115, PRN13 = 23, PRN14 = 13, 6)
+		        : complexity <= 1024 ? (PRN2 = 163, PRN3 = 233, PRN4 = 8, PRN5 = 195, PRN6 = 5, PRN7 = 4398, PRN8 = 7383, PRN9 = 2, PRN10 = 13, PRN11 = 99, PRN12 = 137, PRN13 = 24, PRN14 = 16, 7)
+		        : (PRN2 = 181, PRN3 = 229, PRN4 = 6, PRN5 = 196, PRN6 = 5, PRN7 = 4962, PRN8 = 7341, PRN9 = 2, PRN10 = 13, PRN11 = 102, PRN12 = 122, PRN13 = 26, PRN14 = 16, 6);
 
           // Reduced depth of the next LMR search
           int lmrDepth = std::max(newDepth - r, 0);
@@ -1017,6 +1018,7 @@ moves_loop: // When in check, search starts here
           {
               // Futility pruning for captures (~2 Elo)
               if (   !givesCheck
+                  && !PvNode
                   && lmrDepth < PRN1
                   && !ss->inCheck
                   && ss->staticEval + PRN2 + PRN3 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
@@ -1070,7 +1072,6 @@ moves_loop: // When in check, search starts here
               lmrDepth = std::max(lmrDepth, 0);
 
               // Prune moves with negative SEE (~4 Elo)
-
               if (!pos.see_ge(move, Value(-PRN13 * lmrDepth * lmrDepth - PRN14 * lmrDepth)))
                   continue;
           }
@@ -1207,10 +1208,10 @@ moves_loop: // When in check, search starts here
                      + (*contHist[0])[movedPiece][to_sq(move)]
                      + (*contHist[1])[movedPiece][to_sq(move)]
                      + (*contHist[3])[movedPiece][to_sq(move)]
-                     - 4082;
+                     - 4182;
 
       // Decrease/increase reduction for moves with a good/bad history (~25 Elo)
-      r -= ss->statScore / (11079 + 4626 * (depth > 6 && depth < 19));
+      r -= ss->statScore / (11791 + 3992 * (depth > 6 && depth < 19));
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1271,9 +1272,6 @@ moves_loop: // When in check, search starts here
           (ss+1)->pv[0] = MOVE_NONE;
 
           value = -search<PV>(pos, ss+1, -beta, -alpha, newDepth, false);
-
-          if (moveCount > 1 && newDepth >= depth && !capture)
-              update_continuation_histories(ss, movedPiece, to_sq(move), -stat_bonus(newDepth));
       }
 
       // Step 19. Undo move
@@ -1347,18 +1345,16 @@ moves_loop: // When in check, search starts here
 
               if (PvNode && value < beta) // Update alpha! Always alpha < beta
               {
+                  alpha = value;
 
                   // Reduce other moves if we have found at least one score improvement (~1 Elo)
                   if (   depth > 1
-                      && ((improving && complexity > 971) || (value < (5 * alpha + 75 * beta) / 87) || depth < 6)
-                      && beta  <  12535
-                      && value > -12535) {
-                      bool extraReduction = depth > 2 && alpha > -12535 && bestValue != -VALUE_INFINITE && (value - bestValue) > (7 * (beta - alpha)) / 8;
-                      depth -= 1 + extraReduction;
-                  }
+                      && depth < 6
+                      && beta  <  10534
+                      && alpha > -10534)
+                      depth -= 1;
 
                   assert(depth > 0);
-                  alpha = value;
               }
               else
               {
