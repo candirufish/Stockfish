@@ -901,12 +901,6 @@ namespace {
         && !ttMove)
         depth -= 2 + 2 * (ss->ttHit &&  tte->depth() >= depth);
 
-    if (rootNode
-        && depth > 4
-        && tte->depth() >= depth
-        && thisThread->failedHighCnt >= 2)
-        depth--;
-
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
@@ -1142,6 +1136,12 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5705)
               extension = 1;
       }
+
+    if (rootNode
+        && depth > 4
+        && tte->depth() >= depth
+        && thisThread->failedHighCnt >= 2)
+        extension = -1;
 
       // Add extension to new depth
       newDepth += extension;
