@@ -996,6 +996,19 @@ moves_loop: // When in check, search starts here
           // Skip quiet moves if movecount exceeds our FutilityMoveCount threshold (~8 Elo)
           moveCountPruning = moveCount >= futility_move_count(improving, depth);
 
+          int PRN1 = 0, PRN2 = 0, PRN3 = 0, PRN4 = 0, PRN5 = 0, PRN6 = 0, PRN7 = 0, PRN8 = 0, PRN9 = 0, PRN10 = 0, PRN11 = 0, PRN12 = 0, PRN13 = 0, PRN14 = 0;
+
+          PRN1 =  pos.rule50_count() <= 2 ? (PRN2 = 201, PRN3 = 226, PRN4 = 8, PRN5 = 214, PRN6 = 5, PRN7 = 5026, PRN8 = 9065, PRN9 = 2, PRN10 = 12, PRN11 = 112, PRN12 = 156, PRN13 = 30, PRN14 = 12, 5)
+                : pos.rule50_count() <= 4 ? (PRN2 = 142, PRN3 = 263, PRN4 = 7, PRN5 = 216, PRN6 = 5, PRN7 = 5312, PRN8 = 6351, PRN9 = 2, PRN10 = 13, PRN11 = 88, PRN12 = 137, PRN13 = 32, PRN14 = 17, 6)
+                : pos.rule50_count() <= 8 ? (PRN2 = 146, PRN3 = 252, PRN4 = 6, PRN5 = 203, PRN6 = 5, PRN7 = 4492, PRN8 = 6885, PRN9 = 2, PRN10 = 11, PRN11 = 102, PRN12 = 126, PRN13 = 19, PRN14 = 17, 6)
+                : pos.rule50_count() <= 16 ? (PRN2 = 153, PRN3 = 230, PRN4 = 9, PRN5 = 219, PRN6 = 4, PRN7 = 3990, PRN8 = 8192, PRN9 = 2, PRN10 = 11, PRN11 = 93, PRN12 = 154, PRN13 = 27, PRN14 = 16, 7)
+                : pos.rule50_count() <= 24 ? (PRN2 = 188, PRN3 = 269, PRN4 = 8, PRN5 = 254, PRN6 = 4, PRN7 = 4111, PRN8 = 6903, PRN9 = 2, PRN10 = 14, PRN11 = 107, PRN12 = 124, PRN13 = 27, PRN14 = 15, 5)
+                : pos.rule50_count() <= 32 ? (PRN2 = 151, PRN3 = 186, PRN4 = 8, PRN5 = 201, PRN6 = 5, PRN7 = 4538, PRN8 = 8640, PRN9 = 2, PRN10 = 13, PRN11 = 114, PRN12 = 121, PRN13 = 19, PRN14 = 18, 6)
+                : pos.rule50_count() <= 48 ? (PRN2 = 169, PRN3 = 173, PRN4 = 7, PRN5 = 228, PRN6 = 6, PRN7 = 4537, PRN8 = 9736, PRN9 = 2, PRN10 = 13, PRN11 = 123, PRN12 = 149, PRN13 = 25, PRN14 = 17, 7)
+                : pos.rule50_count() <= 64 ? (PRN2 = 193, PRN3 = 224, PRN4 = 7, PRN5 = 212, PRN6 = 5, PRN7 = 4227, PRN8 = 8190, PRN9 = 2, PRN10 = 14, PRN11 = 109, PRN12 = 104, PRN13 = 19, PRN14 = 12, 7)
+                : pos.rule50_count() <= 80 ? (PRN2 = 166, PRN3 = 241, PRN4 = 6, PRN5 = 222, PRN6 = 4, PRN7 = 3615, PRN8 = 6987, PRN9 = 2, PRN10 = 14, PRN11 = 99, PRN12 = 137, PRN13 = 19, PRN14 = 13, 5)
+                : (PRN2 = 152, PRN3 = 201, PRN4 = 8, PRN5 = 209, PRN6 = 5, PRN7 = 3052, PRN8 = 7627, PRN9 = 2, PRN10 = 12, PRN11 = 115, PRN12 = 170, PRN13 = 23, PRN14 = 15, 5);
+
           // Reduced depth of the next LMR search
           int lmrDepth = std::max(newDepth - r, 0);
 
@@ -1004,15 +1017,15 @@ moves_loop: // When in check, search starts here
           {
               // Futility pruning for captures (~2 Elo)
               if (   !givesCheck
-                  && lmrDepth < 6
+                  && lmrDepth < PRN1
                   && !ss->inCheck
-                  && ss->staticEval + 182 + 230 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
-                   + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 7 < alpha)
+                  && ss->staticEval + PRN2 + PRN3 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
+                   + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / PRN4 < alpha)
                   continue;
 
               Bitboard occupied;
               // SEE based pruning (~11 Elo)
-              if (!pos.see_ge(move, occupied, Value(-206) * depth))
+              if (!pos.see_ge(move, occupied, Value(-PRN5) * depth))
               {
                   if (depth < 2 - capture)
                       continue;
@@ -1039,25 +1052,26 @@ moves_loop: // When in check, search starts here
                             + (*contHist[3])[movedPiece][to_sq(move)];
 
               // Continuation history based pruning (~2 Elo)
-              if (   lmrDepth < 5
-                  && history < -4405 * (depth - 1))
+              if (   lmrDepth < PRN6
+                  && history < -PRN7 * (depth - 1))
                   continue;
 
               history += 2 * thisThread->mainHistory[us][from_to(move)];
 
-              lmrDepth += history / 7278;
-              lmrDepth = std::max(lmrDepth, -2);
+              lmrDepth += history / PRN8;
+              lmrDepth = std::max(lmrDepth, -PRN9);
 
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
-                  && lmrDepth < 13
-                  && ss->staticEval + 103 + 138 * lmrDepth <= alpha)
+                  && lmrDepth < PRN10
+                  && ss->staticEval + PRN11 + PRN12 * lmrDepth <= alpha)
                   continue;
 
               lmrDepth = std::max(lmrDepth, 0);
 
               // Prune moves with negative SEE (~4 Elo)
-              if (!pos.see_ge(move, Value(-24 * lmrDepth * lmrDepth - 16 * lmrDepth)))
+
+              if (!pos.see_ge(move, Value(-PRN13 * lmrDepth * lmrDepth - PRN14 * lmrDepth)))
                   continue;
           }
       }
