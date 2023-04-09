@@ -1140,7 +1140,7 @@ moves_loop: // When in check, search starts here
     if (rootNode
         && depth > 4
         && tte->depth() >= depth
-        && thisThread->failedHighCnt >= 3)
+        && thisThread->failedHighCnt >= 4)
         extension = -2;
 
       // Add extension to new depth
