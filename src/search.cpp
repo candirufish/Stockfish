@@ -902,7 +902,7 @@ namespace {
         depth -= 2 + 2 * (ss->ttHit &&  tte->depth() >= depth);
 
     if (cutNode
-        && ss->ttPv
+        && !ss->ttPv
         && !ttMove
         &&  ss->ttHit
         &&  tte->depth() >= depth)
