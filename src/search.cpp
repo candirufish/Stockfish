@@ -982,6 +982,7 @@ moves_loop: // When in check, search starts here
       capture = pos.capture_stage(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+      ss->rule50 = pos.rule50_count();
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1008,7 +1009,7 @@ moves_loop: // When in check, search starts here
               if (   !givesCheck
                   && lmrDepth < 6
                   && !ss->inCheck
-                  && ss->staticEval + 182 + 230 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
+                  && ss->staticEval + 182 + 230 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))] + (3 * (ss-1)->rule50) * PvNode
                    + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 7 < alpha)
                   continue;
 
