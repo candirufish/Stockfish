@@ -1005,7 +1005,7 @@ moves_loop: // When in check, search starts here
           {
               bool highDiffEv = false;
               if (   !(ss-1)->inCheck
-                  && (abs(ss->staticEval) - abs((ss-1)->staticEval)) > 512)
+                  && (abs(ss->staticEval) - abs((ss-1)->staticEval)) > 1024)
                   highDiffEv = true;
 
               // Futility pruning for captures (~2 Elo)
