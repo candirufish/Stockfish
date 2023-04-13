@@ -1004,8 +1004,9 @@ moves_loop: // When in check, search starts here
               || givesCheck)
           {
               bool highDiffEv = false;
-              if (   !(ss-1)->inCheck
-                  && (abs(ss->staticEval) - abs((ss-1)->staticEval)) > 1024)
+              if (   PvNode 
+                  && !ss->inCheck
+                  && abs(ss->staticEval - bestValue) > 250)
                   highDiffEv = true;
 
               // Futility pruning for captures (~2 Elo)
