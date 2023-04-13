@@ -1179,7 +1179,7 @@ moves_loop: // When in check, search starts here
       if (PvNode)
           r -= 1 + 12 / (3 + depth);
 
-      if (rootNode && thisThread->failedHighCnt < 2)
+      if (rootNode && thisThread->failedHighCnt < 2 && complexity > 1000)
           r--;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
