@@ -1207,7 +1207,7 @@ moves_loop: // When in check, search starts here
               || (cutNode && (ss-1)->moveCount > 1)))
       {
 
-          bool kinginc = ss->inCheck && type_of(movedPiece) == KING && (ss+1)->cutoffCnt > 3;
+          bool kinginc = ss->inCheck && type_of(movedPiece) == KING && (ss+1)->cutoffCnt > 3 && cutNode;
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
