@@ -1169,7 +1169,7 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
-          r += 2;
+          r += 2 + bool(ss->staticEval > 8192);
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
@@ -1185,9 +1185,6 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
       if ((ss+1)->cutoffCnt > 3)
-          r++;
-
-      if (!PvNode && ss->staticEval > 8192)
           r++;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
