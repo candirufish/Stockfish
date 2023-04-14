@@ -1005,6 +1005,7 @@ moves_loop: // When in check, search starts here
           {
               bool highDiffEv = false;
               if (   !(ss-1)->inCheck
+                  && PvNode
                   && (abs(ss->staticEval) - abs((ss-1)->staticEval)) > 512)
                   highDiffEv = true;
 
