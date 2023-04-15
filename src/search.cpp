@@ -1041,6 +1041,8 @@ moves_loop: // When in check, search starts here
                             + (*contHist[1])[movedPiece][to_sq(move)]
                             + (*contHist[3])[movedPiece][to_sq(move)];
 
+              bool kmargin = move == ss->killers[0] && PvNode && ttMove;
+
               // Continuation history based pruning (~2 Elo)
               if (   lmrDepth < 5
                   && history < -4405 * (depth - 1))
@@ -1054,7 +1056,7 @@ moves_loop: // When in check, search starts here
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
                   && lmrDepth < 13
-                  && ss->staticEval + 103 + 138 * lmrDepth <= alpha)
+                  && ss->staticEval + 103 + 50 * kmargin + 138 * lmrDepth <= alpha)
                   continue;
 
               lmrDepth = std::max(lmrDepth, 0);
