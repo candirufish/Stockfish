@@ -1041,7 +1041,7 @@ moves_loop: // When in check, search starts here
                             + (*contHist[1])[movedPiece][to_sq(move)]
                             + (*contHist[3])[movedPiece][to_sq(move)];
 
-              bool kmargin = move == ss->killers[0] && PvNode && ttMove;
+              bool kmargin = move == ss->killers[0] && PvNode && ttMove && moveCount > 2;
 
               // Continuation history based pruning (~2 Elo)
               if (   lmrDepth < 5
