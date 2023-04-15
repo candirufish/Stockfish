@@ -1005,6 +1005,7 @@ moves_loop: // When in check, search starts here
           {
               bool cpType = false;
               if (   PvNode
+                  && ttMove
                   && type_of(pos.piece_on(to_sq(move))) != PAWN)
                   cpType = true;
 
