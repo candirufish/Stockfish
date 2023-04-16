@@ -1096,7 +1096,7 @@ moves_loop: // When in check, search starts here
                   singularQuietLMR = !ttCapture;
 
                   // Avoid search explosion by limiting the number of double extensions
-                  if (  (!PvNode || (capture && quietCount < 2))
+                  if (  !PvNode
                       && value < singularBeta - 25
                       && ss->doubleExtensions <= 10)
                   {
@@ -1168,7 +1168,7 @@ moves_loop: // When in check, search starts here
           r--;
 
       // Increase reduction for cut nodes (~3 Elo)
-      if (cutNode)
+      if (cutNode && !(capture && quietCount < 2))
           r += 2;
 
       // Increase reduction if ttMove is a capture (~3 Elo)
