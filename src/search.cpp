@@ -1006,7 +1006,7 @@ moves_loop: // When in check, search starts here
 
               bool PvTT = false;
               if (   PvNode
-                  && quietCount < 2
+                  && improving
                   && ttMove)
                   PvTT = true;
 
