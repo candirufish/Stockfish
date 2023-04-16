@@ -1006,7 +1006,7 @@ moves_loop: // When in check, search starts here
 
               bool PvTT = false;
               if (   PvNode
-                  && (ss-1)->moveCount <= 1
+                  && moveCount > 2
                   && ttMove)
                   PvTT = true;
 
