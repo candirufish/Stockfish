@@ -1005,7 +1005,7 @@ moves_loop: // When in check, search starts here
           {
               bool cpType = false;
               if (   PvNode
-                  && quietCount < 2
+                  && (ss-1)->moveCount <= 1
                   && type_of(pos.piece_on(to_sq(move))) != PAWN)
                   cpType = true;
 
