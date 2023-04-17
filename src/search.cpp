@@ -1005,8 +1005,7 @@ moves_loop: // When in check, search starts here
           {
               bool cpType = false;
               if (   PvNode
-                  && (ss-1)->moveCount <= 1
-                  && type_of(pos.piece_on(to_sq(move))) != PAWN)
+                  &&  type_of(move) == PROMOTION)
                   cpType = true;
 
               // Futility pruning for captures (~2 Elo)
