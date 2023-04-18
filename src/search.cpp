@@ -780,7 +780,7 @@ namespace {
     if (eval < alpha - 426 - 256 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
-        if (value < alpha || (!ss->ttPv && value - futility_margin(depth, improving) >= beta))
+        if (value < alpha || (cutNode && value - futility_margin(depth, improving) >= beta))
             return value;
     }
 
