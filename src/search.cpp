@@ -716,6 +716,8 @@ namespace {
 
     CapturePieceToHistory& captureHistory = thisThread->captureHistory;
 
+    Value betaMargin = VALUE_NONE;
+
     // Step 6. Static evaluation of the position
     if (ss->inCheck)
     {
@@ -782,6 +784,16 @@ namespace {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
+    }
+
+
+    betaMargin = beta + 1024 - 256 * improving;
+
+    if (!ss->ttPv && depth <= 6 && !excludedMove && ss->staticEval >= betaMargin)
+    {
+        value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
+        if (value > betaMargin)
+                return value;
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
