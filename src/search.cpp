@@ -779,10 +779,18 @@ namespace {
     // return a fail low.
     if (eval < alpha - 426 - 256 * depth * depth)
     {
-
+        if (!ss->ttPv)
+        {
         value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
-        if (value < alpha || (cutNode && value - futility_margin(depth, improving) >= beta))
+        if (value < alpha || value - futility_margin(depth, improving) >= beta)
             return value;
+        }
+       else 
+        {
+        value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
+        if (value < alpha)
+            return value;
+        }
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
