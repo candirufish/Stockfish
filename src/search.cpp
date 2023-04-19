@@ -786,16 +786,6 @@ namespace {
             return value;
     }
 
-
-    betaMargin = beta + 1024 - 256 * improving;
-
-    if (!ss->ttPv && depth <= 6 && !excludedMove && eval >= betaMargin)
-    {
-        value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
-        if (value > betaMargin)
-                return value;
-    }
-
     // Step 8. Futility pruning: child node (~40 Elo).
     // The depth condition is important for mate finding.
     if (   !ss->ttPv
@@ -921,6 +911,20 @@ namespace {
         &&  depth >= 7
         && !ttMove)
         depth -= 2;
+
+    betaMargin = beta + 1024 - 256 * improving;
+
+    if (!ss->ttPv && depth <= 6 && !excludedMove && ss->staticEval >= betaMargin)
+    {
+        value = search<NonPV>(pos, ss, betaMargin, betaMargin + 1, depth - 2, cutNode);
+        if (value > betaMargin)
+        {
+            depth -= 2;
+            if (depth <= 0)
+                return value;
+        }
+    }
+
 
 moves_loop: // When in check, search starts here
 
