@@ -779,8 +779,9 @@ namespace {
     // return a fail low.
     if (eval < alpha - 426 - 256 * depth * depth)
     {
-        value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
-        if (value < alpha || (cutNode && ss->ttPv && value - futility_margin(depth, improving) >= beta))
+
+        value = search<NonPV>(pos, ss, alpha - 1, alpha, depth - 7, cutNode);
+        if (value < alpha || (cutNode && value - futility_margin(depth, improving) >= beta))
             return value;
     }
 
