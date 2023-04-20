@@ -558,7 +558,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, betaRz;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
@@ -722,6 +722,7 @@ namespace {
         // Skip early pruning when in check
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
+        betaRz = false;
         improvement = 0;
         complexity = 0;
         goto moves_loop;
@@ -773,6 +774,7 @@ namespace {
                   : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval - (ss-4)->staticEval
                   :                                    156;
     improving = improvement > 0;
+    betaRz = false;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
@@ -782,6 +784,8 @@ namespace {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
+        else if (cutNode && !ss->ttPv && value - futility_margin(depth, improving) >= beta)
+            betaRz = true;
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
@@ -902,8 +906,11 @@ namespace {
         && !ttMove)
         depth -= 2 + 2 * (ss->ttHit &&  tte->depth() >= depth);
 
+    if (betaRz)
+        depth -= 3;
+
     if (depth <= 0)
-        return qsearch<PV>(pos, ss, alpha, beta);
+        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
 
     if (    cutNode
         &&  depth >= 7
