@@ -559,7 +559,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, priorCapture, singularQuietLMR;
-    bool capture, moveCountPruning, ttCapture;
+    bool capture, moveCountPruning, ttCapture, k2lmr;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement, complexity;
 
@@ -607,6 +607,7 @@ namespace {
 
     (ss+1)->excludedMove = bestMove = MOVE_NONE;
     (ss+2)->killers[0]   = (ss+2)->killers[1] = MOVE_NONE;
+    (ss+2)->killers[0]   = (ss+2)->killers[1] = (ss + 2)->killers[2] = MOVE_NONE;
     (ss+2)->cutoffCnt    = 0;
     ss->doubleExtensions = (ss-1)->doubleExtensions;
     Square prevSq        = is_ok((ss-1)->currentMove) ? to_sq((ss-1)->currentMove) : SQ_NONE;
@@ -939,6 +940,7 @@ moves_loop: // When in check, search starts here
 
     value = bestValue;
     moveCountPruning = singularQuietLMR = false;
+    k2lmr = false;
 
     // Indicate PvNodes that will probably fail low if the node was searched
     // at a depth equal or greater than the current depth, and the result of this search was a fail low.
@@ -1140,6 +1142,9 @@ moves_loop: // When in check, search starts here
               extension = 1;
       }
 
+      if (move == ttMove || move == ss->killers[2])
+          k2lmr = true;
+
       // Add extension to new depth
       newDepth += extension;
       ss->doubleExtensions = (ss-1)->doubleExtensions + (extension == 2);
@@ -1195,6 +1200,9 @@ moves_loop: // When in check, search starts here
 
       // Decrease/increase reduction for moves with a good/bad history (~25 Elo)
       r -= ss->statScore / (11079 + 4626 * (depth > 6 && depth < 19));
+
+      if (moveCount > 2 && !k2lmr && PvNode)
+          r--;
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
@@ -1783,11 +1791,13 @@ moves_loop: // When in check, search starts here
   void update_quiet_stats(const Position& pos, Stack* ss, Move move, int bonus) {
 
     // Update killers
-    if (ss->killers[0] != move)
-    {
-        ss->killers[1] = ss->killers[0];
-        ss->killers[0] = move;
-    }
+      if (ss->killers[0] != move)
+      {
+          ss->killers[1] = ss->killers[0];
+          ss->killers[0] = move;
+      }
+      else
+          ss->killers[2] = move;
 
     Color us = pos.side_to_move();
     Thread* thisThread = pos.this_thread();
