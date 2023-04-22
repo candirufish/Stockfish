@@ -764,8 +764,8 @@ namespace {
     if (eval < alpha - 426 - 256 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
-        if (value < alpha)
-            return value;
+        if (value < alpha || (ss->killers[0] == MOVE_NONE && cutNode && !ss->ttPv && value - futility_margin(depth, improving) >= beta))
+           return value;
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
