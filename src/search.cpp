@@ -1130,7 +1130,7 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 10
                    && abs(ss->staticEval) > 88)
-              extension = 1;
+              extension = pos.non_pawn_material() == 0 && abs(ss->staticEval) > 128 ? 2 : 1;
 
           // Quiet ttMove extensions (~1 Elo)
           else if (   PvNode
