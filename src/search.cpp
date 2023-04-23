@@ -885,7 +885,7 @@ namespace {
     ss->tteD = ss->ttHit && tte->depth() >= depth;
     if (    PvNode
         && !ttMove)
-        depth -= ss->tteD ? (ss-2)->tteD ? 6 : 4 : 2;
+        depth -= ss->tteD ? (ss-2)->tteD && depth <= 5 ? 5 : 4 : 2;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
