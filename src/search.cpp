@@ -1124,7 +1124,7 @@ moves_loop: // When in check, search starts here
               extension = 1;
       }
 
-      if (move == ttMove || move == ss->killers[2])
+      if (move == ss->killers[0] || move == ss->killers[2])
           k2lmr = true;
 
       // Add extension to new depth
