@@ -987,11 +987,19 @@ moves_loop: // When in check, search starts here
           if (   capture
               || givesCheck)
           {
+
+              bool cpType = false;
+              if (   PvNode
+                  && quietCount < 2
+                  && moveCount > 2
+                  && type_of(pos.piece_on(to_sq(move))) != PAWN)
+                  cpType = true;
+
               // Futility pruning for captures (~2 Elo)
               if (   !givesCheck
                   && lmrDepth < 6
                   && !ss->inCheck
-                  && ss->staticEval + 182 + 230 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))]
+                  && ss->staticEval + 182 + 230 * lmrDepth + PieceValue[EG][pos.piece_on(to_sq(move))] + 50 * cpType
                    + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 7 < alpha)
                   continue;
 
