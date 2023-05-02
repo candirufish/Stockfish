@@ -558,6 +558,7 @@ namespace {
     moveCount          = captureCount = quietCount = ss->moveCount = 0;
     bestValue          = -VALUE_INFINITE;
     maxValue           = VALUE_INFINITE;
+    ss->cutnode        = cutNode;
 
     // Check for the available remaining time
     if (thisThread == Threads.main())
@@ -889,7 +890,7 @@ namespace {
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
-    if (    cutNode
+    if (    (cutNode || (ss-1)->cutnode)
         &&  depth >= 7
         && !ttMove)
         depth -= 2;
