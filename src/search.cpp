@@ -1205,7 +1205,7 @@ moves_loop: // When in check, search starts here
               // was good enough search deeper, if it was bad enough search shallower
               const bool doDeeperSearch = value > (alpha + 58 + 12 * (newDepth - d));
               const bool doEvenDeeperSearch = value > alpha + 588 && ss->doubleExtensions <= 5;
-              const bool doShallowerSearch = (value < bestValue + newDepth || ss->inCheck);
+              const bool doShallowerSearch = (value < bestValue + newDepth || (ss->inCheck && type_of(movedPiece) == KING));
 
               ss->doubleExtensions = ss->doubleExtensions + doEvenDeeperSearch;
 
