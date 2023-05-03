@@ -1158,7 +1158,8 @@ moves_loop: // When in check, search starts here
       if (ttCapture)
           r++;
 
-      if (ttInCheck && type_of(movedPiece) == KING)
+      if (ttInCheck && type_of(movedPiece) == KING && !PvNode
+        && depth >= 2)
           r++;
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
