@@ -1228,9 +1228,9 @@ moves_loop: // When in check, search starts here
       {
           // Increase reduction for cut nodes and not ttMove (~1 Elo)
           if (!ttMove && cutNode)
-              r += (ss+1)->cutoffCnt > 3 ? 3 : 2;
+              r += 2;
 
-          value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 4), !cutNode);
+          value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > (!ttMove && (ss+1)->cutoffCnt > 3 ? 2 : 4)), !cutNode);
       }
 
       // For PV nodes only, do a full PV search on the first move or after a fail
