@@ -1326,7 +1326,7 @@ moves_loop: // When in check, search starts here
               }
               else
               {
-                  ss->cutoffCnt += !ttMove ? cutNode && depth >= 7 ? 3 : 2 : 1;
+                  ss->cutoffCnt += !ttMove && cutNode && depth >= 7 ? 2 : 1;
 
                   assert(value >= beta); // Fail high
                   break;
