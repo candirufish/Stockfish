@@ -1320,7 +1320,9 @@ moves_loop: // When in check, search starts here
                       && beta  <  12535
                       && value > -12535)
                       {
-                      ss->cutoffCnt = 0;
+                      if (ttMove)
+                         ss->cutoffCnt = 0;
+
                       depth -= 1;
                       }
 
