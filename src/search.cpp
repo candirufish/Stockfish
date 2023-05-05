@@ -1321,7 +1321,7 @@ moves_loop: // When in check, search starts here
                       && value > -12535)
                       {
                       if (ttMove)
-                         ss->cutoffCnt = 0;
+                         ss->cutoffCnt--;
 
                       depth -= 1;
                       }
