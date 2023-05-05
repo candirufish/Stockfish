@@ -1319,7 +1319,10 @@ moves_loop: // When in check, search starts here
                   if (   depth > 1
                       && beta  <  12535
                       && value > -12535)
+                      {
+                      ss->cutoffCnt = 0;
                       depth -= 1;
+                      }
 
                   assert(depth > 0);
                   alpha = value;
