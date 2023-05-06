@@ -1326,7 +1326,7 @@ moves_loop: // When in check, search starts here
               }
               else
               {
-                  ss->cutoffCnt += 1 + (!ttMove || (value > VALUE_KNOWN_WIN));
+                  ss->cutoffCnt += 1 + (!ttMove || (value > 12535));
                   assert(value >= beta); // Fail high
                   break;
               }
