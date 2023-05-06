@@ -1167,8 +1167,8 @@ moves_loop: // When in check, search starts here
           r--;
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
-      if ((ss+1)->cutoffCnt > 3)
-          r += !ttMove && depth >= 7 && cutNode ? 2 : 1;
+      if ((ss+1)->cutoffCnt > (!ttMove && depth >= 7 && cutNode ? 1 : 3))
+          r++;
 
       else if (move == ttMove)
           r--;
