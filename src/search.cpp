@@ -890,9 +890,9 @@ namespace {
         return qsearch<PV>(pos, ss, alpha, beta);
 
     if (    cutNode
-        &&  depth >= 7
+        &&  depth >= ((ss+1)->cutoffCnt > 3 && !ss->ttPv ? 3 : 7)
         && !ttMove)
-        depth -= (ss+1)->cutoffCnt > 3 && !ss->ttPv ? 3 : 2;
+        depth -= 2;
 
 moves_loop: // When in check, search starts here
 
