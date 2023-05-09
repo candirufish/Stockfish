@@ -1143,7 +1143,7 @@ moves_loop: // When in check, search starts here
           && !likelyFailLow)
           r -= 2;
 
-      if (!ss->ttPv && tte->depth() >= depth + 3)
+      if (ss->ttPv && tte->depth() >= depth + 3)
           r--;
 
       // Decrease reduction if opponent's move count is high (~1 Elo)
