@@ -927,6 +927,7 @@ moves_loop: // When in check, search starts here
                          && ttMove
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
+    bool k0Ext = false;
 
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
@@ -1116,7 +1117,7 @@ moves_loop: // When in check, search starts here
                    && move == ttMove
                    && move == ss->killers[0]
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5705)
-              extension = 1;
+              extension = 1, k0Ext = true;
       }
 
       // Add extension to new depth
@@ -1167,7 +1168,7 @@ moves_loop: // When in check, search starts here
       if ((ss+1)->cutoffCnt > 3)
           r++;
 
-      else if (move == ttMove)
+      else if (k0Ext)
           r--;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
