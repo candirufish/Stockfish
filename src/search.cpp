@@ -1080,7 +1080,7 @@ moves_loop: // When in check, search starts here
                       && ss->doubleExtensions <= 10)
                   {
                       extension = 2;
-                      depth += depth < 13;
+                      depth += depth < (ss->ttPv ? 7 : 13);
                   }
               }
 
