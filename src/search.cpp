@@ -1165,7 +1165,8 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
       if ((ss+1)->cutoffCnt > 3)
-          r++;
+          r+= ((moveCount - 1 == (ss+1)->cutoffCnt) && !PvNode ) ? 2 : 1;
+
 
       else if (move == ttMove)
           r--;
