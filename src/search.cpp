@@ -1135,6 +1135,7 @@ moves_loop: // When in check, search starts here
 
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
+      bool fullSearch = false;
 
       // Decrease reduction if position is or has been on the PV
       // and node is not likely to fail low. (~3 Elo)
@@ -1210,7 +1211,10 @@ moves_loop: // When in check, search starts here
               newDepth += doDeeperSearch - doShallowerSearch + doEvenDeeperSearch;
 
               if (newDepth > d)
+              {
+                  fullSearch = true;
                   value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth, !cutNode);
+              }
 
               int bonus = value <= alpha ? -stat_bonus(newDepth)
                         : value >= beta  ?  stat_bonus(newDepth)
@@ -1223,6 +1227,7 @@ moves_loop: // When in check, search starts here
       // Step 18. Full depth search when LMR is skipped. If expected reduction is high, reduce its depth by 1.
       else if (!PvNode || moveCount > 1)
       {
+          fullSearch = true;
           // Increase reduction for cut nodes and not ttMove (~1 Elo)
           if (!ttMove && cutNode)
               r += 2;
@@ -1235,6 +1240,7 @@ moves_loop: // When in check, search starts here
       // parent node fail low with value <= alpha and try another move.
       if (PvNode && (moveCount == 1 || (value > alpha && (rootNode || value < beta))))
       {
+          fullSearch = true;
           (ss+1)->pv = pv;
           (ss+1)->pv[0] = MOVE_NONE;
 
@@ -1312,7 +1318,7 @@ moves_loop: // When in check, search starts here
 
               if (value >= beta)
               {
-                  ss->cutoffCnt += 1 + !ttMove;
+                  ss->cutoffCnt += (!ttMove || !fullSearch) ? 2 : 1;
                   assert(value >= beta); // Fail high
                   break;
               }
