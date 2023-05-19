@@ -1328,7 +1328,7 @@ moves_loop: // When in check, search starts here
                   if (   depth > 1
                       && beta  <  12535
                       && value > -12535)
-                      depth -= fullSearch && depth > 6 ? 2 : 1;
+                      depth -= fullSearch && depth > 3 && depth < 10? 2 : 1;
 
                   assert(depth > 0);
                   alpha = value; // Update alpha! Always alpha < beta
