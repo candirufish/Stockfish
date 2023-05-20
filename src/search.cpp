@@ -1318,7 +1318,7 @@ moves_loop: // When in check, search starts here
 
               if (value >= beta)
               {
-                  ss->cutoffCnt += !ttMove + !fullSearch;
+                  ss->cutoffCnt += 1 + !ttMove;
                   assert(value >= beta); // Fail high
                   break;
               }
@@ -1335,7 +1335,8 @@ moves_loop: // When in check, search starts here
               }
           }
       }
-
+   else if (fullSearch)
+         ss->cutoffCnt = 0;
 
       // If the move is worse than some previously searched move, remember it to update its stats later
       if (move != bestMove)
