@@ -1161,23 +1161,21 @@ moves_loop: // When in check, search starts here
       if (singularQuietLMR)
           r--;
 
-      if (!capture) 
-      {
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
       if ((ss+1)->cutoffCnt > 3)
           r++;
 
       else if (move == ttMove)
           r--;
-      }
+
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
                      + (*contHist[1])[movedPiece][to_sq(move)]
                      + (*contHist[3])[movedPiece][to_sq(move)]
                      - 3755;
-
       // Decrease/increase reduction for moves with a good/bad history (~25 Elo)
-      r -= ss->statScore / (10445 + 4762 * (depth > 6 && depth < 21));
+      if (!capture) 
+          r -= ss->statScore / (10445 + 4762 * (depth > 6 && depth < 21));
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
