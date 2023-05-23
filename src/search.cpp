@@ -1327,7 +1327,7 @@ moves_loop: // When in check, search starts here
               }
           }
       }
-      else if (ttMove)
+      else if (ttMove && PvNode)
           ss->cutoffCnt = 0;
 
       // If the move is worse than some previously searched move, remember it to update its stats later
