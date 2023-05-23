@@ -1176,7 +1176,7 @@ moves_loop: // When in check, search starts here
 
      int rHist = ss->statScore / (10445 + 4762 * (depth > 6 && depth < 21));
      if (capture)
-          rHist = std::max(rHist, -2);
+          rHist = std::max(rHist, 0);
 
       // Decrease/increase reduction for moves with a good/bad history (~25 Elo)
       r -= rHist;
