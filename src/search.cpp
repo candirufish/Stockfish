@@ -1138,7 +1138,7 @@ moves_loop: // When in check, search starts here
       // and node is not likely to fail low. (~3 Elo)
       // Decrease further on cutNodes. (~1 Elo)
       if (ss->ttPv)
-          r -= (cutNode && tte->depth() >= depth + 3 ? 2 : 1) + !likelyFailLow;
+          r -= (cutNode && tte->depth() >= depth + 3 ? 3 : 2) + !likelyFailLow;
 
       // Decrease reduction if opponent's move count is high (~1 Elo)
       if ((ss-1)->moveCount > 8)
