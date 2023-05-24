@@ -1540,9 +1540,6 @@ moves_loop: // When in check, search starts here
           &&  futilityBase > -VALUE_KNOWN_WIN
           &&  type_of(move) != PROMOTION)
       {
-          if (moveCount > 2)
-              continue;
-
           futilityValue = futilityBase + PieceValue[EG][pos.piece_on(to_sq(move))];
 
           if (futilityValue <= alpha)
@@ -1550,6 +1547,9 @@ moves_loop: // When in check, search starts here
               bestValue = std::max(bestValue, futilityValue);
               continue;
           }
+
+          if (moveCount > 2)
+              continue;
 
           if (futilityBase <= alpha && !pos.see_ge(move, VALUE_ZERO + 1))
           {
