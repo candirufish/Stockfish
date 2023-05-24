@@ -1194,6 +1194,9 @@ moves_loop: // When in check, search starts here
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
+          const bool doEvenShallowerSearch = cutNode && ss->inCheck;
+          newDepth -= doEvenShallowerSearch;
+
           // Do full depth search when reduced LMR search fails high
           if (value > alpha && d < newDepth)
           {
