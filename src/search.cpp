@@ -1548,14 +1548,14 @@ moves_loop: // When in check, search starts here
               continue;
           }
 
-          if (moveCount > 2)
-              continue;
-
           if (futilityBase <= alpha && !pos.see_ge(move, VALUE_ZERO + 1))
           {
               bestValue = std::max(bestValue, futilityBase);
               continue;
           }
+
+          if (moveCount > 2)
+              continue;
       }
 
       // We prune after 2nd quiet check evasion where being 'in check' is implicitly checked through the counter
