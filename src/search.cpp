@@ -1314,15 +1314,19 @@ moves_loop: // When in check, search starts here
               }
               else
               {
+                  alpha = value; // Update alpha! Always alpha < beta
                   // Reduce other moves if we have found at least one score improvement (~1 Elo)
                   // Reduce more for depth > 3 and depth < 12 (~1 Elo)
-                  if (   depth > 1
-                      && beta  <  14001
-                      && value > -12754)
-                      depth -= depth > 3 && depth < 12 && ttMove ? 2 : 1;
+                  if (beta < 14001 && value > -12754)
+                  {
+                  if (depth < 6 && ttMove)
+                       break;
+                  else if (depth > 1)
+                      depth -= 1;
+                  }
 
                   assert(depth > 0);
-                  alpha = value; // Update alpha! Always alpha < beta
+
               }
           }
       }
