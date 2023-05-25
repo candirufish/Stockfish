@@ -1321,6 +1321,8 @@ moves_loop: // When in check, search starts here
                   {
                   if (depth < 6 && ttMove)
                        break;
+                  else if (depth > 3 && depth < 12)
+                      depth -= 2;
                   else if (depth > 1)
                       depth -= 1;
                   }
