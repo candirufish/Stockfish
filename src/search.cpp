@@ -546,7 +546,7 @@ namespace {
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool givesCheck, improving, priorCapture, singularQuietLMR;
-    bool capture, moveCountPruning, ttCapture;
+    bool capture, moveCountPruning, ttCapture, ttGivesCheck;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement;
 
@@ -893,6 +893,7 @@ namespace {
 
 moves_loop: // When in check, search starts here
 
+    ttGivesCheck = false;
     // Step 12. A small Probcut idea, when we are in check (~4 Elo)
     probCutBeta = beta + 430;
     if (   ss->inCheck
@@ -1125,6 +1126,8 @@ moves_loop: // When in check, search starts here
       prefetch(TT.first_entry(pos.key_after(move)));
 
       // Update the current move (this must be done after singular extension search)
+      if (move == ttMove && givesCheck)
+          ttGivesCheck = true;
       ss->currentMove = move;
       ss->continuationHistory = &thisThread->continuationHistory[ss->inCheck]
                                                                 [capture]
@@ -1165,7 +1168,7 @@ moves_loop: // When in check, search starts here
       if ((ss+1)->cutoffCnt > 3)
           r++;
 
-      else if (move == ttMove)
+      else if (move == ttMove && !ttGivesCheck)
           r--;
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
