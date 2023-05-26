@@ -1105,7 +1105,7 @@ moves_loop: // When in check, search starts here
           else if (   givesCheck
                    && depth > 9
                    && abs(ss->staticEval) > 87)
-              extension = (pos.count<ALL_PIECES>() <= 12 && (pos.count<ALL_PIECES>() - pos.count<PAWN>() <= 6)) && move == ttMove ? 2 : 1;
+              extension = (pos.count<ALL_PIECES>() <= 12 && (pos.count<ALL_PIECES>() - pos.count<PAWN>() <= 6)) && pos.see_ge(move) ? 2 : 1;
 
           // Quiet ttMove extensions (~1 Elo)
           else if (   PvNode
