@@ -1115,7 +1115,7 @@ moves_loop: // When in check, search starts here
               extension = 1;
       }
 
-      bool rnfh = rootNode && thisThread->failedHighCnt >= 2 && depth > 4 && depth < 12 && tte->depth() >= depth;
+      bool rnfh = rootNode && thisThread->failedHighCnt >= 2 && depth < 10 && tte->depth() >= depth;
       // Add extension to new depth
       newDepth += extension;
       ss->doubleExtensions = (ss-1)->doubleExtensions + (extension == 2);
