@@ -1308,7 +1308,7 @@ moves_loop: // When in check, search starts here
 
               if (value >= beta)
               {
-                  ss->cutoffCnt += !ttMove ? ss->ttHit && tte->depth() >= depth ? 3 : 2 : 1;
+                  ss->cutoffCnt += !ttMove ? ss->ttHit && tte->depth() >= depth && PvNode ? 3 : 2 : 1;
                   assert(value >= beta); // Fail high
                   break;
               }
