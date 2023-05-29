@@ -1132,6 +1132,8 @@ moves_loop: // When in check, search starts here
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
 
+
+      bool lmrnull = (ss-1)->currentMove == MOVE_NULL && !ttMove;
       // Decrease reduction if position is or has been on the PV
       // and node is not likely to fail low. (~3 Elo)
       // Decrease further on cutNodes. (~1 Elo)
@@ -1166,6 +1168,9 @@ moves_loop: // When in check, search starts here
       else if (move == ttMove)
           r--;
 
+      if (lmrnull)
+          r += 2;
+
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
                      + (*contHist[1])[movedPiece][to_sq(move)]
@@ -1188,7 +1193,7 @@ moves_loop: // When in check, search starts here
           // In general we want to cap the LMR depth search at newDepth, but when
           // reduction is negative, we allow this move a limited search extension
           // beyond the first move depth. This may lead to hidden double extensions.
-          Depth d = std::clamp(newDepth - r, 1, newDepth + 1);
+          Depth d = std::clamp(newDepth - r, 1, newDepth + !lmrnull);
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
 
@@ -1199,7 +1204,7 @@ moves_loop: // When in check, search starts here
               // was good enough search deeper, if it was bad enough search shallower
               const bool doDeeperSearch = value > (bestValue + 63 + 11 * (newDepth - d));
               const bool doEvenDeeperSearch = value > alpha + 662 && ss->doubleExtensions <= 6;
-              const bool doShallowerSearch = value < bestValue + newDepth;
+              const bool doShallowerSearch = ((value < bestValue + newDepth) || lmrnull);
 
               ss->doubleExtensions = ss->doubleExtensions + doEvenDeeperSearch;
 
