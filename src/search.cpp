@@ -1115,7 +1115,7 @@ moves_loop: // When in check, search starts here
               extension = 1;
       }
 
-      bool rnfh = rootNode && thisThread->failedHighCnt >= 2 && depth > 4 && (tte->depth() >= depth + 3);
+      bool rnfh = rootNode && thisThread->failedHighCnt >= 2 && depth > 4 && tte->depth() >= depth;
       // Add extension to new depth
       newDepth += extension;
       ss->doubleExtensions = (ss-1)->doubleExtensions + (extension == 2);
@@ -1318,10 +1318,9 @@ moves_loop: // When in check, search starts here
                   // Reduce other moves if we have found at least one score improvement (~1 Elo)
                   // Reduce more for depth > 3 and depth < 12 (~1 Elo)
                   if (   depth > 1
-                      && !rnfh
                       && beta  <  14001
                       && value > -12754)
-                      depth -= depth > 3 && depth < 12 ? 2 : 1;
+                      depth -= depth > 3 && depth < (rnfh ? 6 : 12) ? 2 : 1;
 
                   assert(depth > 0);
                   alpha = value; // Update alpha! Always alpha < beta
