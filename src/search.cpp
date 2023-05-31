@@ -761,6 +761,7 @@ namespace {
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
+        if (value < alpha || (value - futility_margin(depth, improving) >= beta))
             return value;
     }
 
@@ -895,6 +896,7 @@ moves_loop: // When in check, search starts here
     probCutBeta = beta + 430;
     if (   ss->inCheck
         && !PvNode
+        && depth >= 2
         && ttCapture
         && (tte->bound() & BOUND_LOWER)
         && tte->depth() >= depth - 4
