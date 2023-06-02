@@ -1325,7 +1325,7 @@ moves_loop: // When in check, search starts here
               }
           }
       }
-      else if (PvNode && depth < thisThread->selDepth / 2)
+      else if (depth < thisThread->selDepth / 2)
           ss->cutoffCnt--;
 
       // If the move is worse than some previously searched move, remember it to update its stats later
