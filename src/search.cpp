@@ -1326,7 +1326,7 @@ moves_loop: // When in check, search starts here
           }
       }
       else if (thisThread->rootDepth < 5)
-          ss->cutoffCnt = 0;
+          ss->cutoffCnt--;
 
       // If the move is worse than some previously searched move, remember it to update its stats later
       if (move != bestMove)
