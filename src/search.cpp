@@ -1049,6 +1049,11 @@ moves_loop: // When in check, search starts here
               value = search<NonPV>(pos, ss, singularBeta - 1, singularBeta, singularDepth, cutNode);
               ss->excludedMove = MOVE_NONE;
 
+              bool plyMv =    (ss->ply & 1)
+                  && (   (ss-1)->moveCount > 1
+                  || (ss-3)->moveCount > 1
+                  || (ss-5)->moveCount > 1);
+
               if (value < singularBeta)
               {
                   extension = 1;
@@ -1075,6 +1080,9 @@ moves_loop: // When in check, search starts here
               // If the eval of ttMove is greater than beta, we reduce it (negative extension) (~7 Elo)
               else if (ttValue >= beta)
                   extension = -2 - !PvNode;
+
+              else if (plyMv)
+                  extension = -1;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
