@@ -1291,7 +1291,12 @@ moves_loop: // When in check, search starts here
 
               if (value >= beta)
               {
-                  ss->cutoffCnt += 1 + !ttMove;
+              bool plyMv =    (ss->ply & 1)
+                  && (   (ss-1)->moveCount > 1
+                  || (ss-3)->moveCount > 1
+                  || (ss-5)->moveCount > 1);
+
+                  ss->cutoffCnt += 1 + !ttMove + plyMv;
                   assert(value >= beta); // Fail high
                   break;
               }
