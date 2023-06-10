@@ -830,7 +830,6 @@ namespace {
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
     if (    PvNode
-        &&  depth <= 3
         &&  pos.non_pawn_material(us)
         &&  ttMove)
         depth -= std::clamp((depth - tte->depth()) / 4, 0, 3);
