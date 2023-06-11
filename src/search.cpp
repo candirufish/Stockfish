@@ -837,6 +837,15 @@ namespace {
         && !ttMove)
         depth -= 2;
 
+   if (    !ss->ttPv
+        &&  !cutNode
+        &&  !ttMove
+        &&  depth >= 8
+        &&  tte->depth() < depth - 8)
+        depth--;
+
+
+
     probCutBeta = beta + 168 - 61 * improving;
 
     // Step 11. ProbCut (~10 Elo)
