@@ -760,7 +760,7 @@ namespace {
     if (eval < alpha - 456 - 252 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
-        if (value < alpha + 16 * bool(pos.non_pawn_material(us)))
+        if (value < alpha + 32 * bool(pos.non_pawn_material(us)))
             return value;
     }
 
