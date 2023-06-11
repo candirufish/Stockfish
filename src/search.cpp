@@ -842,7 +842,7 @@ namespace {
         &&  !ttMove
         &&  depth >= 8
         &&  tte->depth() < depth - 8)
-        depth--;
+        depth -= 2;
 
 
 
