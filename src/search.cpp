@@ -1075,9 +1075,8 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && !(pos.non_pawn_material(us))
                       && value < singularBeta - 21
-                      && ss->doubleExtensions <= 11)
+                      && ss->doubleExtensions <= (pos.non_pawn_material(us) ? 4 : 11))
                   {
                       extension = 2;
                       depth += depth < 13;
