@@ -1075,6 +1075,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
+                      && !(pos.non_pawn_material(us))
                       && value < singularBeta - 21
                       && ss->doubleExtensions <= 11)
                   {
