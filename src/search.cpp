@@ -1094,10 +1094,7 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension) (~7 Elo)
               else if (ttValue >= beta)
-                  extension = -2 - !PvNode;
-
-              else if (!PvNode && (ss-1)->nodeType == NonPV)
-                  extension = -2;
+                  extension = !PvNode ? (ss-1)->nodeType == NonPV ? 4 : 3 : 2;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
