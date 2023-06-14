@@ -1094,7 +1094,7 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension) (~7 Elo)
               else if (ttValue >= beta)
-                  extension = !PvNode ? cutNode && (ss-1)->nodeType == NonPV ? 4 : 3 : 2;
+                  extension = -2 - !PvNode;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
@@ -1224,7 +1224,7 @@ moves_loop: // When in check, search starts here
       {
           // Increase reduction for cut nodes and not ttMove (~1 Elo)
           if (!ttMove && cutNode)
-              r += 2;
+              r += (ss-1)->nodeType == NonPV ? 3 : 2;
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 3), !cutNode);
       }
