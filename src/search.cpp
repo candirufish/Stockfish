@@ -1097,7 +1097,7 @@ moves_loop: // When in check, search starts here
                   extension = -2 - !PvNode;
 
               else if (cutNode && (ss-1)->nodeType == NonPV)
-                  extension = -2;
+                  extension = -3;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
