@@ -1076,7 +1076,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 21
+                      && value < singularBeta - ((ss-1)->nodeType == PV ? 8 : 21)
                       && ss->doubleExtensions <= 11)
                   {
                       extension = 2;
@@ -1095,9 +1095,6 @@ moves_loop: // When in check, search starts here
               // If the eval of ttMove is greater than beta, we reduce it (negative extension) (~7 Elo)
               else if (ttValue >= beta)
                   extension = -2 - !PvNode;
-
-              else if (cutNode && (ss-1)->nodeType == NonPV)
-                  extension = -3;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
