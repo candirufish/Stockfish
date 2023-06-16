@@ -1096,9 +1096,6 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2 - !PvNode;
 
-              else if (cutNode && (ss-1)->nodeType == NonPV)
-                  extension = -4;
-
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
                   extension = -1;
@@ -1325,7 +1322,7 @@ moves_loop: // When in check, search starts here
                   if (   depth > 1
                       && beta  <  14362
                       && value > -12393)
-                      depth -= depth > 3 && depth < 12 ? 2 : 1;
+                      depth -= ((depth > 3 && depth < 12) || (ss-1)->nodeType == Root) ? 2 : 1;
 
                   assert(depth > 0);
                   alpha = value; // Update alpha! Always alpha < beta
