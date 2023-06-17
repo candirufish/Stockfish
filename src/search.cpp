@@ -833,7 +833,7 @@ namespace {
     if (    cutNode
         &&  depth >= 8
         && !ttMove)
-        depth -= (ss-1)->nodeType == PV ? 1 : 2;
+        depth -= (ss-1)->nodeType != PV ? 3 : 2;
 
     probCutBeta = beta + 168 - 61 * improving;
 
