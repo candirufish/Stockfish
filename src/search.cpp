@@ -1096,9 +1096,6 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2 - !PvNode;
 
-              else if (cutNode && (ss-1)->nodeType == NonPV && (ss-3)->nodeType == NonPV)
-                  extension = -3;
-
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
                   extension = -1;
@@ -1151,7 +1148,7 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
-          r += 2;
+          r += (ss-1)->nodeType == PV && ss->ttPv ? 1 : 2;
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
