@@ -826,7 +826,7 @@ namespace {
     // Use qsearch if depth is equal or below zero (~9 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth) + (ss-1)->ttCapture;
+        depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
@@ -1153,7 +1153,7 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ss->ttCapture)
-          r++;
+          r += 1 + (ss-1)->ttCapture;
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
