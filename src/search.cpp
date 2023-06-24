@@ -1161,7 +1161,7 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
-          r -= 1 + !(ss-1)->ttCapture;
+          r -= !(ss-1)->ttCapture && PvNode ? 2 : 1;
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
       if ((ss+1)->cutoffCnt > 3)
