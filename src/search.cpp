@@ -826,7 +826,7 @@ namespace {
     // Use qsearch if depth is equal or below zero (~9 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth) + (ss-1)->ttCapture;
+        depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
@@ -1160,7 +1160,7 @@ moves_loop: // When in check, search starts here
           r -= 1 + 12 / (3 + depth);
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
-      if (singularQuietLMR)
+      if (singularQuietLMR && !(ss-1)->ttCapture)
           r--;
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
