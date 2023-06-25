@@ -1158,12 +1158,8 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
-      {
           r -= 1 + 12 / (3 + depth);
 
-          if (ttMove && !rootNode && !(ss-1)->ttm && depth <= 8)
-                r--;
-      }
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
           r--;
@@ -1230,7 +1226,7 @@ moves_loop: // When in check, search starts here
       {
           // Increase reduction for cut nodes and not ttMove (~1 Elo)
           if (!ttMove && cutNode)
-              r += 2;
+              r += 2 + !(ss-1)->ttm;
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth - (r > 3), !cutNode);
       }
