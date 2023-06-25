@@ -1161,8 +1161,8 @@ moves_loop: // When in check, search starts here
       {
           r -= 1 + 12 / (3 + depth);
 
-          if (ttMove && !rootNode && !(ss-1)->ttm)
-                r -= 2;
+          if (ttMove && !rootNode && !(ss-1)->ttm && depth <= 8)
+                r--;
       }
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
