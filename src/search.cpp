@@ -1153,7 +1153,7 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
-          r += 1 + (ss-1)->singularQuietLMR;
+          r += 1 - (ss-1)->singularQuietLMR;
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
