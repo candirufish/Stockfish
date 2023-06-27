@@ -1077,7 +1077,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && value < singularBeta - 21
+                      && (value < singularBeta - 21 || (ss-1)->singularQuietLMR)
                       && ss->doubleExtensions <= 11)
                   {
                       extension = 2;
@@ -1161,7 +1161,7 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (ss->singularQuietLMR)
-          r -= 1 + (ss-1)->singularQuietLMR;
+          r--;
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
       if ((ss+1)->cutoffCnt > 3)
