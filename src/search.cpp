@@ -829,7 +829,7 @@ namespace {
         && !ttMove)
         depth -= 5 + 2 * (ss->ttHit && tte->depth() >= depth);
 
-    else if (PvNode && depth <= 8 && !rootNode && !(ss-1)->ttm)
+    else if (PvNode && depth <= 6 && !rootNode && !(ss-1)->ttm)
         depth += 3;
 
     if (depth <= 0)
