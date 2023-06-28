@@ -607,6 +607,7 @@ namespace {
     ttMove =  rootNode ? thisThread->rootMoves[thisThread->pvIdx].pv[0]
             : ss->ttHit    ? tte->move() : MOVE_NONE;
     ttCapture = ttMove && pos.capture_stage(ttMove);
+    ss->ttm = ttMove;
 
     // At this point, if excluded, skip straight to step 6, static eval. However,
     // to save indentation, we list the condition in all code between here and there.
@@ -827,6 +828,8 @@ namespace {
     if (    PvNode
         && !ttMove)
         depth -= (ss->killers[0] == MOVE_NONE ? 5 : 2) + 2 * (ss->ttHit && tte->depth() >= depth);
+    else if (PvNode && !rootNode && !(ss-1)->ttm)
+        depth += 3;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
