@@ -836,7 +836,7 @@ namespace {
         && !ttMove)
         depth -= 2;
 
-    probCutBeta = beta + 168 - 61 * improving;
+    probCutBeta = beta + 168 - 61 * improving + 128 * ((ss-1)->ttCapture && ss->ttCapture);
 
     // Step 11. ProbCut (~10 Elo)
     // If we have a good enough capture (or queen promotion) and a reduced search returns a value
@@ -1160,7 +1160,7 @@ moves_loop: // When in check, search starts here
           r -= 1 + 12 / (3 + depth);
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
-      if (singularQuietLMR && !(ss-1)->ttCapture)
+      if (singularQuietLMR)
           r--;
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
