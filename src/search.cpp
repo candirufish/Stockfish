@@ -1159,7 +1159,7 @@ moves_loop: // When in check, search starts here
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
       {
-          if (ttMove && !rootNode && !(ss-1)->ttm)
+          if (!rootNode && !(ss-1)->ttm)
                 r -= 3;
           else
                 r -= 1 + 12 / (3 + depth);
