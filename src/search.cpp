@@ -1169,7 +1169,7 @@ moves_loop: // When in check, search starts here
           r -= 1 + 12 / (3 + depth);
 
           if (!rootNode && ttMove && (ss-1)->dr)
-              r--;
+              r -= 2;
       }
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
