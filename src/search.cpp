@@ -960,6 +960,7 @@ moves_loop: // When in check, search starts here
       capture = pos.capture_stage(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+      ss->cngext = false;
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1100,7 +1101,7 @@ moves_loop: // When in check, search starts here
 
               // If we are on a cutNode, reduce it based on depth (negative extension) (~1 Elo)
               else if (cutNode)
-                  extension = depth > 8 && depth < 17 ? -3 : -1;
+                  extension = depth > 8 && depth < 17 ? (ss->cngext = true, -3) : -1;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
@@ -1155,6 +1156,9 @@ moves_loop: // When in check, search starts here
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
           r += 2;
+
+      if ((ss-1)->cngext)
+          r--;
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
