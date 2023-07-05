@@ -837,6 +837,12 @@ namespace {
         && !ttMove)
         depth -= 2;
 
+      // Increase reduction if ttMove is a capture (~3 Elo)
+      if (ttCapture
+        && !ss->ttPv
+        && depth >= 2)
+        depth--;
+
     probCutBeta = beta + 168 - 61 * improving;
 
     // Step 11. ProbCut (~10 Elo)
@@ -1155,10 +1161,6 @@ moves_loop: // When in check, search starts here
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
           r += 2;
-
-      // Increase reduction if ttMove is a capture (~3 Elo)
-      if (ttCapture)
-          r++;
 
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
