@@ -833,9 +833,9 @@ namespace {
         return qsearch<PV>(pos, ss, alpha, beta);
 
     if (    cutNode
-        &&  depth >= 8
+        &&  depth >= ((ss+1)->cutoffCnt > 3 ? 4 : 8)
         && !ttMove)
-        depth -= 2 + bool((ss+1)->cutoffCnt > 3);
+        depth -= 2;
 
     probCutBeta = beta + 168 - 61 * improving;
 
