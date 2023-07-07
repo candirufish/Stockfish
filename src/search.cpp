@@ -545,7 +545,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, pvDr;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount, improvement;
@@ -598,6 +598,7 @@ namespace {
     ss->doubleExtensions = (ss-1)->doubleExtensions;
     Square prevSq        = is_ok((ss-1)->currentMove) ? to_sq((ss-1)->currentMove) : SQ_NONE;
     ss->statScore        = 0;
+    pvDr                 = false;
 
     // Step 4. Transposition table lookup.
     excludedMove = ss->excludedMove;
@@ -827,7 +828,10 @@ namespace {
     // Use qsearch if depth is equal or below zero (~9 Elo)
     if (    PvNode
         && !ttMove)
+        {
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
+        pvDr = true;
+        }
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
@@ -1163,6 +1167,9 @@ moves_loop: // When in check, search starts here
       // Decrease reduction for PvNodes based on depth (~2 Elo)
       if (PvNode)
           r -= 1 + 12 / (3 + depth);
+
+      if (pvDr)
+          r++;
 
       // Decrease reduction if ttMove has been singularly extended (~1 Elo)
       if (singularQuietLMR)
