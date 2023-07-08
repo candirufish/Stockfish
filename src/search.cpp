@@ -837,7 +837,7 @@ namespace {
         && !ttMove)
         depth -= 2;
 
-    if (   !PvNode
+    if (   !ss->ttPv
         && !ttMove
         && depth >= 6
         && (ss+1)->cutoffCnt > 3)
