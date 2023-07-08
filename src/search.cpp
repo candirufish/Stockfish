@@ -837,6 +837,12 @@ namespace {
         && !ttMove)
         depth -= 2;
 
+    if (   !PvNode
+        && !ttMove
+        && depth >= 6
+        && (ss+1)->cutoffCnt > 3)
+        depth--;
+
     probCutBeta = beta + 168 - 61 * improving;
 
     // Step 11. ProbCut (~10 Elo)
