@@ -598,6 +598,7 @@ namespace {
     ss->doubleExtensions = (ss-1)->doubleExtensions;
     Square prevSq        = is_ok((ss-1)->currentMove) ? to_sq((ss-1)->currentMove) : SQ_NONE;
     ss->statScore        = 0;
+    ss->dr               = false;
 
     // Step 4. Transposition table lookup.
     excludedMove = ss->excludedMove;
@@ -701,6 +702,13 @@ namespace {
     }
 
     CapturePieceToHistory& captureHistory = thisThread->captureHistory;
+
+    // Indicate PvNodes that will probably fail low if the node was searched
+    // at a depth equal to or greater than the current depth, and the result of this search was a fail low.
+    bool likelyFailLow =    PvNode
+                         && ttMove
+                         && (tte->bound() & BOUND_UPPER)
+                         && tte->depth() >= depth;
 
     // Step 6. Static evaluation of the position
     if (ss->inCheck)
@@ -827,7 +835,12 @@ namespace {
     // Use qsearch if depth is equal or below zero (~9 Elo)
     if (    PvNode
         && !ttMove)
-        depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
+    {
+        depth -= 3 + 2 * (ss->ttHit && tte->depth() >= depth);
+        ss->dr = true;
+    }
+    else if (!rootNode && ttMove && !likelyFailLow && (ss-1)->dr)
+        depth++;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
@@ -919,13 +932,6 @@ moves_loop: // When in check, search starts here
     value = bestValue;
     moveCountPruning = singularQuietLMR = false;
 
-    // Indicate PvNodes that will probably fail low if the node was searched
-    // at a depth equal to or greater than the current depth, and the result of this search was a fail low.
-    bool likelyFailLow =    PvNode
-                         && ttMove
-                         && (tte->bound() & BOUND_UPPER)
-                         && tte->depth() >= depth;
-
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
     while ((move = mp.next_move(moveCountPruning)) != MOVE_NONE)
@@ -960,6 +966,7 @@ moves_loop: // When in check, search starts here
       capture = pos.capture_stage(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+      bool cngext = false;
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1096,8 +1103,10 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is greater than beta, we reduce it (negative extension) (~7 Elo)
               else if (ttValue >= beta)
+              {
                   extension = -2 - !PvNode;
-
+                  cngext = true;
+              }
               // If we are on a cutNode, reduce it based on depth (negative extension) (~1 Elo)
               else if (cutNode)
                   extension = depth > 8 && depth < 17 ? -3 : -1;
@@ -1183,6 +1192,9 @@ moves_loop: // When in check, search starts here
 
       // Decrease/increase reduction for moves with a good/bad history (~25 Elo)
       r -= ss->statScore / (11124 + 4740 * (depth > 5 && depth < 22));
+
+      if (r < 0 && cngext)
+          r++;
 
       // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
       // We use various heuristics for the sons of a node after the first son has
