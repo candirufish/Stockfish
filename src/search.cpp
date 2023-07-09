@@ -839,7 +839,7 @@ namespace {
         depth -= 3 + 2 * (ss->ttHit && tte->depth() >= depth);
         ss->dr = true;
     }
-    else if (!rootNode && ttMove && !likelyFailLow && (ss-1)->dr)
+    else if (!rootNode && likelyFailLow && (ss-1)->dr)
         depth++;
 
     if (depth <= 0)
