@@ -833,7 +833,7 @@ namespace {
         && eval > beta + 80
         && tte->depth() >= depth
         && !ttMove)
-        depth--;
+        depth -= 2;
 
     if (depth <= 0)
         return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
