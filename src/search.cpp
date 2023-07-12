@@ -832,7 +832,7 @@ namespace {
     if (   !rootNode
         && !ttMove
         &&  depth < 2
-        &&  eval <= alpha - 256)
+        &&  eval <= alpha - 512)
         depth--;
 
     if (depth <= 0)
