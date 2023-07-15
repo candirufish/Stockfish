@@ -830,7 +830,7 @@ namespace {
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
     if (    !ss->ttPv
-        && eval > beta + 16 * depth
+        && eval > beta + 32 * depth
         && !ttMove)
         depth--;
 
