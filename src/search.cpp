@@ -831,7 +831,6 @@ namespace {
     if (    !ss->ttPv
         && (ss-1)->currentMove == MOVE_NULL
         && depth < 6
-        && eval > beta
         && !ttMove)
         depth--;
 
