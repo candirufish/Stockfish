@@ -753,16 +753,6 @@ namespace {
                 : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval > (ss-4)->staticEval
                 : true;
 
-    // Step 7. Razoring (~1 Elo).
-    // If eval is really low check with qsearch if it can exceed alpha, if it can't,
-    // return a fail low.
-    if (eval < alpha - 456 - 252 * depth * depth)
-    {
-        value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
-        if (value < alpha)
-            return value;
-    }
-
     // Step 10. If the position doesn't have a ttMove, decrease depth by 2
     // (or by 4 if the TT entry for the current position was hit and the stored depth is greater than or equal to the current depth).
     // Use qsearch if depth is equal or below zero (~9 Elo)
@@ -778,6 +768,16 @@ namespace {
 
     if (depth <= 0)
         return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
+
+    // Step 7. Razoring (~1 Elo).
+    // If eval is really low check with qsearch if it can exceed alpha, if it can't,
+    // return a fail low.
+    if (eval < alpha - 456 - 252 * depth * depth)
+    {
+        value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
+        if (value < alpha)
+            return value;
+    }
 
     // Step 8. Futility pruning: child node (~40 Elo).
     // The depth condition is important for mate finding.
