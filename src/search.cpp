@@ -761,7 +761,7 @@ namespace {
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
     if (eval < alpha - 456 - 252 * depth * depth)
-        depth--;
+        depth -= 2;
 
     if (depth <= 0)
         return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
