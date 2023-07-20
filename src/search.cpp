@@ -828,8 +828,15 @@ namespace {
         && !ttMove)
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
+    if (    !ss->ttPv
+        && depth < 6
+        && pos.non_pawn_material(us)
+        && eval > beta + 80
+        && !ttMove)
+        depth--;
+
     if (depth <= 0)
-        return qsearch<PV>(pos, ss, alpha, beta);
+        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
 
     if (    cutNode
         &&  depth >= 8
