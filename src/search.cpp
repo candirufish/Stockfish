@@ -830,8 +830,7 @@ namespace {
 
     if (    !ss->ttPv
         && depth < 6
-        && pos.non_pawn_material(us)
-        && eval > beta + 80
+        && eval > beta + 128
         && !ttMove)
         depth--;
 
