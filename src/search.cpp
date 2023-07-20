@@ -1322,7 +1322,7 @@ moves_loop: // When in check, search starts here
               }
               else
               {
-                  if (value > alpha + 128 && abs(value - beta) <= 16 && !ttMove)
+                  if (value > alpha + 64 && abs(value - beta) <= 16 && !ttMove)
                       ss->cutoffCnt++;
 
                   // Reduce other moves if we have found at least one score improvement (~2 Elo)
