@@ -1175,7 +1175,6 @@ moves_loop: // When in check, search starts here
           r--;
 
       if (    !ss->ttPv
-        && depth < 6
         && eval > beta + 80
         && !ttMove)
           r++;
