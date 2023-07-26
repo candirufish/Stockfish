@@ -761,11 +761,9 @@ namespace {
     if (eval < alpha - 456 - 252 * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
-        if (value < alpha)
+        if (value < alpha || (value - futility_margin(depth, cutNode && !ss->ttHit, improving) >= beta))
             return value;
 
-        else if (value - futility_margin(depth, cutNode && !ss->ttHit, improving) >= beta)
-            almostRazor = true;
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
@@ -833,11 +831,8 @@ namespace {
         && !ttMove)
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
-    if (    almostRazor)
-        depth -= 3;
-
     if (depth <= 0)
-        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
+        return qsearch<PV>(pos, ss, alpha, beta);
 
     if (    cutNode
         &&  depth >= 8
