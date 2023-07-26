@@ -545,7 +545,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue, probCutBeta;
-    bool givesCheck, improving, priorCapture, singularQuietLMR;
+    bool givesCheck, improving, priorCapture, singularQuietLMR, almostRazor;
     bool capture, moveCountPruning, ttCapture;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
@@ -708,6 +708,7 @@ namespace {
         // Skip early pruning when in check
         ss->staticEval = eval = VALUE_NONE;
         improving = false;
+        almostRazor = false;
         goto moves_loop;
     }
     else if (excludedMove)
@@ -752,6 +753,7 @@ namespace {
     improving =   (ss-2)->staticEval != VALUE_NONE ? ss->staticEval > (ss-2)->staticEval
                 : (ss-4)->staticEval != VALUE_NONE ? ss->staticEval > (ss-4)->staticEval
                 : true;
+    almostRazor = false;
 
     // Step 7. Razoring (~1 Elo).
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
@@ -761,6 +763,9 @@ namespace {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
             return value;
+
+        else if (value - futility_margin(depth, cutNode && !ss->ttHit, improving) >= beta)
+            almostRazor = true;
     }
 
     // Step 8. Futility pruning: child node (~40 Elo).
@@ -828,8 +833,11 @@ namespace {
         && !ttMove)
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
+    if (    almostRazor)
+        depth--;
+
     if (depth <= 0)
-        return qsearch<PV>(pos, ss, alpha, beta);
+        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
 
     if (    cutNode
         &&  depth >= 8
@@ -1103,6 +1111,10 @@ moves_loop: // When in check, search starts here
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
+                  extension = -1;
+
+              // If the eval of ttMove is less than alpha, we reduce it (negative extension) (~1 Elo)
+              else if (ttValue <= alpha)
                   extension = -1;
           }
 
