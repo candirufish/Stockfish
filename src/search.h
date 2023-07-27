@@ -31,6 +31,8 @@ class Position;
 
 namespace Search {
 
+// Different node types, used as a template parameter
+  enum NodeType { NonPV, PV, Root };
 
 /// Stack struct keeps track of the information we need to remember from nodes
 /// shallower and deeper in the tree during the search. Each search thread has
@@ -51,6 +53,7 @@ struct Stack {
   bool ttHit;
   int doubleExtensions;
   int cutoffCnt;
+  NodeType nodeType;
 };
 
 
