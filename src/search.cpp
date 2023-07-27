@@ -1097,7 +1097,7 @@ moves_loop: // When in check, search starts here
 
               // If we are on a cutNode, reduce it based on depth (negative extension) (~1 Elo)
               else if (cutNode)
-                  extension = ((depth > 8 && depth < 17) || ((ss-1)->nodeType == NonPV && (ss-3)->nodeType == NonPV)) ? -3 : -1;
+                  extension = depth > 8 && depth < 17 ? -3 : -1;
 
               // If the eval of ttMove is less than value, we reduce it (negative extension) (~1 Elo)
               else if (ttValue <= value)
@@ -1147,7 +1147,7 @@ moves_loop: // When in check, search starts here
 
       // Increase reduction for cut nodes (~3 Elo)
       if (cutNode)
-          r += 2;
+          r += (ss-1)->nodeType == NonPV && (ss-3)->nodeType == NonPV ? 3 : 2;
 
       // Increase reduction if ttMove is a capture (~3 Elo)
       if (ttCapture)
