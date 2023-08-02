@@ -1171,9 +1171,6 @@ moves_loop: // When in check, search starts here
       else if (move == ttMove)
           r--;
 
-      if (!(ss-1)->mcp && (ss-1)->currentMove == MOVE_NULL)
-          r++;
-
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
                      + (*contHist[0])[movedPiece][to_sq(move)]
                      + (*contHist[1])[movedPiece][to_sq(move)]
@@ -1327,7 +1324,7 @@ moves_loop: // When in check, search starts here
                       && depth < 12
                       && beta  <  14362
                       && value > -12393)
-                      depth -= 2;
+                      depth -= (ss-1)->mcp ? 3 : 2;
 
                   assert(depth > 0);
                   alpha = value; // Update alpha! Always alpha < beta
