@@ -1171,9 +1171,6 @@ moves_loop: // When in check, search starts here
       else if (move == ttMove)
           r--;
 
-      if ((ss-1)->mcp && (ss-1)->currentMove == MOVE_NULL)
-          r--;
-
       if ((ss - 1)->currentMove == MOVE_NULL) 
       {
           if ((ss - 1)->mcp)
