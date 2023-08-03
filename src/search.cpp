@@ -1176,7 +1176,7 @@ moves_loop: // When in check, search starts here
           if ((ss - 1)->mcp)
              r--;
           else
-             r++;
+             r += 2;
       }
 
       ss->statScore =  2 * thisThread->mainHistory[us][from_to(move)]
