@@ -1097,6 +1097,9 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2 - !PvNode;
 
+              else if (!PvNode && !ss->capture && !(ss-1)->capture)
+                  extension = -3;
+
               // If we are on a cutNode, reduce it based on depth (negative extension) (~1 Elo)
               else if (cutNode)
                   extension = depth > 8 && depth < 17 ? -3 : -1;
@@ -1118,8 +1121,6 @@ moves_loop: // When in check, search starts here
                    && (*contHist[0])[movedPiece][to_sq(move)] >= 5168)
               extension = 1;
 
-          else if (ss->capture && (ss-1)->capture && abs(ss->staticEval - (ss-1)->staticEval) > 512)
-              extension = 1;
       }
 
       // Add extension to new depth
