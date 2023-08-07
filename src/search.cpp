@@ -1097,9 +1097,6 @@ moves_loop: // When in check, search starts here
               else if (ttValue >= beta)
                   extension = -2 - !PvNode;
 
-              else if (!PvNode && !ss->capture && !(ss-1)->capture)
-                  extension = -3;
-
               // If we are on a cutNode, reduce it based on depth (negative extension) (~1 Elo)
               else if (cutNode)
                   extension = depth > 8 && depth < 17 ? -3 : -1;
@@ -1149,6 +1146,9 @@ moves_loop: // When in check, search starts here
 
       // Decrease reduction if opponent's move count is high (~1 Elo)
       if ((ss-1)->moveCount > 8)
+          r--;
+
+      else if ((ss-1)->capture && ss->moveCount == 1)
           r--;
 
       // Increase reduction for cut nodes (~3 Elo)
