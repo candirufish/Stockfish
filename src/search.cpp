@@ -1033,8 +1033,8 @@ moves_loop: // When in check, search starts here
                   + (move == countermove) * FPM3
                   + moveCountPruning * FPM4
                   + improving * FPM5
-                  + ttMove * FPM6
-                  + !ttMove * FPM7
+                  + bool(ttMove) * FPM6
+                  + !bool(ttMove) * FPM7
                   + PvNode * FPM8
                   + cutNode * FPM9
                   + (!PvNode && !cutNode) * FPM10
