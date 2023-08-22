@@ -62,8 +62,7 @@ namespace {
 
 int fprBase = 112;
 int FPM1 = 0, FPM2 = 0, FPM3 = 0, FPM4 = 0, FPM5 = 0, FPM6 = 0, FPM7 = 0, FPM8 = 0, FPM9 = 0, FPM10 = 0;
-int FPM11 = 0, FPM12 = 0, FPM13 = 0, FPM14 = 0, FPM15 = 0, FPM16 = 0, FPM17 = 0, FPM18 = 0, FPM19 = 0, FPM20 = 0;
-int FPM21 = 0;
+int FPM11 = 0, FPM12 = 0, FPM13 = 0, FPM14 = 0, FPM15 = 0, FPM16 = 0, FPM17 = 0, FPM18 = 0;
 
 int PRN1 = 7, PRN2 = 197, PRN3 = 248, PRN4 = 7, PRN5 = 205, PRN6 = 6, PRN7 = 3832, PRN8 = 7011, PRN9 = 2, PRN10 = 12;
 int PRN11 = 138, PRN12 = 31;
@@ -71,8 +70,7 @@ int PRN11 = 138, PRN12 = 31;
 auto f1 = [](int m){return Range(0, 2 * m);};
 
 TUNE(SetRange(-256, 256), fprBase, FPM1, FPM2, FPM3, FPM4, FPM5, FPM6, FPM7, FPM8, FPM9, FPM10);
-TUNE(SetRange(-256, 256), FPM11, FPM12, FPM13, FPM14, FPM15, FPM16, FPM17, FPM18, FPM19, FPM20);
-TUNE(SetRange(-32, 32), FPM21);
+TUNE(SetRange(-256, 256), FPM11, FPM12, FPM13, FPM14, FPM15, FPM16, FPM17, FPM18);
 
 TUNE(SetRange(f1), PRN1, PRN2, PRN3, PRN4, PRN5, PRN6, PRN7, PRN8, PRN9, PRN10);
 TUNE(SetRange(f1), PRN11, PRN12);
@@ -1029,26 +1027,23 @@ moves_loop: // When in check, search starts here
 
               int fprMargin = fprBase
                   + (move == ss->killers[0]) * FPM1
-                  + (move == ss->killers[1]) * FPM2
-                  + (move == countermove) * FPM3
-                  + moveCountPruning * FPM4
-                  + improving * FPM5
-                  + bool(ttMove) * FPM6
-                  + !bool(ttMove) * FPM7
-                  + PvNode * FPM8
-                  + cutNode * FPM9
+                  + (move == countermove) * FPM2
+                  + moveCountPruning * FPM3
+                  + improving * FPM4
+                  + (ttMove && PvNode) * FPM5
+                  + (!ttMove && PvNode) * FPM6
+                  + (ttMove && cutNode) * FPM7
+                  + (!ttMove && cutNode) * FPM8
+                  + (move == ttMove) * FPM9
                   + (!PvNode && !cutNode) * FPM10
                   + ss->ttPv * FPM11
                   + !ss->ttPv * FPM12
                   + ((ss+1)->cutoffCnt > 3) * FPM13
-                  + (pos.rule50_count() <= 3) * FPM14
-                  + (pos.rule50_count() >= 80) * FPM15
-                  + (ss-1)->inCheck * FPM16
-                  + ((ss-1)->moveCount > 8) * FPM17
-                  + (tte->depth() >= depth + 3) * FPM18
-                  + !likelyFailLow * FPM19
-                  + bool(excludedMove) * FPM20
-                  + ss->doubleExtensions * FPM21;
+                  + ((ss-1)->moveCount > 8) * FPM14
+                  + (tte->depth() >= depth + 3) * FPM15
+                  + !likelyFailLow * FPM16
+                  + !bool(excludedMove) * FPM17
+                  + (move == (ss-4)->currentMove && pos.has_repeated()) * FPM18;
 
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
