@@ -925,6 +925,9 @@ moves_loop: // When in check, search starts here
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
 
+    bool repeating =    move == (ss-4)->currentMove 
+                         && pos.has_repeated();
+
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
     while ((move = mp.next_move(moveCountPruning)) != MOVE_NONE)
@@ -1058,6 +1061,7 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
+                      && !repeating
                       && value < singularBeta - 21
                       && ss->doubleExtensions <= 11)
                   {
@@ -1145,8 +1149,7 @@ moves_loop: // When in check, search starts here
           r--;
       
       // Increase reduction on repetition (~1 Elo)
-      if (   move == (ss-4)->currentMove
-          && pos.has_repeated())
+      if (repeating)
           r += 2;
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
