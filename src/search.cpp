@@ -1061,7 +1061,6 @@ moves_loop: // When in check, search starts here
 
                   // Avoid search explosion by limiting the number of double extensions
                   if (  !PvNode
-                      && !repeating
                       && value < singularBeta - 21
                       && ss->doubleExtensions <= 11)
                   {
@@ -1093,6 +1092,7 @@ moves_loop: // When in check, search starts here
 
           // Check extensions (~1 Elo)
           else if (   givesCheck
+                   && !repeating
                    && depth > 9)
               extension = 1;
 
