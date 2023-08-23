@@ -925,9 +925,6 @@ moves_loop: // When in check, search starts here
                          && (tte->bound() & BOUND_UPPER)
                          && tte->depth() >= depth;
 
-    bool repeating =    move == (ss-4)->currentMove 
-                         && pos.has_repeated();
-
     // Step 13. Loop through all pseudo-legal moves until no moves remain
     // or a beta cutoff occurs.
     while ((move = mp.next_move(moveCountPruning)) != MOVE_NONE)
@@ -969,6 +966,8 @@ moves_loop: // When in check, search starts here
       Value delta = beta - alpha;
 
       Depth r = reduction(improving, depth, moveCount, delta, thisThread->rootDelta);
+
+      bool repeating =    move == (ss-4)->currentMove && pos.has_repeated();
 
       // Step 14. Pruning at shallow depth (~120 Elo). Depth conditions are important for mate finding.
       if (  !rootNode
