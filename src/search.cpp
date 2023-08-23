@@ -1117,6 +1117,7 @@ moves_loop: // When in check, search starts here
       // Step 16. Make the move
       pos.do_move(move, st, givesCheck);
 
+      bool repeating = (move == (ss-4)->currentMove && pos.has_repeated());
       // Decrease reduction if position is or has been on the PV
       // and node is not likely to fail low. (~3 Elo)
       // Decrease further on cutNodes. (~1 Elo)
@@ -1145,8 +1146,7 @@ moves_loop: // When in check, search starts here
           r--;
       
       // Increase reduction on repetition (~1 Elo)
-      if (   move == (ss-4)->currentMove
-          && pos.has_repeated())
+      if (repeating)
           r += 2;
 
       // Increase reduction if next ply has a lot of fail high (~5 Elo)
@@ -1306,6 +1306,7 @@ moves_loop: // When in check, search starts here
                   // Reduce other moves if we have found at least one score improvement (~2 Elo)
                   if (   depth > 2
                       && depth < 12
+                      && !repeating
                       && beta  <  14362
                       && value > -12393)
                       depth -= 2;
