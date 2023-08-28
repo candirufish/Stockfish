@@ -985,12 +985,12 @@ moves_loop: // When in check, search starts here
               if (   !givesCheck
                   && lmrDepth < 7
                   && !ss->inCheck
-                  && ss->staticEval + 197 + 248 * lmrDepth + PieceValue[pos.piece_on(to_sq(move))]
+                  && ss->staticEval + 227 + 217 * lmrDepth + PieceValue[pos.piece_on(to_sq(move))]
                    + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 7 < alpha)
                   continue;
 
               // SEE based pruning for captures and checks (~11 Elo)
-              if (!pos.see_ge(move, Value(-205) * depth))
+              if (!pos.see_ge(move, Value(-213) * depth))
                   continue;
           }
           else
@@ -1001,24 +1001,44 @@ moves_loop: // When in check, search starts here
 
               // Continuation history based pruning (~2 Elo)
               if (   lmrDepth < 6
-                  && history < -3832 * depth)
+                  && history < -4312 * depth)
                   continue;
 
               history += 2 * thisThread->mainHistory[us][from_to(move)];
 
-              lmrDepth += history / 7011;
+              lmrDepth += history / 6417;
               lmrDepth = std::max(lmrDepth, -2);
+
+              int fprMargin = 36
+                  + (move == ss->killers[0]) * -22
+                  + (move == countermove) * -40
+                  + moveCountPruning * -3
+                  + improving * 62
+                  + (ttMove && PvNode) * -22
+                  + (!ttMove && PvNode) * -4
+                  + (ttMove && cutNode) * -55
+                  + (!ttMove && cutNode) * -7
+                  + (move == ttMove) * -11
+                  + (!PvNode && !cutNode) * 33
+                  + ss->ttPv * 33
+                  + !ss->ttPv * 25
+                  + ((ss+1)->cutoffCnt > 3) * -72
+                  + ((ss-1)->moveCount > 8) * -33
+                  + (tte->depth() >= depth + 3) * -25
+                  + !likelyFailLow * 12
+                  + !bool(excludedMove) * 61
+                  + (move == (ss-4)->currentMove && pos.has_repeated()) * -4;
 
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
                   && lmrDepth < 12
-                  && ss->staticEval + 112 + 138 * lmrDepth <= alpha)
+                  && ss->staticEval + fprMargin + 146 * lmrDepth <= alpha)
                   continue;
 
               lmrDepth = std::max(lmrDepth, 0);
 
               // Prune moves with negative SEE (~4 Elo)
-              if (!pos.see_ge(move, Value(-31 * lmrDepth * lmrDepth)))
+              if (!pos.see_ge(move, Value(-33 * lmrDepth * lmrDepth)))
                   continue;
           }
       }
