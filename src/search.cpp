@@ -847,8 +847,8 @@ namespace {
 
     else if (!ss->ttPv 
         && depth >= 8
-        && (ss+1)->cutoffCnt > 3)
-        depth -= 2;
+        && (ss+1)->cutoffCnt > 0)
+        depth -= 1 + ((ss+1)->cutoffCnt > 3);
 
     probCutBeta = beta + 168 - 61 * improving;
 
