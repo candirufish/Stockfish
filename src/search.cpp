@@ -849,7 +849,7 @@ namespace {
         && !ss->ttPv 
         && depth >= 8
         && (ss+1)->cutoffCnt > 3)
-        depth--;
+        depth -= 2;
 
     probCutBeta = beta + 168 - 61 * improving;
 
