@@ -845,8 +845,7 @@ namespace {
         && !ttMove)
         depth -= 2;
 
-    else if (!PvNode 
-        && !ss->ttPv 
+    else if (!ss->ttPv 
         && depth >= 8
         && (ss+1)->cutoffCnt > 3)
         depth -= 2;
