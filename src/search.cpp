@@ -840,8 +840,8 @@ namespace {
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
-    if (    cutNode
-        &&  depth >= 8
+    if ((cutNode || (!ss->ttPv && (ss + 1)->cutoffCnt > 3))
+        && depth >= 8
         && !ttMove)
         depth -= 2;
 
