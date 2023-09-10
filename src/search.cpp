@@ -1145,7 +1145,7 @@ moves_loop: // When in check, search starts here
       if (ttCapture)
           r++;
 
-      if (ss->ttHit && ttValue <= alpha && tte->depth() >= depth + 3)
+      if (ss->ttHit && ttValue <= alpha && !ttMove)
           r++;
 
       // Decrease reduction for PvNodes (~2 Elo)
