@@ -1209,7 +1209,7 @@ moves_loop: // When in check, search starts here
               {
                   value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth, !cutNode);
 
-                  if (value > alpha && value >= beta && doDeeperSearch && doEvenDeeperSearch)
+                  if (value > alpha && value >= beta && doDeeperSearch && doEvenDeeperSearch && !ttMove)
                     ss->cutoffCnt++;
               }
 
