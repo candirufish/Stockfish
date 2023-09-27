@@ -1191,7 +1191,7 @@ moves_loop: // When in check, search starts here
           Depth d = std::clamp(newDepth - r, 1, newDepth + 1);
 
           value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, d, true);
-          newDepth -= (value < bestValue + newDepth);
+          newDepth -= (value < bestValue + newDepth) && value < ss->staticEval;
 
           // Do a full-depth search when reduced LMR search fails high
           if (value > alpha && d < newDepth)
