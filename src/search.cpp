@@ -1205,13 +1205,10 @@ moves_loop: // When in check, search starts here
 
               ss->doubleExtensions = ss->doubleExtensions + doEvenDeeperSearch;
 
-              newDepth += doDeeperSearch - doShallowerSearch + doEvenDeeperSearch;
+              newDepth += doDeeperSearch - doShallowerSearch + doEvenDeeperSearch + (range >= 256);
 
               if (newDepth > d)
                   value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, newDepth, !cutNode);
-              else if (range >= 256)
-                  value = -search<NonPV>(pos, ss+1, -(alpha+1), -alpha, (d + newDepth)/2, true);
-
 
               int bonus = value <= alpha ? -stat_bonus(newDepth)
                         : value >= beta  ?  stat_bonus(newDepth)
