@@ -842,13 +842,12 @@ namespace {
         && !ttMove)
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
-    if (depth <= 0)
-        return qsearch<PV>(pos, ss, alpha, beta);
-
     if ((ss+1)->cutoffCnt > 3
-        && !ttMove
-        &&  depth >= 2)
+        && !ttMove)
         depth--;
+
+    if (depth <= 0)
+        return qsearch<PvNode ? PV : NonPV>(pos, ss, alpha, beta);
 
     if (    cutNode
         &&  depth >= 8
