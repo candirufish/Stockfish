@@ -845,6 +845,11 @@ namespace {
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
+    if ((ss+1)->cutoffCnt > 3
+        && !ttMove
+        &&  depth >= 2)
+        depth--;
+
     if (    cutNode
         &&  depth >= 8
         && !ttMove)
@@ -1162,10 +1167,6 @@ moves_loop: // When in check, search starts here
       if (   move == (ss-4)->currentMove
           && pos.has_repeated())
           r += 2;
-
-      // Increase reduction if next ply has a lot of fail high (~5 Elo)
-      if ((ss+1)->cutoffCnt > 3)
-          r++;
 
       // Decrease reduction for first generated move (ttMove)
       else if (move == ttMove)
