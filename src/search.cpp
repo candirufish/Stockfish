@@ -843,7 +843,7 @@ namespace {
         depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
 
     if ((ss+1)->cutoffCnt > 3
-        && eval <= alpha - 80
+        && eval > beta + 80
         && !ttMove)
         depth--;
 
