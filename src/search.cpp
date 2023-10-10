@@ -1325,7 +1325,9 @@ moves_loop: // When in check, search starts here
                       && value > -12393)
                       {
                       depth -= 2;
-                      ss->cutoffCnt = 0;
+
+                      if (ss->moveCount == 1)
+                           ss->cutoffCnt = 0;
                       }
                   assert(depth > 0);
                   alpha = value; // Update alpha! Always alpha < beta
