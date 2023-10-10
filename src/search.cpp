@@ -1326,7 +1326,7 @@ moves_loop: // When in check, search starts here
                       {
                       depth -= 2;
 
-                      if (ss->moveCount == 1)
+                      if (moveCount > 2)
                            ss->cutoffCnt = 0;
                       }
                   assert(depth > 0);
