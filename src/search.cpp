@@ -1631,7 +1631,13 @@ moves_loop: // When in check, search starts here
                 if (value < beta) // Update alpha here!
                     alpha = value;
                 else
-                    break; // Fail high
+                {
+                  if (!PvNode)
+                    ss->cutoffCnt++;
+
+                  assert(value >= beta); // Fail high
+                  break; // Fail high
+                }
             }
         }
     }
