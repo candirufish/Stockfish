@@ -1330,7 +1330,8 @@ moves_loop: // When in check, search starts here
               }
           }
       }
-
+      else
+         ss->cutoffCnt--;
 
       // If the move is worse than some previously searched move, remember it, to update its stats later
       if (move != bestMove && moveCount <= 32)
@@ -1371,7 +1372,7 @@ moves_loop: // When in check, search starts here
     // Bonus for prior countermove that caused the fail low
     else if (!priorCapture && prevSq != SQ_NONE)
     {
-        int bonus = (depth > 6) + (PvNode || cutNode) + (bestValue < alpha - 653) + ((ss-1)->moveCount > 11) + ((ss+1)->cutoffCnt == 0);
+        int bonus = (depth > 6) + (PvNode || cutNode) + (bestValue < alpha - 653) + ((ss-1)->moveCount > 11) + ((ss+1)->cutoffCnt < 0);
         update_continuation_histories(ss-1, pos.piece_on(prevSq), prevSq, stat_bonus(depth) * bonus);
         thisThread->mainHistory[~us][from_to((ss-1)->currentMove)] << stat_bonus(depth) * bonus / 2;
     }
