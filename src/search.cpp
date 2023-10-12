@@ -1374,7 +1374,8 @@ moves_loop: // When in check, search starts here
         int bonus = (depth > 6) + (PvNode || cutNode) + (bestValue < alpha - 653) + ((ss-1)->moveCount > 11);
         update_continuation_histories(ss-1, pos.piece_on(prevSq), prevSq, stat_bonus(depth) * bonus);
         thisThread->mainHistory[~us][from_to((ss-1)->currentMove)] << stat_bonus(depth) * bonus / 2;
-        ss->cutoffCnt = 0;
+        if (bonus >= 3)
+            ss->cutoffCnt = 0;
     }
 
     if (PvNode)
