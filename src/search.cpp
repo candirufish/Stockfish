@@ -1632,7 +1632,7 @@ moves_loop: // When in check, search starts here
                     alpha = value;
                 else
                 {
-                  ss->cutoffCnt += moveCount > 4;
+                  ss->cutoffCnt += moveCount > 2;
 
                   assert(value >= beta); // Fail high
                   break; // Fail high
