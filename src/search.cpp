@@ -67,7 +67,7 @@ using Eval::evaluate;
 using namespace Search;
 
 namespace {
-
+  int rz1 = 257, rz2 = 200;
   // Different node types, used as a template parameter
   enum NodeType { NonPV, PV, Root };
 
@@ -767,7 +767,11 @@ namespace {
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
     // Adjust razor margin according to cutoffCnt. (~1 Elo)
-    if (eval < alpha - 492 - (257 - 200 * ((ss+1)->cutoffCnt > 3)) * depth * depth)
+
+    rz1 = rz1 * (100 - pos.rule50_count()) / 100; 
+    rz2 = rz2 * (100 - pos.rule50_count()) / 100;
+
+    if (eval < alpha - 492 - (rz1 - rz2 * ((ss+1)->cutoffCnt > 3)) * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
