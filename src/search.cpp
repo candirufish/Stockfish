@@ -768,7 +768,7 @@ namespace {
     // return a fail low.
     // Adjust razor margin according to cutoffCnt. (~1 Elo)
     if (eval < alpha - 492 - (257 - 200 * ((ss+1)->cutoffCnt > 3)) * depth * depth
-        &&  pos.rule50_count() >= 4)
+        &&  pos.rule50_count() > 1)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
