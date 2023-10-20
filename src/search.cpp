@@ -1000,12 +1000,12 @@ moves_loop: // When in check, search starts here
               if (   !givesCheck
                   && lmrDepth < 7
                   && !ss->inCheck
-                  && ss->staticEval + 188 + 206 * lmrDepth + PieceValue[pos.piece_on(to_sq(move))]
+                  && ss->staticEval + 180 + 226 * lmrDepth + PieceValue[pos.piece_on(to_sq(move))]
                    + captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))] / 7 < alpha)
                   continue;
 
               // SEE based pruning for captures and checks (~11 Elo)
-              if (!pos.see_ge(move, Value(-185) * depth))
+              if (!pos.see_ge(move, Value(-191) * depth))
                   continue;
           }
           else
@@ -1015,25 +1015,26 @@ moves_loop: // When in check, search starts here
                             + (*contHist[3])[movedPiece][to_sq(move)];
 
               // Continuation history based pruning (~2 Elo)
-              if (   lmrDepth < 6
-                  && history < -3232 * depth)
+              if (   lmrDepth < 5
+                  && history < -3527 * depth)
                   continue;
 
               history += 2 * thisThread->mainHistory[us][from_to(move)];
 
-              lmrDepth += history / 5793;
+              lmrDepth += history / 6349;
               lmrDepth = std::max(lmrDepth, -2);
 
+              int fpmg = 199 * (100 - pos.rule50_count()) / 100;
               // Futility pruning: parent node (~13 Elo)
               if (   !ss->inCheck
                   && lmrDepth < 13
-                  && ss->staticEval + 115 + 122 * lmrDepth <= alpha)
+                  && ss->staticEval + fpmg + 113 * lmrDepth <= alpha)
                   continue;
 
               lmrDepth = std::max(lmrDepth, 0);
 
               // Prune moves with negative SEE (~4 Elo)
-              if (!pos.see_ge(move, Value(-27 * lmrDepth * lmrDepth)))
+              if (!pos.see_ge(move, Value(-28 * lmrDepth * lmrDepth)))
                   continue;
           }
       }
