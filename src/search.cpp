@@ -1632,7 +1632,7 @@ moves_loop: // When in check, search starts here
                     alpha = value;
                 else
                 {
-                  ss->cutoffCnt += ((ss+1)->cutoffCnt > 2);
+                  ss->cutoffCnt += ((ss+1)->cutoffCnt > 1);
 
                   assert(value >= beta); // Fail high
                   break; // Fail high
