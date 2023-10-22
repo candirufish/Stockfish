@@ -1626,7 +1626,12 @@ moves_loop: // When in check, search starts here
                 if (value < beta) // Update alpha here!
                     alpha = value;
                 else
-                    break; // Fail high
+                {
+                  ss->cutoffCnt += ((ss+1)->cutoffCnt > 0);
+
+                  assert(value >= beta); // Fail high
+                  break; // Fail high
+                }
             }
         }
     }
