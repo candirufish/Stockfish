@@ -1129,8 +1129,8 @@ moves_loop:  // When in check, search starts here
             r++;
 
         // Decrease reduction for first generated move (ttMove)
-        else if (move == ttMove || extension)
-            r--;
+        else if (move == ttMove)
+            r -= extension ? 2 : 1;
 
         ss->statScore = 2 * thisThread->mainHistory[us][from_to(move)]
                       + (*contHist[0])[movedPiece][to_sq(move)]
