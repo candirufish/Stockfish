@@ -1138,11 +1138,8 @@ moves_loop:  // When in check, search starts here
         if (move == (ss - 4)->currentMove && pos.has_repeated())
             r += 2;
 
-        if ((ss + 1)->qsCutoffCnt > 5 && !capture)
-            r++;
-
         // Increase reduction if next ply has a lot of fail high (~5 Elo)
-        if ((ss + 1)->cutoffCnt > 3)
+        if ((ss + 1)->cutoffCnt > 3 || (ss + 1)->qsCutoffCnt > 3)
             r++;
 
         // Decrease reduction for first generated move (ttMove)
