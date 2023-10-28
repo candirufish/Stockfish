@@ -600,6 +600,7 @@ Value search(Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, boo
     (ss + 1)->excludedMove = bestMove = MOVE_NONE;
     (ss + 2)->killers[0] = (ss + 2)->killers[1] = MOVE_NONE;
     (ss + 2)->cutoffCnt                         = 0;
+    (ss + 2)->qsCutoffCnt                         = 0;
     ss->doubleExtensions                        = (ss - 1)->doubleExtensions;
     Square prevSq = is_ok((ss - 1)->currentMove) ? to_sq((ss - 1)->currentMove) : SQ_NONE;
     ss->statScore = 0;
@@ -1137,6 +1138,9 @@ moves_loop:  // When in check, search starts here
         if (move == (ss - 4)->currentMove && pos.has_repeated())
             r += 2;
 
+        if ((ss + 1)->qsCutoffCnt > 3 && !capture)
+            r++;
+
         // Increase reduction if next ply has a lot of fail high (~5 Elo)
         if ((ss + 1)->cutoffCnt > 3)
             r++;
@@ -1581,7 +1585,11 @@ Value qsearch(Position& pos, Stack* ss, Value alpha, Value beta, Depth depth) {
                 if (value < beta)  // Update alpha here!
                     alpha = value;
                 else
-                    break;  // Fail high
+                {
+                    ss->qsCutoffCnt++;
+                    assert(value >= beta); // Fail high
+                    break; // Fail high
+                }
             }
         }
     }
