@@ -1140,7 +1140,7 @@ moves_loop:  // When in check, search starts here
         if (move == (ss - 4)->currentMove && pos.has_repeated())
             r += 2;
 
-        if ((ss + 1)->qsCutoffCnt == 0 && (ss + 1)->cutoffCnt == 0 && improving)
+        if ((ss + 1)->qsCutoffCnt == 0 && (ss + 1)->cutoffCnt == 0 && !improving)
             r--;
 
         // Increase reduction if next ply has a lot of fail high (~5 Elo)
