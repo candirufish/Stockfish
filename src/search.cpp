@@ -1094,6 +1094,12 @@ moves_loop:  // When in check, search starts here
             else if (PvNode && move == ttMove && move == ss->killers[0]
                      && (*contHist[0])[movedPiece][to_sq(move)] >= 4194)
                 extension = 1;
+
+            if (   type_of(movedPiece) == PAWN
+                     && move == ttMove
+                     && pos.rule50_count() > 40
+                     && thisThread->pawnHistory[pawn_structure(pos)][movedPiece][to_sq(move)] >= 0)
+                extension = 2;
         }
 
         // Add extension to new depth
