@@ -1127,9 +1127,19 @@ moves_loop:  // When in check, search starts here
         if (ttCapture)
             r++;
 
+        ss->statScore = 2 * thisThread->mainHistory[us][from_to(move)]
+                      + (*contHist[0])[movedPiece][to_sq(move)]
+                      + (*contHist[1])[movedPiece][to_sq(move)]
+                      + (*contHist[3])[movedPiece][to_sq(move)] - 3848;
+
+       int rStat = ss->statScore / (10216 + 3855 * (depth > 5 && depth < 23));
+
         // Decrease reduction for PvNodes (~2 Elo)
         if (PvNode)
+            {
             r--;
+            rStat = std::max(rStat, -1);
+            }
 
         // Decrease reduction if a quiet ttMove has been singularly extended (~1 Elo)
         if (singularQuietLMR)
@@ -1139,24 +1149,13 @@ moves_loop:  // When in check, search starts here
         if (move == (ss - 4)->currentMove && pos.has_repeated())
             r += 2;
 
-        ss->statScore = 2 * thisThread->mainHistory[us][from_to(move)]
-                      + (*contHist[0])[movedPiece][to_sq(move)]
-                      + (*contHist[1])[movedPiece][to_sq(move)]
-                      + (*contHist[3])[movedPiece][to_sq(move)] - 3848;
-
-       int rStat = ss->statScore / (10216 + 3855 * (depth > 5 && depth < 23));
-
         // Increase reduction if next ply has a lot of fail high (~5 Elo)
         if ((ss + 1)->cutoffCnt > 3)
-        {
             r++;
-            rStat = std::min(rStat, 0);
-        }
+
         // Decrease reduction for first generated move (ttMove)
         else if (move == ttMove)
             r--;
-
-
 
         // Decrease/increase reduction for moves with a good/bad history (~25 Elo)
         r -= rStat;
