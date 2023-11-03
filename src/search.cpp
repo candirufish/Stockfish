@@ -1150,7 +1150,7 @@ moves_loop:  // When in check, search starts here
         if ((ss + 1)->cutoffCnt > 3)
         {
             r++;
-            rStat = std::min(rStat, -1);
+            rStat = std::min(rStat, 0);
         }
         // Decrease reduction for first generated move (ttMove)
         else if (move == ttMove)
