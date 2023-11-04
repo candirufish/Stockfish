@@ -1080,13 +1080,13 @@ moves_loop:  // When in check, search starts here
                     extension = -1;
             }
 
-            // Check extensions (~1 Elo)
-            else if (givesCheck && depth > 9)
-                extension = 1;
-
             // Quiet ttMove extensions (~1 Elo)
             else if (PvNode && move == ttMove && move == ss->killers[0]
                      && (*contHist[0])[movedPiece][to_sq(move)] >= 4194)
+                extension = 1;
+
+            // Check extensions (~1 Elo)
+            if (givesCheck && depth > 9)
                 extension = 1;
         }
 
