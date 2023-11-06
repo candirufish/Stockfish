@@ -1160,10 +1160,9 @@ moves_loop:  // When in check, search starts here
 
         // Set reduction to 0 for first generated move (ttMove)
         // Nullifies all previous reduction adjustments to ttMove and leaves only history to do them
-        else if (move == ttMove)
+        else if (move == ttMove && ss->statScore < 0)
         {
             r = 0;
-            ss->statScore = 0;
         }
 
         // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
