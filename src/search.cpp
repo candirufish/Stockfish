@@ -1114,6 +1114,12 @@ moves_loop:  // When in check, search starts here
         ss->continuationHistory =
           &thisThread->continuationHistory[ss->inCheck][capture][movedPiece][to_sq(move)];
 
+        if (   type_of(movedPiece) == PAWN
+                 && move == ttMove
+                 && pos.rule50_count() > 80
+                 && thisThread->pawnHistory[pawn_structure(pos)][movedPiece][to_sq(move)] >= 0)
+            r--;
+
         // Step 16. Make the move
         pos.do_move(move, st, givesCheck);
 
