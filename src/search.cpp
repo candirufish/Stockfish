@@ -1104,8 +1104,9 @@ moves_loop:  // When in check, search starts here
             // Recapture extensions (~1 Elo)
             else if (PvNode && move == ttMove && to_sq(move) == prevSq
                      && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))]
-                          > 4000)
-                extension = 1;
+                          > 4096)
+                extension = captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))]
+                          > 8192 ? 2 : 1;
         }
 
         // Add extension to new depth
