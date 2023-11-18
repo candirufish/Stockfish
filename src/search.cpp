@@ -1165,7 +1165,7 @@ moves_loop:  // When in check, search starts here
         if (PvNode && move == ttMove && to_sq(move) == prevSq
                      && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))]
                           > 4000)
-            r--;
+            r -= 2;
 
         // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
         // We use various heuristics for the sons of a node after the first son has
