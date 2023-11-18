@@ -1100,12 +1100,6 @@ moves_loop:  // When in check, search starts here
             else if (PvNode && move == ttMove && move == ss->killers[0]
                      && (*contHist[0])[movedPiece][to_sq(move)] >= 4194)
                 extension = 1;
-
-            // Recapture extensions (~1 Elo)
-            else if (PvNode && move == ttMove && to_sq(move) == prevSq
-                     && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))]
-                          > 4000)
-                extension = 1;
         }
 
         // Add extension to new depth
@@ -1167,6 +1161,11 @@ moves_loop:  // When in check, search starts here
 
         // Decrease/increase reduction for moves with a good/bad history (~25 Elo)
         r -= ss->statScore / (10216 + 3855 * (depth > 5 && depth < 23));
+
+        if (PvNode && move == ttMove && to_sq(move) == prevSq
+                     && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))]
+                          > 4000)
+            r--;
 
         // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
         // We use various heuristics for the sons of a node after the first son has
