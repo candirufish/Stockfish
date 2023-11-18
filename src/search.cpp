@@ -633,7 +633,7 @@ Value search(Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, boo
             if (ttValue >= beta)
             {
                 // Bonus for a quiet ttMove that fails high (~2 Elo)
-                if (!ttCapture && !ttInCheck)
+                if (!ttCapture)
                     update_quiet_stats(pos, ss, ttMove, stat_bonus(depth));
 
                 // Extra penalty for early quiet moves of
@@ -643,7 +643,7 @@ Value search(Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, boo
                                                   -stat_malus(depth + 1));
             }
             // Penalty for a quiet ttMove that fails low (~1 Elo)
-            else if (!ttCapture && !ttInCheck)
+            else if (!ttCapture)
             {
                 int penalty = -stat_malus(depth);
                 thisThread->mainHistory[us][from_to(ttMove)] << penalty;
@@ -1056,7 +1056,7 @@ moves_loop:  // When in check, search starts here
                 if (value < singularBeta)
                 {
                     extension        = 1;
-                    singularQuietLMR = !ttCapture;
+                    singularQuietLMR = !ttCapture && !ttInCheck;
 
                     // Avoid search explosion by limiting the number of double extensions
                     if (!PvNode && value < singularBeta - 18 && ss->doubleExtensions <= 11)
