@@ -633,7 +633,7 @@ Value search(Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, boo
             if (ttValue >= beta)
             {
                 // Bonus for a quiet ttMove that fails high (~2 Elo)
-                if (!ttCapture || !ttInCheck)
+                if (!ttCapture && !ttInCheck)
                     update_quiet_stats(pos, ss, ttMove, stat_bonus(depth));
 
                 // Extra penalty for early quiet moves of
@@ -643,7 +643,7 @@ Value search(Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, boo
                                                   -stat_malus(depth + 1));
             }
             // Penalty for a quiet ttMove that fails low (~1 Elo)
-            else if (!ttCapture || !ttInCheck)
+            else if (!ttCapture && !ttInCheck)
             {
                 int penalty = -stat_malus(depth);
                 thisThread->mainHistory[us][from_to(ttMove)] << penalty;
