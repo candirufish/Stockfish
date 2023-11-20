@@ -957,7 +957,7 @@ moves_loop:  // When in check, search starts here
         extension  = 0;
         capture    = pos.capture_stage(move);
         movedPiece = pos.moved_piece(move);
-        givesCheck = pos.gives_check(move);
+        ss->givesCheck = givesCheck = pos.gives_check(move);
 
         // Calculate new depth for this move
         newDepth = depth - 1;
@@ -1093,7 +1093,7 @@ moves_loop:  // When in check, search starts here
             }
 
             // Check extensions (~1 Elo)
-            else if (givesCheck && depth > 9)
+            else if (givesCheck && depth > 9 && !(ss-2)->givesCheck)
                 extension = 1;
 
             // Quiet ttMove extensions (~1 Elo)
