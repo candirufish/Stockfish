@@ -1093,6 +1093,7 @@ moves_loop:  // When in check, search starts here
 
             else if (   (PvNode || cutNode)
                      && capture
+                     && depth > 9
                      && move == ttMove)
                 extension = 1;
 
