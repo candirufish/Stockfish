@@ -1130,7 +1130,7 @@ moves_loop:  // When in check, search starts here
         if ((ss - 1)->moveCount > 7)
             r--;
 
-        if (extension && depth > 9)
+        if (extension == 2 && depth > 9)
             r--;
 
         // Increase reduction for cut nodes (~3 Elo)
