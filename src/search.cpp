@@ -1104,7 +1104,7 @@ moves_loop:  // When in check, search starts here
             else if (PvNode && move == ttMove && to_sq(move) == prevSq
                      && captureHistory[movedPiece][to_sq(move)][type_of(pos.piece_on(to_sq(move)))]
                           > 4000)
-                extension = pos.non_pawn_material() == 0 ? 2 : 1;
+                extension = 1;
         }
 
         // Add extension to new depth
@@ -1118,6 +1118,9 @@ moves_loop:  // When in check, search starts here
         ss->currentMove = move;
         ss->continuationHistory =
           &thisThread->continuationHistory[ss->inCheck][capture][movedPiece][to_sq(move)];
+
+        if (pos.non_pawn_material() == 0 && thisThread->pawnHistory[pawn_structure(pos)][movedPiece][to_sq(move)] < -7000)
+            r++;
 
         // Step 16. Make the move
         pos.do_move(move, st, givesCheck);
