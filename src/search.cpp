@@ -1157,7 +1157,7 @@ moves_loop:  // When in check, search starts here
         // Set reduction to 0 for first picked move (ttMove) (~2 Elo)
         // Nullifies all previous reduction adjustments to ttMove and leaves only history to do them
         else if (move == ttMove)
-            r = -1;
+            r = 0;
 
         ss->statScore = 2 * thisThread->mainHistory[us][from_to(move)]
                       + (*contHist[0])[movedPiece][to_sq(move)]
@@ -1312,6 +1312,8 @@ moves_loop:  // When in check, search starts here
                 }
             }
         }
+        else if ((ss+2)->cutoffCnt > 17)
+            ss->cutoffCnt = 0;
 
         // If the move is worse than some previously searched move,
         // remember it, to update its stats later.
