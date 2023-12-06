@@ -1138,9 +1138,6 @@ moves_loop:  // When in check, search starts here
         if (ttCapture)
             r++;
 
-        if (ss->inCheck && type_of(movedPiece) == KING && moveCountPruning)
-            r++;
-
         // Decrease reduction for PvNodes (~2 Elo)
         if (PvNode)
             r--;
@@ -1177,12 +1174,14 @@ moves_loop:  // When in check, search starts here
         if (depth >= 2 && moveCount > 1 + rootNode
             && (!ss->ttPv || !capture || (cutNode && (ss - 1)->moveCount > 1)))
         {
+           bool kinginc = ss->inCheck && type_of(movedPiece) == KING && moveCountPruning;
+
             // In general we want to cap the LMR depth search at newDepth, but when
             // reduction is negative, we allow this move a limited search extension
             // beyond the first move depth. This may lead to hidden double extensions.
             // To prevent problems when the max value is less than the min value,
             // std::clamp has been replaced by a more robust implementation.
-            Depth d = std::max(1, std::min(newDepth - r, newDepth + 1));
+            Depth d = std::max(1, std::min(newDepth - r, newDepth + !kinginc));
 
             value = -search<NonPV>(pos, ss + 1, -(alpha + 1), -alpha, d, true);
 
