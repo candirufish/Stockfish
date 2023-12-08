@@ -1142,7 +1142,7 @@ moves_loop:  // When in check, search starts here
         && ss->inCheck
         && !capture
         && !givesCheck)
-            r++;
+            r += 2;
 
         // Decrease reduction for PvNodes (~2 Elo)
         if (PvNode)
