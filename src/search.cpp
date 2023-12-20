@@ -831,14 +831,14 @@ Value search(Position& pos, Stack* ss, Value alpha, Value beta, Depth depth, boo
     // the stored depth is greater than or equal to the current depth.
     // Use qsearch if depth <= 0.
     if (PvNode && !ttMove)
-        depth -= 2 + 2 * (ss->ttHit && tte->depth() >= depth);
+        depth -= 4;
 
     if (depth <= 0)
         return qsearch<PV>(pos, ss, alpha, beta);
 
     // For cutNodes without a ttMove, we decrease depth by 2 if depth is high enough.
-    if (cutNode && depth >= 8 && !ttMove)
-        depth -= 2;
+    if (cutNode && depth >= 5 && !ttMove)
+        depth -= 1;
 
     probCutBeta = beta + 163 - 67 * improving;
 
