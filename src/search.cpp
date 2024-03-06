@@ -1107,7 +1107,7 @@ moves_loop:  // When in check, search starts here
 
         // Decrease reduction for PvNodes (~3 Elo)
         if (PvNode)
-            r--;
+            r -= (ss + 1)->cutoffCnt <= 3 && depth < 5 ? 2 : 1;
 
         // Increase reduction on repetition (~1 Elo)
         if (move == (ss - 4)->currentMove && pos.has_repeated())
