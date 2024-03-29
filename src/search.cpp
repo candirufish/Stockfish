@@ -590,6 +590,7 @@ Value Search::Worker::search(
     (ss + 1)->excludedMove = bestMove = Move::none();
     (ss + 2)->killers[0] = (ss + 2)->killers[1] = Move::none();
     (ss + 2)->cutoffCnt                         = 0;
+    (ss + 2)->qsCutoffCnt                       = 0;
     ss->multipleExtensions                      = (ss - 1)->multipleExtensions;
     Square prevSq = ((ss - 1)->currentMove).is_ok() ? ((ss - 1)->currentMove).to_sq() : SQ_NONE;
     ss->statScore = 0;
@@ -1130,6 +1131,9 @@ moves_loop:  // When in check, search starts here
         if ((ss + 1)->cutoffCnt > 3)
             r++;
 
+        if ((ss + 1)->qsCutoffCnt > 3 && depth < 5)
+            r++;
+
         // Set reduction to 0 for first picked move (ttMove) (~2 Elo)
         // Nullifies all previous reduction adjustments to ttMove and leaves only history to do them
         else if (move == ttMove)
@@ -1599,7 +1603,11 @@ Value Search::Worker::qsearch(Position& pos, Stack* ss, Value alpha, Value beta,
                 if (value < beta)  // Update alpha here!
                     alpha = value;
                 else
-                    break;  // Fail high
+                {
+                    ss->qsCutoffCnt++;
+                    assert(value >= beta); // Fail high
+                    break; // Fail high
+                }
             }
         }
     }
