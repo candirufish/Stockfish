@@ -1286,7 +1286,7 @@ moves_loop:  // When in check, search starts here
                 }
             }
         }
-      else if (capture && depth > 6)
+      else if (capture && depth > 12)
           ss->cutoffCnt = 0;
 
 
