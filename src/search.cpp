@@ -1131,9 +1131,6 @@ moves_loop:  // When in check, search starts here
         if ((ss + 1)->cutoffCnt > 3)
             r++;
 
-        if ((ss + 1)->qsCutoffCnt > 3 && depth < 5)
-            r++;
-
         // Set reduction to 0 for first picked move (ttMove) (~2 Elo)
         // Nullifies all previous reduction adjustments to ttMove and leaves only history to do them
         else if (move == ttMove)
@@ -1275,7 +1272,7 @@ moves_loop:  // When in check, search starts here
 
                 if (value >= beta)
                 {
-                    ss->cutoffCnt += 1 + !ttMove;
+                    ss->cutoffCnt += 1 + !ttMove + ((ss + 1)->qsCutoffCnt > 3 && depth < 5);
                     assert(value >= beta);  // Fail high
                     break;
                 }
