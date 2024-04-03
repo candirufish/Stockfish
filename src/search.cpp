@@ -757,7 +757,7 @@ Value Search::Worker::search(
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
     // Adjust razor margin according to cutoffCnt. (~1 Elo)
-    if (eval < alpha - 488 - (289 - 142 * ((ss + 1)->cutoffCnt > 3)) * depth * depth)
+    if (eval < alpha - 488 - (289 - 142 * ((ss + 1)->cutoffCnt > 3 && (ss + 1)->qsCutoffCnt > 0)) * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
@@ -1287,8 +1287,6 @@ moves_loop:  // When in check, search starts here
                 }
             }
         }
-      else if (depth > 12 && (ss + 1)->qsCutoffCnt == 0)
-          ss->cutoffCnt = 0;
 
         // If the move is worse than some previously searched move,
         // remember it, to update its stats later.
