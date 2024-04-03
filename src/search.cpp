@@ -1133,7 +1133,7 @@ moves_loop:  // When in check, search starts here
 
         // Set reduction to 0 for first picked move (ttMove) (~2 Elo)
         // Nullifies all previous reduction adjustments to ttMove and leaves only history to do them
-        else if (move == ttMove && (ss + 1)->qsCutoffCnt == 0 )
+        else if (move == ttMove)
             r = 0;
 
         ss->statScore = 2 * thisThread->mainHistory[us][move.from_to()]
@@ -1287,6 +1287,8 @@ moves_loop:  // When in check, search starts here
                 }
             }
         }
+      else if (depth > 12 && (ss + 1)->qsCutoffCnt == 0)
+          ss->cutoffCnt = 0;
 
         // If the move is worse than some previously searched move,
         // remember it, to update its stats later.
