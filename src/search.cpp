@@ -539,7 +539,7 @@ Value Search::Worker::search(
     Depth    extension, newDepth;
     Value    bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool     givesCheck, improving, priorCapture, opponentWorsening;
-    bool     capture, moveCountPruning, ttCapture;
+    bool     capture, moveCountPruning, ttCapture, ttInCheck;
     Piece    movedPiece;
     int      moveCount, captureCount, quietCount;
 
@@ -601,6 +601,7 @@ Value Search::Worker::search(
               : ss->ttHit ? tte->move()
                           : Move::none();
     ttCapture = ttMove && pos.capture_stage(ttMove);
+    ttInCheck = ttMove && ss->inCheck;
 
     // At this point, if excluded, skip straight to step 6, static eval. However,
     // to save indentation, we list the condition in all code between here and there.
@@ -1048,7 +1049,7 @@ moves_loop:  // When in check, search starts here
                     // We make sure to limit the extensions in some way to avoid a search explosion
                     if (!PvNode && ss->multipleExtensions <= 16)
                     {
-                        extension = 2 + (value < singularBeta - 11 && !ttCapture);
+                        extension = 2 + (value < singularBeta - 11 && !ttCapture && !ttInCheck);
                         depth += depth < 14;
                     }
                     if (PvNode && !ttCapture && ss->multipleExtensions <= 5
