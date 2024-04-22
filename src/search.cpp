@@ -55,6 +55,14 @@ namespace {
 static constexpr double EvalLevel[10] = {1.043, 1.017, 0.952, 1.009, 0.971,
                                          1.002, 0.992, 0.947, 1.046, 1.001};
 
+constexpr int cntArray[5][5] = {
+    {-173, 15, -133, -20, 30},
+    {-135, 48, -118, -106, 85},
+    {-88, 76, -53, -102, 67},
+    {87, -93, 26, 67, 20},
+    {-2, 46, 54, 144, 102}
+};
+
 // Futility margin
 Value futility_margin(Depth d, bool noTtCutNode, bool improving, bool oppWorsening) {
     Value futilityMult       = 118 - 44 * noTtCutNode;
@@ -586,6 +594,7 @@ Value Search::Worker::search(
     bestMove             = Move::none();
     (ss + 2)->killers[0] = (ss + 2)->killers[1] = Move::none();
     (ss + 2)->cutoffCnt                         = 0;
+    (ss + 2)->qsCutoffCnt                       = 0;
     ss->multipleExtensions                      = (ss - 1)->multipleExtensions;
     Square prevSq = ((ss - 1)->currentMove).is_ok() ? ((ss - 1)->currentMove).to_sq() : SQ_NONE;
     ss->statScore = 0;
@@ -752,7 +761,7 @@ Value Search::Worker::search(
     // If eval is really low check with qsearch if it can exceed alpha, if it can't,
     // return a fail low.
     // Adjust razor margin according to cutoffCnt. (~1 Elo)
-    if (eval < alpha - 471 - (276 - 148 * ((ss + 1)->cutoffCnt > 3)) * depth * depth)
+    if (eval < alpha - 471 - (276 - cntArray[std::min((ss + 1)->cutoffCnt, 4)][std::min((ss + 1)->qsCutoffCnt, 4)]) * depth * depth)
     {
         value = qsearch<NonPV>(pos, ss, alpha - 1, alpha);
         if (value < alpha)
@@ -1595,7 +1604,11 @@ Value Search::Worker::qsearch(Position& pos, Stack* ss, Value alpha, Value beta,
                 if (value < beta)  // Update alpha here!
                     alpha = value;
                 else
-                    break;  // Fail high
+                {
+                    ss->qsCutoffCnt++;
+                    assert(value >= beta); // Fail high
+                    break; // Fail high
+                }
             }
         }
     }
