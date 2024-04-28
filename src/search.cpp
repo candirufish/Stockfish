@@ -827,8 +827,8 @@ Value Search::Worker::search(
     else if (cutNode && depth >= 8)
         depth -= 2;
     }
-    else
-        depth -= std::clamp((depth - tte->depth()) / 4, 0, 2);
+    else if (!ss->ttPv)
+        depth -= std::clamp((depth - tte->depth()) / 4, 0, 1);
 
     if (depth <= 0)
         return qsearch < PvNode ? PV : NonPV > (pos, ss, alpha, beta);
