@@ -827,7 +827,7 @@ Value Search::Worker::search(
     else if (cutNode && depth >= 8)
         depth -= 2;
     }
-    else if (!ss->ttPv)
+    else if (ss->ttPv)
         depth -= std::clamp((depth - tte->depth()) / 4, 0, 1);
 
     if (depth <= 0)
