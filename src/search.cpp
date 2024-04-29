@@ -1126,6 +1126,9 @@ moves_loop:  // When in check, search starts here
         else if (cutNode && move != ttMove && move != ss->killers[0])
             r++;
 
+        else if (move == ss->killers[0])
+            r--;
+
         // Increase reduction for cut nodes (~4 Elo)
         if (cutNode)
             r += 2 - (tte->depth() >= depth && ss->ttPv);
