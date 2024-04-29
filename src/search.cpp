@@ -58,11 +58,11 @@ static constexpr double EvalLevel[10] = {0.981, 0.956, 0.895, 0.949, 0.913,
                                          0.942, 0.933, 0.890, 0.984, 0.941};
 
 constexpr int cntArray[5][5] = {
-    {-130, 25, -70, 9, 53},
-    {-88, 37, -139, -106, 92},
-    {-25, 116, -151, -96, 78},
-    {127, -45, 47, 77, -1},
-    {38, 80, 9, 61, 109}
+    {109, 133, -186, 19, 209},
+    {18, -68, -84, -3, 141},
+    {-106, 106, -111, -31, -189},
+    {135, -202, -70, 83, 87},
+    {-75, 151, -28, 96, 78}
 };
 
 // Futility margin
@@ -1148,12 +1148,11 @@ moves_loop:  // When in check, search starts here
             r--;
 
         // Increase reduction if next ply has a lot of fail high (~5 Elo)
-        if ((ss + 1)->cutoffCnt > 3)
-            r++;
+        r += std::clamp((cntArray[std::min((ss + 1)->cutoffCnt, 4)][std::min((ss + 1)->qsCutoffCnt, 4)] / 271), -2, 2);
 
         // Set reduction to 0 for first picked move (ttMove) (~2 Elo)
         // Nullifies all previous reduction adjustments to ttMove and leaves only history to do them
-        else if (move == ttMove)
+        if (move == ttMove && (ss + 1)->cutoffCnt <= 3)
             r = 0;
 
         ss->statScore = 2 * thisThread->mainHistory[us][move.from_to()]
