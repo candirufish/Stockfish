@@ -57,6 +57,10 @@ namespace {
 static constexpr double EvalLevel[10] = {0.981, 0.956, 0.895, 0.949, 0.913,
                                          0.942, 0.933, 0.890, 0.984, 0.941};
 
+int s20red[13] = {0, 0, 0, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048};
+TUNE(SetRange(-2048, 16384), s20red);
+
+
 // Futility margin
 Value futility_margin(Depth d, bool noTtCutNode, bool improving, bool oppWorsening) {
     Value futilityMult       = 118 - 45 * noTtCutNode;
@@ -1291,10 +1295,10 @@ moves_loop:  // When in check, search starts here
                 else
                 {
                     // Reduce other moves if we have found at least one score improvement (~2 Elo)
-                    if (depth > 2 && depth < 12 && beta < 13546 && value > -13478)
-                        depth -= 2;
+                    if (depth < 12 && beta < 13546 && value > -13478)
+                        depth -= std::min((s20red[depth] / 1024), 12);
 
-                    assert(depth > 0);
+                    depth = std::max(depth, 1);
                     alpha = value;  // Update alpha! Always alpha < beta
                 }
             }
