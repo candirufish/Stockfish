@@ -57,9 +57,7 @@ namespace {
 static constexpr double EvalLevel[10] = {0.981, 0.956, 0.895, 0.949, 0.913,
                                          0.942, 0.933, 0.890, 0.984, 0.941};
 
-int s20red[13] = {0, 0, 0, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048};
-TUNE(SetRange(-2048, 16384), s20red);
-
+constexpr int s20red[13] = {-103, 605, -7, 2341, 1724, 1919, 2850, 2430, 3582, 1084, 1601, 2732, 2917};
 
 // Futility margin
 Value futility_margin(Depth d, bool noTtCutNode, bool improving, bool oppWorsening) {
