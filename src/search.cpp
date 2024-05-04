@@ -1055,10 +1055,10 @@ moves_loop:  // When in check, search starts here
                     // We make sure to limit the extensions in some way to avoid a search explosion
                     if (!PvNode && ss->multipleExtensions <= 16)
                     {
-                        extension = 2 + (value < singularBeta - 11 && !ttCapture && !ttInCheck);
+                        extension = 2 + (value < singularBeta - 11 && !ttCapture);
                         depth += depth < 14;
                     }
-                    if (PvNode && !ttCapture && !ttInCheck && ss->multipleExtensions <= 5
+                    if (PvNode && !ttCapture && ss->multipleExtensions <= 5
                         && value < singularBeta - 38)
                         extension = 2;
                 }
@@ -1070,7 +1070,7 @@ moves_loop:  // When in check, search starts here
                 // and we can prune the whole subtree by returning a softbound.
                 else if (singularBeta >= beta)
                 {
-                    if (!ttCapture)
+                    if (!ttCapture && !ttInCheck)
                         update_quiet_stats(pos, ss, *this, ttMove, -stat_malus(depth));
 
                     return singularBeta;
