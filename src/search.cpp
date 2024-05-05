@@ -1140,7 +1140,7 @@ moves_loop:  // When in check, search starts here
             r--;
 
         if (ttMove && (PvNode || cutNode) && tte->depth() <= depth - 6)
-            r++;
+            r += 2;
 
         // Increase reduction if next ply has a lot of fail high (~5 Elo)
         if ((ss + 1)->cutoffCnt > 3)
