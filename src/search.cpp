@@ -821,7 +821,7 @@ Value Search::Worker::search(
     // Step 10. Internal iterative reductions (~9 Elo)
     // For PV nodes without a ttMove, we decrease depth by 3.
     if (PvNode && !ttMove)
-        depth -= 3;
+        depth -= (ss-1)->r >= -1 ? 4 : 3;
 
     // Use qsearch if depth <= 0.
     if (depth <= 0)
@@ -1148,6 +1148,8 @@ moves_loop:  // When in check, search starts here
 
         // Decrease/increase reduction for moves with a good/bad history (~8 Elo)
         r -= ss->statScore / (17662 - std::min(depth, 16) * 105);
+
+        ss->r = r;
 
         // Step 17. Late moves reduction / extension (LMR, ~117 Elo)
         if (depth >= 2 && moveCount > 1 + rootNode)
