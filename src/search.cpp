@@ -946,7 +946,7 @@ moves_loop:  // When in check, search starts here
         extension  = 0;
         capture    = pos.capture_stage(move);
         movedPiece = pos.moved_piece(move);
-        givesCheck = pos.gives_check(move);
+        ss->givesCheck = givesCheck = pos.gives_check(move);
 
         // Calculate new depth for this move
         newDepth = depth - 1;
@@ -1088,6 +1088,8 @@ moves_loop:  // When in check, search starts here
                 else if (cutNode)
                     extension = -2;
             }
+            else if (!(ss-2)->givesCheck && givesCheck && depth > 10)
+                extension = 1;
 
             // Extension for capturing the previous moved piece (~0 Elo on STC, ~1 Elo on LTC)
             else if (PvNode && move == ttMove && move.to_sq() == prevSq
