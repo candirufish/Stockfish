@@ -53,6 +53,11 @@ using Eval::evaluate;
 using namespace Search;
 
 namespace {
+int ex1 = 59, ex2 = 49, ex3 = 285, ex4 = 228, ex5 = 0, ex6 = 121, ex7 = 238, ex8 = 259, ex9 = 0, ex10 = 117, ex11 = 471, ex12 = 343, ex13 = 281, ex14 = 0, ex15 = 217, ex16 = 14;
+auto f1 = [](int m){if (m<30) return Range(m-256,m+256); else return Range(m / 2, m * 3 / 2);};
+
+TUNE(SetRange(f1), ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10, ex11, ex12, ex13, ex14, ex15);
+TUNE(ex16);
 
 static constexpr double EvalLevel[10] = {0.981, 0.956, 0.895, 0.949, 0.913,
                                          0.942, 0.933, 0.890, 0.984, 0.941};
@@ -547,7 +552,7 @@ Value Search::Worker::search(
     Depth    extension, newDepth;
     Value    bestValue, value, ttValue, eval, maxValue, probCutBeta;
     bool     givesCheck, improving, priorCapture, opponentWorsening;
-    bool     capture, moveCountPruning, ttCapture;
+    bool     capture, moveCountPruning, ttCapture, ttInCheck;
     Piece    movedPiece;
     int      moveCount, captureCount, quietCount;
 
@@ -608,6 +613,7 @@ Value Search::Worker::search(
               : ss->ttHit ? tte->move()
                           : Move::none();
     ttCapture = ttMove && pos.capture_stage(ttMove);
+    ttInCheck = ttMove && ss->inCheck;
 
     // At this point, if excluded, skip straight to step 6, static eval. However,
     // to save indentation, we list the condition in all code between here and there.
@@ -1039,7 +1045,7 @@ moves_loop:  // When in check, search starts here
                 && std::abs(ttValue) < VALUE_TB_WIN_IN_MAX_PLY && (tte->bound() & BOUND_LOWER)
                 && tte->depth() >= depth - 3)
             {
-                Value singularBeta  = ttValue - (59 + 49 * (ss->ttPv && !PvNode)) * depth / 64;
+                Value singularBeta  = ttValue - (ex1 + ex2 * (ss->ttPv && !PvNode)) * depth / 64;
                 Depth singularDepth = newDepth / 2;
 
                 ss->excludedMove = move;
@@ -1049,16 +1055,16 @@ moves_loop:  // When in check, search starts here
 
                 if (value < singularBeta)
                 {
-                    int doubleMargin = 285 * PvNode - 228 * !ttCapture;
+                    int doubleMargin = ex3 * PvNode - ex4 * !ttCapture - ex5 * !ttInCheck;
                     int tripleMargin =
-                      121 + 238 * PvNode - 259 * !ttCapture + 117 * (ss->ttPv || !ttCapture);
-                    int quadMargin = 471 + 343 * PvNode - 281 * !ttCapture + 217 * ss->ttPv;
+                      ex6 + ex7 * PvNode - ex8 * !ttCapture - ex9 * !ttInCheck + ex10 * (ss->ttPv || !ttCapture);
+                    int quadMargin = ex11 + ex12 * PvNode - ex13 * !ttCapture - ex14 * !ttInCheck + ex15 * ss->ttPv;
 
                     extension = 1 + (value < singularBeta - doubleMargin)
                               + (value < singularBeta - tripleMargin)
                               + (value < singularBeta - quadMargin);
 
-                    depth += ((!PvNode) && (depth < 14));
+                    depth += ((!PvNode) && (depth < ex16));
                 }
 
                 // Multi-cut pruning
