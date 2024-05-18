@@ -891,7 +891,7 @@ Value Search::Worker::search(
 moves_loop:  // When in check, search starts here
 
     // Step 12. A small Probcut idea, when we are in check (~4 Elo)
-    probCutBeta = beta + 428 - 128 * (ss-2)->givesCheck;
+    probCutBeta = beta + 428;
     if (ss->inCheck && !PvNode && ttCapture && (tte->bound() & BOUND_LOWER)
         && tte->depth() >= depth - 4 && ttValue >= probCutBeta
         && std::abs(ttValue) < VALUE_TB_WIN_IN_MAX_PLY && std::abs(beta) < VALUE_TB_WIN_IN_MAX_PLY)
@@ -1188,6 +1188,9 @@ moves_loop:  // When in check, search starts here
             // Increase reduction if ttMove is not present (~6 Elo)
             if (!ttMove)
                 r += 2;
+
+            if (ttCapture && (ss-2)->givesCheck)
+                r++;
 
             // Note that if expected reduction is high, we reduce search depth by 1 here (~9 Elo)
             value = -search<NonPV>(pos, ss + 1, -(alpha + 1), -alpha, newDepth - (r > 3), !cutNode);
