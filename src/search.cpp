@@ -1190,7 +1190,7 @@ moves_loop:  // When in check, search starts here
                 r += 2;
 
             if (ttCapture && (ss-2)->givesCheck)
-                r++;
+                r += 2;
 
             // Note that if expected reduction is high, we reduce search depth by 1 here (~9 Elo)
             value = -search<NonPV>(pos, ss + 1, -(alpha + 1), -alpha, newDepth - (r > 3), !cutNode);
