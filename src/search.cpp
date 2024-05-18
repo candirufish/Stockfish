@@ -1189,9 +1189,6 @@ moves_loop:  // When in check, search starts here
             if (!ttMove)
                 r += 2;
 
-            if (ttCapture && (ss-2)->givesCheck)
-                r++;
-
             // Note that if expected reduction is high, we reduce search depth by 1 here (~9 Elo)
             value = -search<NonPV>(pos, ss + 1, -(alpha + 1), -alpha, newDepth - (r > 3), !cutNode);
         }
@@ -1279,7 +1276,7 @@ moves_loop:  // When in check, search starts here
 
                 if (value >= beta)
                 {
-                    ss->cutoffCnt += 1 + !ttMove;
+                    ss->cutoffCnt += 1 + !ttMove + (ttCapture && (ss-2)->givesCheck);
                     assert(value >= beta);  // Fail high
                     break;
                 }
