@@ -830,7 +830,7 @@ Value Search::Worker::search(
 
     // For cutNodes without a ttMove, we decrease depth by 2 if depth is high enough.
     if (cutNode && depth >= 8 && (!ttMove || tte->bound() == BOUND_UPPER))
-        depth -= 1 + !ttMove;
+        depth -= 1 + !ttMove  + (ss->ttPv && (ss-1)->ttHit && !(ss-1)->ttPv && (ss-2)->ttHit && !(ss-2)->ttPv);
 
     // Step 11. ProbCut (~10 Elo)
     // If we have a good enough capture (or queen promotion) and a reduced search returns a value
@@ -1115,7 +1115,7 @@ moves_loop:  // When in check, search starts here
 
         // Decrease reduction if position is or has been on the PV (~7 Elo)
         if (ss->ttPv)
-            r -= 1 + (ttValue > alpha) + (tte->depth() >= depth)  - 2 * (!PvNode && (ss-1)->ttHit && !(ss-1)->ttPv && (ss-2)->ttHit && !(ss-2)->ttPv);
+            r -= 1 + (ttValue > alpha) + (tte->depth() >= depth);
 
         else if (cutNode && move != ttMove && move != ss->killers[0])
             r++;
